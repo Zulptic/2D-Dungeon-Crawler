@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scenes/world/growing_tree.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Size_02.png" id="2_growth"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Size_03.png" id="3_mature"]
+[ext_resource type="Texture2D" path="res://assets/hud/environmental_hud/Environment_Health_Bar.png" id="4_frame"]
+[ext_resource type="Texture2D" path="res://assets/hud/environmental_hud/Environment_Health_Bar_Health.png" id="5_fill"]
+
+[ext_resource type="Resource" path="res://scenes/items/oak_log.tres" id="6_log"]
+
+[sub_resource type="AtlasTexture" id="BudTexture"]
+atlas = ExtResource("2_growth")
+region = Rect2(0, 48, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="StumpTexture"]
+atlas = ExtResource("3_mature")
+region = Rect2(192, 32, 16, 32)
+filter_clip = true
+
+[sub_resource type="RectangleShape2D" id="TrunkCollision"]
+size = Vector2(12, 8)
+
+[sub_resource type="AtlasTexture" id="HealthFill"]
+resource_local_to_scene = true
+atlas = ExtResource("5_fill")
+region = Rect2(3, 2, 31, 2)
+filter_clip = true
+
+[node name="GrowingTree" type="StaticBody2D" groups=["choppable_trees"]]
+texture_filter = 1
+script = ExtResource("1_script")
+max_health = 35
+drop_item = ExtResource("6_log")
+drop_min = 4
+drop_max = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("TrunkCollision")
+disabled = true
+
+[node name="Stump" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-8, -24)
+texture = SubResource("StumpTexture")
+centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-8, -8)
+texture = SubResource("BudTexture")
+centered = false
+
+[node name="HealthBar" type="Node2D" parent="."]
+visible = false
+position = Vector2(-9, -20)
+scale = Vector2(0.5, 0.5)
+z_index = 6
+
+[node name="Frame" type="Sprite2D" parent="HealthBar"]
+texture = ExtResource("4_frame")
+centered = false
+
+[node name="Fill" type="Sprite2D" parent="HealthBar"]
+position = Vector2(3, 2)
+texture = SubResource("HealthFill")
+centered = false
+
+[node name="GrowthTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+process_callback = 0

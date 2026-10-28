@@ -1,0 +1,94 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scenes/player_hud.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/hud/player_hud/hud_player_infos.png" id="2_frame"]
+[ext_resource type="Texture2D" path="res://assets/hud/player_hud/hud_player_infos_health_bar.png" id="3_health"]
+[ext_resource type="Texture2D" path="res://assets/hud/player_hud/hud_player_infos_mana_bar.png" id="4_mana"]
+[ext_resource type="Texture2D" path="res://assets/hud/player_hud/hud_player_infos_stamina_bar.png" id="5_stamina"]
+
+[ext_resource type="PackedScene" path="res://scenes/player_hotbar.tscn" id="6_hotbar"]
+
+[ext_resource type="PackedScene" path="res://scenes/player_inventory.tscn" id="7_inventory"]
+
+[ext_resource type="PackedScene" path="res://scenes/item_pickup_notice.tscn" id="8_pickup_notice"]
+
+[sub_resource type="AtlasTexture" id="Atlas_stamina_fill"]
+resource_local_to_scene = true
+atlas = ExtResource("5_stamina")
+region = Rect2(0, 0, 58, 2)
+filter_clip = true
+
+[node name="PlayerHUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="Screen" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Art" type="Control" parent="Screen"]
+layout_mode = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 144.0
+offset_bottom = 64.0
+scale = Vector2(3, 3)
+mouse_filter = 2
+
+[node name="Frame" type="TextureRect" parent="Screen/Art"]
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("2_frame")
+
+[node name="Health" type="TextureRect" parent="Screen/Art"]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 12.0
+offset_right = 113.0
+offset_bottom = 16.0
+mouse_filter = 2
+texture = ExtResource("3_health")
+
+[node name="Mana" type="TextureRect" parent="Screen/Art"]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 19.0
+offset_right = 101.0
+offset_bottom = 21.0
+mouse_filter = 2
+texture = ExtResource("4_mana")
+
+[node name="StaminaClip" type="Control" parent="Screen/Art"]
+clip_contents = false
+layout_mode = 0
+offset_left = 43.0
+offset_top = 24.0
+offset_right = 101.0
+offset_bottom = 26.0
+mouse_filter = 2
+
+[node name="Fill" type="TextureRect" parent="Screen/Art/StaminaClip"]
+layout_mode = 0
+offset_right = 58.0
+offset_bottom = 2.0
+mouse_filter = 2
+expand_mode = 1
+texture = SubResource("Atlas_stamina_fill")
+
+[node name="Hotbar" parent="Screen" instance=ExtResource("6_hotbar")]
+z_index = 1
+
+[node name="Inventory" parent="Screen" instance=ExtResource("7_inventory")]
+
+[node name="ItemPickupNotice" parent="Screen" instance=ExtResource("8_pickup_notice")]
+z_index = 1

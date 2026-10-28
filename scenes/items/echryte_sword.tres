@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://ccn04xh5am3ai"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 64, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"echryte_sword"
+display_name = "Echryte Sword"
+description = "An echryte blade forged for fierce, precise strikes."
+icon = SubResource("ItemIcon")
+category = 2
+subtype = &"sword"
+material = &"echryte"
+sale_price = 220
+damage_min = 8
+damage_max = 12
+damage_multiplier = 1.4
+monster_damage_modifier = 1.0

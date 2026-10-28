@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3]
+[ext_resource type="Script" path="res://scenes/world/breakable_rock.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Rocks.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/hud/environmental_hud/Environment_Health_Bar.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/hud/environmental_hud/Environment_Health_Bar_Health.png" id="4"]
+[sub_resource type="AtlasTexture" id="Rock"]
+atlas = ExtResource("2")
+region = Rect2(160, 16, 16, 16)
+filter_clip = true
+[sub_resource type="RectangleShape2D" id="Shape"]
+size = Vector2(14, 8)
+[sub_resource type="AtlasTexture" id="Fill"]
+resource_local_to_scene = true
+atlas = ExtResource("4")
+region = Rect2(3, 2, 31, 2)
+filter_clip = true
+[node name="BreakableRock" type="StaticBody2D" groups=["mineable_rocks"]]
+texture_filter = 1
+script = ExtResource("1")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("Rock")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+shape = SubResource("Shape")
+[node name="HealthBar" type="Node2D" parent="."]
+visible = false
+position = Vector2(-9, -14)
+scale = Vector2(0.5, 0.5)
+z_index = 6
+[node name="Frame" type="Sprite2D" parent="HealthBar"]
+texture = ExtResource("3")
+centered = false
+[node name="Fill" type="Sprite2D" parent="HealthBar"]
+position = Vector2(3, 2)
+texture = SubResource("Fill")
+centered = false

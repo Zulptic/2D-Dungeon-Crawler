@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://bisb4s73f57nr"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(48, 96, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"crushed_ashenite"
+display_name = "Crushed Ashenite"
+description = "Ashenite fragments used to forge exceptional gear."
+icon = SubResource("ItemIcon")
+subtype = &"ore"
+material = &"ashenite"
+max_stack = 999
+sale_price = 80

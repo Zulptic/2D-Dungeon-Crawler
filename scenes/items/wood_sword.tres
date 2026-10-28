@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://clr5cipiiax1c"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"wood_sword"
+display_name = "Wooden Sword"
+description = "A light wooden blade for practicing your strikes."
+icon = SubResource("ItemIcon")
+category = 2
+subtype = &"sword"
+material = &"wood"
+sale_price = 7
+damage_min = 2
+damage_max = 4
+monster_damage_modifier = 1.0

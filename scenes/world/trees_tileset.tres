@@ -1,0 +1,18 @@
+[gd_resource type="TileSet" format=3 uid="uid://cmv64q6ps5l84"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/growing_tree.tscn" id="1_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_leaf_bud.tscn" id="2_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_medium.tscn" id="3_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_large_medium.tscn" id="4_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree_mature.tscn" id="5_tree"]
+
+[sub_resource type="TileSetScenesCollectionSource" id="TreeStages"]
+resource_name = "Light Green Trees"
+scenes/0/scene = ExtResource("1_tree")
+scenes/1/scene = ExtResource("2_tree")
+scenes/2/scene = ExtResource("3_tree")
+scenes/3/scene = ExtResource("4_tree")
+scenes/4/scene = ExtResource("5_tree")
+
+[resource]
+sources/0 = SubResource("TreeStages")

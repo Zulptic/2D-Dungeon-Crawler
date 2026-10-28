@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://bftpitxqno7jj"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cb83w78r0fc2m" path="res://assets/items/Crushed_Stone.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+id = &"crushed_stone"
+display_name = "Crushed Stone"
+description = "Small stone fragments useful for crafting."
+icon = ExtResource("2_icon")
+category = 0
+subtype = &"stone"
+material = &"stone"
+tags = PackedStringArray("stone", "crafting")
+equipment_slot = "none"
+max_stack = 999
+sale_price = 1
+damage_min = 0
+damage_max = 0
+damage_multiplier = 1.0
+rock_damage_modifier = 0.0
+tree_damage_modifier = 0.0
+monster_damage_modifier = 0.0
+mining_tier = 0

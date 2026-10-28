@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="InventoryItem" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(64, 64, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"echryte_bar"
+display_name = "Echryte Bar"
+description = "Refined echryte for crafting stronger equipment."
+icon = SubResource("ItemIcon")
+category = 0
+subtype = &"bar"
+material = &"echryte"
+tags = PackedStringArray("metal", "refined", "crafting")
+equipment_slot = "none"
+max_stack = 999
+sale_price = 100
+damage_min = 0
+damage_max = 0
+damage_multiplier = 1.0
+rock_damage_modifier = 0.0
+tree_damage_modifier = 0.0
+monster_damage_modifier = 0.0
+mining_tier = 0

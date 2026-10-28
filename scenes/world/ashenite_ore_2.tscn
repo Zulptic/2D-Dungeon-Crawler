@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/breakable_rock.tscn" id="1_base"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+[ext_resource type="Resource" path="res://scenes/items/crushed_ashenite.tres" id="3_drop"]
+
+[sub_resource type="AtlasTexture" id="OreTexture"]
+atlas = ExtResource("2_sheet")
+region = Rect2(16, 96, 16, 16)
+filter_clip = true
+
+[node name="AsheniteOre2" instance=ExtResource("1_base")]
+max_health = 10
+drop_item = ExtResource("3_drop")
+drop_min = 1
+drop_max = 1
+required_mining_tier = 1
+
+[node name="Sprite2D" parent="." index="0"]
+texture = SubResource("OreTexture")

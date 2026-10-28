@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://b2f8r8eopdhbp"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(112, 80, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"aetherite_axe"
+display_name = "Aetherite Axe"
+description = "An aetherite axe that cleaves through thick timber."
+icon = SubResource("ItemIcon")
+category = 1
+subtype = &"axe"
+material = &"aetherite"
+sale_price = 320
+damage_min = 7
+damage_max = 10
+damage_multiplier = 1.5
+tree_damage_modifier = 1.0

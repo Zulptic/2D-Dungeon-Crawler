@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://c62g8jpsrrxdv"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(80, 64, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"echryte_pickaxe"
+display_name = "Echryte Pickaxe"
+description = "An echryte pickaxe built for powerful mining blows."
+icon = SubResource("ItemIcon")
+category = 1
+subtype = &"pickaxe"
+material = &"echryte"
+sale_price = 160
+damage_min = 5
+damage_max = 8
+damage_multiplier = 1.4
+rock_damage_modifier = 1.0
+mining_tier = 4

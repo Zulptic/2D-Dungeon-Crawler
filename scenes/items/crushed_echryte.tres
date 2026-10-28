@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://cymgaklmqbxcd"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(48, 64, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"crushed_echryte"
+display_name = "Crushed Echryte"
+description = "Echryte fragments used to forge stronger gear."
+icon = SubResource("ItemIcon")
+subtype = &"ore"
+material = &"echryte"
+max_stack = 999
+sale_price = 28

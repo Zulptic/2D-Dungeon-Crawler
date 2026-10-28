@@ -1,0 +1,9 @@
+[gd_resource type="Theme" load_steps=2 format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/enter-the-gungeon-small.ttf" id="1_font"]
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 7
+Label/colors/font_color = Color(1, 1, 0.94, 1)
+Label/constants/outline_size = 0

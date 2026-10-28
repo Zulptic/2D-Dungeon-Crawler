@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://byrx3t66j5um3"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cmudmu5de0q80" path="res://assets/tiles/Tools.png" id="2"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2")
+region = Rect2(0, 64, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1")
+id = &"test_pickaxe"
+display_name = "Training Pickaxe"
+description = "An old pickaxe for practice and light mining."
+icon = SubResource("Icon")
+category = 1
+subtype = &"pickaxe"
+material = &"wood"
+sale_price = 3
+damage_min = 1
+damage_max = 2
+rock_damage_modifier = 1.0

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://0npxt8hphvi5"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(112, 96, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"ashenite_axe"
+display_name = "Ashenite Axe"
+description = "An ashenite axe that fells the toughest timber."
+icon = SubResource("ItemIcon")
+category = 1
+subtype = &"axe"
+material = &"ashenite"
+sale_price = 640
+damage_min = 9
+damage_max = 13
+damage_multiplier = 1.6
+tree_damage_modifier = 1.0

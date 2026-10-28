@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://c7w2naxoibfji"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 48, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"gold_sword"
+display_name = "Gold Sword"
+description = "A gleaming golden blade with a powerful strike."
+icon = SubResource("ItemIcon")
+category = 2
+subtype = &"sword"
+material = &"gold"
+sale_price = 110
+damage_min = 6
+damage_max = 9
+damage_multiplier = 1.3
+monster_damage_modifier = 1.0

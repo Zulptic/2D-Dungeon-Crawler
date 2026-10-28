@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/breakable_rock.tscn" id="1_base"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Rocks.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="BoulderTexture"]
+atlas = ExtResource("2_sheet")
+region = Rect2(128, 16, 32, 32)
+filter_clip = true
+
+[sub_resource type="RectangleShape2D" id="BoulderCollision"]
+size = Vector2(28, 16)
+
+[node name="GrayBoulder" instance=ExtResource("1_base")]
+max_health = 12
+drop_min = 7
+drop_max = 13
+mining_footprint = Rect2i(0, -1, 2, 2)
+drop_offset = Vector2(8, 0)
+
+[node name="Sprite2D" parent="." index="0"]
+position = Vector2(8, -8)
+texture = SubResource("BoulderTexture")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(8, 0)
+shape = SubResource("BoulderCollision")
+
+[node name="HealthBar" parent="." index="2"]
+position = Vector2(-1, -30)

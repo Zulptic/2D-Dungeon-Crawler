@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://wp2d6on1ufhb"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://eoptoi805cav" path="res://assets/tiles/Mineral_Levels.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="ItemIcon"]
+atlas = ExtResource("2_sheet")
+region = Rect2(48, 0, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_script")
+id = &"crushed_coal"
+display_name = "Crushed Coal"
+description = "Coal fragments used as fuel and in crafting."
+icon = SubResource("ItemIcon")
+subtype = &"fuel"
+material = &"coal"
+max_stack = 999
+sale_price = 3
