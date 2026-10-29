@@ -31,16 +31,25 @@ func _ready() -> void:
     _apply_stage(growth_stage)
 
 func take_hit(damage: int = 1, hit_direction: Vector2 = Vector2.ZERO) -> bool:
+    return _apply_tree_hit(damage, hit_direction, false)
+
+func take_axe_hit(tool: InventoryItem, hit_direction: Vector2 = Vector2.ZERO) -> bool:
+    if _breaking or health <= 0 or tool == null or tool.category != InventoryItem.Category.TOOL or tool.subtype != &"axe":
+        return false
+    var hit := tool.roll_hit(InventoryItem.DamageTarget.TREE)
+    return _apply_tree_hit(hit.damage, hit_direction, hit.is_critical)
+
+func _apply_tree_hit(damage: int, hit_direction: Vector2, is_critical: bool) -> bool:
     if _breaking or health <= 0 or damage <= 0:
         return false
-    # Use the already-rolled axe damage once for both health and its number.
+    # Use the same final damage and crit flag for health and the floating number.
     # A world sibling survives the final hit and does not inherit tree shaking.
     var world := _world_parent()
     var origin := global_position + Vector2(0, -24)
     var applied := super.take_hit(damage, hit_direction)
     if applied:
         var number := TreeDamageNumber.new()
-        number.setup(damage, hit_direction)
+        number.setup(damage, hit_direction, is_critical)
         world.add_child(number)
         number.global_position = origin
     return applied
@@ -173,15 +182,19 @@ class TreeDamageNumber extends Node2D:
     const LIFETIME: float = 1.0
     const FADE_START: float = 0.65
     const GRAVITY: float = 44.0
+    const NORMAL_COLOR := Color(1.0, 0.95, 0.78)
+    const CRITICAL_COLOR := Color(1.0, 0.5, 0.1)
     var amount: int = 0
+    var is_critical: bool = false
     var elapsed: float = 0.0
     var velocity := Vector2.ZERO
     var _offset := Vector2.ZERO
     var _label_origin := Vector2.ZERO
     var label: Label
 
-    func setup(damage: int, hit_direction: Vector2 = Vector2.ZERO) -> void:
+    func setup(damage: int, hit_direction: Vector2 = Vector2.ZERO, critical: bool = false) -> void:
         amount = maxi(0, damage)
+        is_critical = critical
         velocity = Vector2(randf_range(-18.0, 18.0) + hit_direction.x * 4.0, randf_range(-36.0, -28.0))
 
     func _ready() -> void:
@@ -193,7 +206,7 @@ class TreeDamageNumber extends Node2D:
         label.theme = UI_THEME
         label.text = str(amount)
         label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-        label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.78))
+        label.add_theme_color_override("font_color", CRITICAL_COLOR if is_critical else NORMAL_COLOR)
         label.add_theme_color_override("font_outline_color", Color(0.13, 0.08, 0.05))
         label.add_theme_constant_override("outline_size", 1)
         add_child(label)

@@ -23,3 +23,4 @@ damage_max = 13
 damage_multiplier = 1.6
 rock_damage_modifier = 1.0
 mining_tier = 6
+swing_speed = 28

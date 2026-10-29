@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/player_hud.tscn" id="4_hud"]
 [ext_resource type="TileSet" uid="uid://6t4impj2fgk3" path="res://scenes/world/rocks_tileset.tres" id="5_rocks"]
 [ext_resource type="TileSet" uid="uid://cmv64q6ps5l84" path="res://scenes/world/trees_tileset.tres" id="6_trees"]
+[ext_resource type="Script" uid="uid://di3ppychepu3c" path="res://scenes/day_night_cycle.gd" id="7_gp0ih"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rakyr"]
 texture = ExtResource("1_43ydm")
@@ -712,3 +713,6 @@ tile_set = ExtResource("6_trees")
 position = Vector2(-264, -392)
 
 [node name="PlayerHUD" parent="." unique_id=228688550 instance=ExtResource("4_hud")]
+
+[node name="DayNightCycle" type="CanvasModulate" parent="." unique_id=578337992]
+script = ExtResource("7_gp0ih")

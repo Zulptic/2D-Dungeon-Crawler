@@ -22,3 +22,4 @@ damage_min = 11
 damage_max = 16
 damage_multiplier = 1.5
 monster_damage_modifier = 1.0
+swing_speed = 24

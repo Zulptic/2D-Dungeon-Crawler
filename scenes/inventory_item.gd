@@ -5,6 +5,14 @@ extends Resource
 enum Category { RESOURCE, TOOL, WEAPON, ARMOR, ACCESSORY, CONSUMABLE, PLACEABLE, QUEST_ITEM }
 enum DamageTarget { ROCK, TREE, MONSTER }
 const CATEGORY_NAMES := ["Resource", "Tool", "Weapon", "Armor", "Accessory", "Consumable", "Placeable", "Quest Item"]
+const CRITICAL_MULTIPLIERS := [1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0]
+# Weights out of 10,000: 60%, 22%, 10%, 4%, 2.5%, 1%, and 0.5% of crits.
+const CRITICAL_WEIGHTS := [6000, 2200, 1000, 400, 250, 100, 50]
+const WOOD_SWING_SPEED: int = 4
+const ASHENITE_SWING_SPEED: int = 28
+const WOOD_SWING_SECONDS: float = 1.6
+# Original action animations: eight frames at twelve frames per second.
+const ASHENITE_SWING_SECONDS: float = 8.0 / 12.0
 
 @export_group("Identity")
 @export var id: StringName
@@ -30,6 +38,12 @@ const CATEGORY_NAMES := ["Resource", "Tool", "Weapon", "Armor", "Accessory", "Co
 @export_range(0.0, 100.0, 0.05) var monster_damage_modifier: float = 0.0
 @export_range(0, 10, 1) var mining_tier: int = 0
 
+@export_group("Critical Hits")
+@export_range(0.0, 1.0, 0.001) var critical_chance: float = 0.0
+
+@export_group("Swing Timing")
+@export_range(0, 28, 1) var swing_speed: int = 0
+
 func get_title() -> String:
     return display_name if not display_name.is_empty() else String(id).capitalize()
 
@@ -38,6 +52,12 @@ func get_category_name() -> String:
 
 func is_action_item() -> bool:
     return category in [Category.TOOL, Category.WEAPON]
+
+func get_swing_interval() -> float:
+    if not is_action_item() or subtype not in [&"axe", &"pickaxe", &"sword"]:
+        return 0.0
+    var progress := clampf(float(swing_speed - WOOD_SWING_SPEED) / float(ASHENITE_SWING_SPEED - WOOD_SWING_SPEED), 0.0, 1.0)
+    return lerpf(WOOD_SWING_SECONDS, ASHENITE_SWING_SECONDS, progress)
 
 func fits_equipment_slot(slot: String) -> bool:
     if slot == "heirloom":
@@ -76,6 +96,24 @@ func roll_damage(target: DamageTarget) -> int:
     var damage := get_damage_range(target)
     return randi_range(damage.x, damage.y)
 
+func roll_hit(target: DamageTarget) -> DamageRoll:
+    var hit := DamageRoll.new()
+    hit.base_damage = roll_damage(target)
+    hit.damage = hit.base_damage
+    if hit.base_damage > 0 and is_action_item() and randf() < clampf(critical_chance, 0.0, 1.0):
+        hit.is_critical = true
+        hit.multiplier = _roll_critical_multiplier()
+        hit.damage = roundi(hit.base_damage * hit.multiplier)
+    return hit
+
+func _roll_critical_multiplier() -> float:
+    var roll := randi_range(1, 10000)
+    for index in range(CRITICAL_WEIGHTS.size()):
+        roll -= CRITICAL_WEIGHTS[index]
+        if roll <= 0:
+            return CRITICAL_MULTIPLIERS[index]
+    return CRITICAL_MULTIPLIERS[-1]
+
 func get_stat_lines() -> Array[String]:
     var lines: Array[String] = []
     var targets := [DamageTarget.ROCK, DamageTarget.TREE, DamageTarget.MONSTER]
@@ -89,3 +127,9 @@ func get_stat_lines() -> Array[String]:
     if category == Category.TOOL and subtype == &"pickaxe":
         lines.append("Mining tier: %d" % mining_tier)
     return lines
+
+class DamageRoll extends RefCounted:
+    var base_damage: int = 0
+    var damage: int = 0
+    var is_critical: bool = false
+    var multiplier: float = 1.0

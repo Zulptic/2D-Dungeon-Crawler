@@ -22,3 +22,4 @@ damage_min = 4
 damage_max = 6
 damage_multiplier = 1.3
 tree_damage_modifier = 1.0
+swing_speed = 16

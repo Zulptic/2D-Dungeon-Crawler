@@ -52,6 +52,7 @@ var _title_ink_rect := Rect2i()
 var _body_ink_rect := Rect2i()
 var _body_lines: Array[String] = []
 var _sale_value: int = -1
+var _swing_speed: int = -1
 var _damage_range := Vector2i.ZERO
 var _damage_text: String = ""
 var _footer_rect := Rect2i()
@@ -62,6 +63,8 @@ var _sale_rect := Rect2i()
 var _sale_coin_rect := Rect2i()
 var _sale_number_rect := Rect2i()
 var _sale_coin_source_rect := Rect2i()
+var _speed_rect := Rect2i()
+var _speed_number_rect := Rect2i()
 
 func _init() -> void:
     name = "ItemTooltip"
@@ -97,7 +100,7 @@ func _position_at_mouse(mouse: Vector2) -> void:
 
 func _hovered_slot(point: Vector2) -> Dictionary:
     # Dragging and the modal's closing animation own the pointer until finished.
-    if not inventory._drag.is_empty() or (inventory.visible and not inventory.is_open):
+    if get_viewport().gui_is_dragging() or not inventory._drag.is_empty() or (inventory.visible and not inventory.is_open):
         return {}
     var slot: Dictionary
     if inventory.is_open:
@@ -118,7 +121,7 @@ func _draw() -> void:
         draw_texture(_texture, Vector2.ZERO)
 
 func _set_item(item: InventoryItem) -> void:
-    if item != null and item == _item and _texture != null and _sale_value == item.get_sale_price() and _damage_range == _display_damage_range(item):
+    if item != null and item == _item and _texture != null and _sale_value == item.get_sale_price() and _damage_range == _display_damage_range(item) and _swing_speed == item.swing_speed:
         return
     _item = item
     _build_texture()
@@ -149,8 +152,10 @@ func _build_texture() -> void:
     var title := _item.get_title()
     var description := _item.description
     _sale_value = _item.get_sale_price()
+    _swing_speed = _item.swing_speed
     _damage_range = _display_damage_range(_item)
     var sale_number := str(_sale_value) if _sale_value > 0 else ""
+    var speed_number := str(_swing_speed) if _item.get_swing_interval() > 0.0 and _swing_speed > 0 else ""
     _damage_text = ""
     if _damage_range.y > 0:
         _damage_text = str(_damage_range.y) if _damage_range.x == _damage_range.y else "%d-%d" % [_damage_range.x, _damage_range.y]
@@ -162,10 +167,12 @@ func _build_texture() -> void:
     _damage_rect = Rect2i()
     _damage_icon_rect = Rect2i()
     _damage_number_rect = Rect2i()
+    _speed_rect = Rect2i()
+    _speed_number_rect = Rect2i()
 
     # Prewarm every visible glyph before copying the pixel font's texture cache.
     var cache_size := Vector2i(_font_size, 0)
-    for character in title + description + sale_number + _damage_text:
+    for character in title + description + sale_number + _damage_text + speed_number:
         _font.render_glyph(0, cache_size, _font.get_glyph_index(_font_size, character.unicode_at(0), 0))
     _font_atlases.clear()
     var title_image := _text_image(title)
@@ -180,8 +187,10 @@ func _build_texture() -> void:
     var coin_image: Image
     var damage_image: Image
     var damage_number: Image
+    var speed_image: Image
     var sale_width: int = 0
     var damage_width: int = 0
+    var speed_width: int = 0
     var content_height: int = 0
     var side_inset := TITLE_BORDER.x + CARD_SIDE_PADDING
     if _sale_value > 0:
@@ -202,9 +211,12 @@ func _build_texture() -> void:
         damage_number = _text_image(_damage_text)
         damage_width = damage_image.get_width() + CARD_ICON_GAP + damage_number.get_width() + 2 * side_inset
         content_height = maxi(content_height, maxi(damage_image.get_height(), damage_number.get_height()))
-    var footer_width := sale_width + damage_width
-    if sale_width > 0 and damage_width > 0:
-        footer_width += CARD_GAP
+    if not speed_number.is_empty():
+        speed_image = _text_image(speed_number)
+        speed_width = speed_image.get_width() + 2 * side_inset
+        content_height = maxi(content_height, speed_image.get_height())
+    var card_count := int(sale_width > 0) + int(damage_width > 0) + int(speed_width > 0)
+    var footer_width := sale_width + damage_width + speed_width + maxi(0, card_count - 1) * CARD_GAP
     var frame_width := maxi(MAIN_FRAME.get_width(), header_overhead + needed_title_width)
     if footer_width > 0:
         frame_width = maxi(frame_width, footer_width + 2 * TITLE_LEFT)
@@ -213,7 +225,9 @@ func _build_texture() -> void:
         frame_width += 1
     if footer_width > 0 and (frame_width - footer_width) % 2 != 0:
         # A single extra pixel gives the whole row an exact native-pixel center.
-        if damage_width > 0:
+        if speed_width > 0:
+            speed_width += 1
+        elif damage_width > 0:
             damage_width += 1
         else:
             sale_width += 1
@@ -233,11 +247,15 @@ func _build_texture() -> void:
         var card_height := TITLE_CONTENT_TOP + TITLE_TOP_PADDING + content_height + TITLE_BOTTOM_PADDING + TITLE_BORDER.y
         frame_height = maxi(frame_height, _body_ink_rect.end.y + FOOTER_CONTENT_GAP + card_height + FRAME_BOTTOM_BORDER + FOOTER_BOTTOM_MARGIN)
         _footer_rect = Rect2i(Vector2i((frame_width - footer_width) / 2, frame_height - FRAME_BOTTOM_BORDER - FOOTER_BOTTOM_MARGIN - card_height), Vector2i(footer_width, card_height))
+        var card_x := _footer_rect.position.x
         if sale_width > 0:
-            _sale_rect = Rect2i(_footer_rect.position, Vector2i(sale_width, card_height))
+            _sale_rect = Rect2i(Vector2i(card_x, _footer_rect.position.y), Vector2i(sale_width, card_height))
+            card_x += sale_width + CARD_GAP
         if damage_width > 0:
-            var damage_x := _sale_rect.end.x + CARD_GAP if sale_width > 0 else _footer_rect.position.x
-            _damage_rect = Rect2i(Vector2i(damage_x, _footer_rect.position.y), Vector2i(damage_width, card_height))
+            _damage_rect = Rect2i(Vector2i(card_x, _footer_rect.position.y), Vector2i(damage_width, card_height))
+            card_x += damage_width + CARD_GAP
+        if speed_width > 0:
+            _speed_rect = Rect2i(Vector2i(card_x, _footer_rect.position.y), Vector2i(speed_width, card_height))
 
     _image = _frame_image(frame_height, frame_width)
     _image.blend_rect(_title_plate(title_size), Rect2i(Vector2i.ZERO, title_size), _title_rect.position)
@@ -252,17 +270,24 @@ func _build_texture() -> void:
         var damage_ink := _draw_footer_card(_damage_rect, damage_image, damage_number)
         _damage_icon_rect = damage_ink[0]
         _damage_number_rect = damage_ink[1]
+    if _speed_rect.has_area():
+        var speed_ink := _draw_footer_card(_speed_rect, null, speed_image)
+        _speed_number_rect = speed_ink[1]
     _texture = ImageTexture.create_from_image(_image)
     size = _image.get_size()
     queue_redraw()
 
 func _draw_footer_card(card: Rect2i, icon: Image, number: Image) -> Array[Rect2i]:
-    var width := icon.get_width() + CARD_ICON_GAP + number.get_width()
+    var icon_width := icon.get_width() + CARD_ICON_GAP if icon != null else 0
+    var width := icon_width + number.get_width()
     var x := card.position.x + (card.size.x - width) / 2
-    var icon_rect := Rect2i(Vector2i(x, card.position.y + (card.size.y - icon.get_height()) / 2), icon.get_size())
-    var number_rect := Rect2i(Vector2i(icon_rect.end.x + CARD_ICON_GAP, card.position.y + (card.size.y - number.get_height()) / 2), number.get_size())
+    var icon_rect := Rect2i()
+    if icon != null:
+        icon_rect = Rect2i(Vector2i(x, card.position.y + (card.size.y - icon.get_height()) / 2), icon.get_size())
+    var number_rect := Rect2i(Vector2i(x + icon_width, card.position.y + (card.size.y - number.get_height()) / 2), number.get_size())
     _image.blend_rect(_title_plate(card.size), Rect2i(Vector2i.ZERO, card.size), card.position)
-    _image.blend_rect(icon, Rect2i(Vector2i.ZERO, icon.get_size()), icon_rect.position)
+    if icon != null:
+        _image.blend_rect(icon, Rect2i(Vector2i.ZERO, icon.get_size()), icon_rect.position)
     _image.blend_rect(number, Rect2i(Vector2i.ZERO, number.get_size()), number_rect.position)
     return [icon_rect, number_rect]
 
@@ -272,11 +297,13 @@ func _frame_image(height: int, width: int) -> Image:
     if width > source.get_width():
         source = _widen_frame(source, width)
     var extension := height - source.get_height()
+    var middle: int = source.get_height() / 2
     var result := Image.create_empty(width, height, false, Image.FORMAT_RGBA8)
-    result.blit_rect(source, Rect2i(0, 0, width, 76), Vector2i.ZERO)
+    # Insert only flat center rows; move the complete lower decorations together.
+    result.blit_rect(source, Rect2i(0, 0, width, middle), Vector2i.ZERO)
     for row in range(extension):
-        result.blit_rect(source, Rect2i(0, 50, width, 1), Vector2i(0, 76 + row))
-    result.blit_rect(source, Rect2i(0, 76, width, 18), Vector2i(0, 76 + extension))
+        result.blit_rect(source, Rect2i(0, middle, width, 1), Vector2i(0, middle + row))
+    result.blit_rect(source, Rect2i(0, middle, width, source.get_height() - middle), Vector2i(0, middle + extension))
     return result
 
 func _widen_frame(source: Image, width: int) -> Image:

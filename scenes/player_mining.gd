@@ -32,6 +32,7 @@ var _swing_item: InventoryItem
 var _swing_animation: StringName = &""
 var _mining_held: bool = false
 var _held_item: InventoryItem
+var _next_swing_usec: int = 0
 
 func _ready() -> void:
 	var frames := SpriteFrames.new()
@@ -235,7 +236,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 func try_swing(world_position: Vector2) -> bool:
-	if _busy or player.movement_locked or not has_usable_tool():
+	if _busy or Time.get_ticks_usec() < _next_swing_usec or player.movement_locked or not has_usable_tool():
 		return false
 	var item := equipped_item()
 	var direction := world_position - player.global_position
@@ -262,6 +263,9 @@ func try_swing(world_position: Vector2) -> bool:
 	var suffix := "side" if not is_zero_approx(player.facing.x) else ("up" if player.facing.y < 0.0 else "down")
 	sprite.flip_h = player.facing.x < 0.0
 	_swing_animation = StringName(String(TOOL_ANIMATIONS[item.subtype]) + "_" + suffix)
+	var interval := item.get_swing_interval()
+	_next_swing_usec = Time.get_ticks_usec() + roundi(interval * 1000000.0)
+	# Item speed controls the delay before another swing, keeping original playback.
 	sprite.play(_swing_animation)
 	return true
 
@@ -280,7 +284,7 @@ func _on_frame_changed() -> void:
 		if _swing_item.subtype == &"pickaxe":
 			applied = _swing_rock.take_pickaxe_hit(_swing_item, direction)
 		else:
-			applied = _swing_rock.take_hit(_swing_item.roll_damage(InventoryItem.DamageTarget.TREE), direction)
+			applied = _swing_rock.take_axe_hit(_swing_item, direction)
 		if applied and impact_pause_duration > 0.0:
 			# Hold only this swing at impact; normal world and UI processing continue.
 			sprite.pause()

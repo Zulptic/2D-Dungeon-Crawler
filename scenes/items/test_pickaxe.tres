@@ -21,3 +21,5 @@ sale_price = 3
 damage_min = 1
 damage_max = 2
 rock_damage_modifier = 1.0
+critical_chance = 0.05
+swing_speed = 4

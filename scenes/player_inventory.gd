@@ -189,6 +189,8 @@ func set_open(value: bool) -> void:
         return
     is_open = value
     _cancel_drag()
+    if value and hotbar != null:
+        hotbar.cancel_drag()
     _close_held = false
     close_pressed.visible = false
     if value:
@@ -457,11 +459,15 @@ func _refresh_icons() -> void:
 
 func _update_cursor() -> void:
     var next: StringName = &"default"
-    if is_open and not _drag.is_empty():
+    if (is_open and not _drag.is_empty()) or get_viewport().gui_is_dragging():
         next = &"pressed"
     elif is_open:
         var slot := _slot_at(_pointer)
         if not slot.is_empty() and model.get_item(slot.group, slot.index) != null:
+            next = &"hand"
+    elif hotbar != null and not hotbar.input_locked:
+        var index: int = hotbar.slot_at_screen(_pointer)
+        if index >= 0 and model.get_item(&"hotbar", index) != null:
             next = &"hand"
     if not is_instance_valid(_cursor):
         return
@@ -479,7 +485,9 @@ func _update_cursor() -> void:
 func _notification(what: int) -> void:
     if not is_node_ready():
         return
-    if what == NOTIFICATION_WM_MOUSE_ENTER or what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
+    if what == NOTIFICATION_DRAG_BEGIN or what == NOTIFICATION_DRAG_END:
+        _update_cursor()
+    elif what == NOTIFICATION_WM_MOUSE_ENTER or what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
         _pointer = get_viewport().get_mouse_position()
         _cursor_in_window = get_viewport_rect().has_point(_pointer)
         _update_cursor()
