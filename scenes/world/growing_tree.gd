@@ -61,6 +61,16 @@ func _atlas(sheet: Texture2D, region: Rect2) -> AtlasTexture:
     texture.filter_clip = true
     return texture
 
+func _standing_tree_texture(crown: Texture2D) -> Texture2D:
+    var top_image := crown.get_image()
+    top_image.convert(Image.FORMAT_RGBA8)
+    var stump_image := stump.texture.get_image()
+    stump_image.convert(Image.FORMAT_RGBA8)
+    var combined := Image.create_empty(top_image.get_width(), top_image.get_height(), false, Image.FORMAT_RGBA8)
+    combined.blend_rect(stump_image, Rect2i(Vector2i.ZERO, stump_image.get_size()), Vector2i(_stump_origin - _sprite_origin))
+    combined.blend_rect(top_image, Rect2i(Vector2i.ZERO, top_image.get_size()), Vector2i.ZERO)
+    return ImageTexture.create_from_image(combined)
+
 func _apply_stage(stage: int) -> void:
     if _shake != null and _shake.is_valid():
         _shake.kill()
@@ -72,11 +82,13 @@ func _apply_stage(stage: int) -> void:
     health = clampi(health, 0, max_health)
     _display_health = health
     if growth_stage == 4:
-        sprite.texture = _atlas(CHOPPED_SHEET, Rect2(0, 0, 48, 96))
+        var crown := _atlas(CHOPPED_SHEET, Rect2(0, 0, 48, 96))
         _sprite_origin = Vector2(-24, -88)
         stump.texture = _atlas(MATURE_SHEET, Rect2(192, 32, 16, 32))
         _stump_origin = Vector2(-8, -24)
-        stump.visible = true
+        # Fade the standing tree once, so its hidden cut surface cannot show through.
+        sprite.texture = _standing_tree_texture(crown)
+        stump.visible = false
     else:
         var region: Rect2 = GROWTH_REGIONS[growth_stage]
         sprite.texture = _atlas(GROWTH_SHEET, region)
@@ -151,6 +163,9 @@ func _fell_tree() -> void:
         _shake.kill()
     _set_shake_offset(Vector2.ZERO)
     var top_texture: Texture2D = sprite.texture
+    if growth_stage == 4:
+        # The falling crown stays separate from the stump left in the ground.
+        top_texture = _atlas(CHOPPED_SHEET, Rect2(0, 0, 48, 96))
     var pivot := Vector2(0, -10)
     if growth_stage < 4:
         var region: Rect2 = GROWTH_REGIONS[growth_stage]

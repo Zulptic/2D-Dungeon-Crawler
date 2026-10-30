@@ -1,4 +1,5 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
+[ext_resource type="Script" path="res://scenes/world/player_occlusion_fade.gd" id="occlusion_fade"]
 [ext_resource type="Script" path="res://scenes/world/breakable_rock.gd" id="1"]
 [ext_resource type="Texture2D" path="res://assets/tiles/Rocks.png" id="2"]
 [ext_resource type="Texture2D" path="res://assets/hud/environmental_hud/Environment_Health_Bar.png" id="3"]
@@ -34,3 +35,6 @@ centered = false
 position = Vector2(3, 2)
 texture = SubResource("Fill")
 centered = false
+
+[node name="PlayerOcclusionFade" type="Node" parent="."]
+script = ExtResource("occlusion_fade")

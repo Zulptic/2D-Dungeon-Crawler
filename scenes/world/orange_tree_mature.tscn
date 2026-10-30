@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree.tscn" id="1_tree"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Size_03_Chopped.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="StageTexture"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 48, 96)
+filter_clip = true
+
+[node name="OrangeMatureTree" instance=ExtResource("1_tree")]
+starting_stage = 4
+max_health = 35
+
+[node name="Sprite2D" parent="." index="2"]
+position = Vector2(-24, -88)
+texture = SubResource("StageTexture")
+
+[node name="CollisionShape2D" parent="." index="0"]
+disabled = false
+
+[node name="Stump" parent="." index="1"]
+visible = true

@@ -288,7 +288,7 @@ func _input(event: InputEvent) -> void:
         _pointer = event.position
         if event.button_index == MOUSE_BUTTON_LEFT:
             if event.pressed:
-                _press_at(_pointer)
+                _press_at(_pointer, event.shift_pressed)
             else:
                 _release_at(_pointer)
         elif event.button_index == MOUSE_BUTTON_RIGHT:
@@ -316,7 +316,7 @@ func _begin_drag(slot: Dictionary, quantity: int, sticky: bool) -> void:
     _update_drag_position()
     _refresh_icons()
 
-func _press_at(point: Vector2) -> void:
+func _press_at(point: Vector2, quick_move: bool = false) -> void:
     if _is_over_close(point):
         _close_held = true
         close_pressed.visible = true
@@ -326,6 +326,9 @@ func _press_at(point: Vector2) -> void:
         return
     var slot := _slot_at(point)
     if not slot.is_empty():
+        if quick_move and slot.group in [&"hotbar", &"backpack"]:
+            model.quick_transfer(slot.group, slot.index)
+            return
         _begin_drag(slot, model.get_quantity(slot.group, slot.index), false)
 
 func _pick_split(point: Vector2, half: bool) -> void:

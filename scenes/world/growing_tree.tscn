@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
+[ext_resource type="Script" path="res://scenes/world/player_occlusion_fade.gd" id="occlusion_fade"]
 [ext_resource type="Script" path="res://scenes/world/growing_tree.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://assets/tiles/Size_02.png" id="2_growth"]
 [ext_resource type="Texture2D" path="res://assets/tiles/Size_03.png" id="3_mature"]
@@ -70,3 +71,7 @@ centered = false
 wait_time = 10.0
 one_shot = true
 process_callback = 0
+
+[node name="PlayerOcclusionFade" type="Node" parent="."]
+script = ExtResource("occlusion_fade")
+visual_paths = Array[NodePath]([NodePath("../Stump"), NodePath("../Sprite2D")])

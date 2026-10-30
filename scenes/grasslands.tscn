@@ -7,6 +7,8 @@
 [ext_resource type="TileSet" uid="uid://6t4impj2fgk3" path="res://scenes/world/rocks_tileset.tres" id="5_rocks"]
 [ext_resource type="TileSet" uid="uid://cmv64q6ps5l84" path="res://scenes/world/trees_tileset.tres" id="6_trees"]
 [ext_resource type="Script" uid="uid://di3ppychepu3c" path="res://scenes/day_night_cycle.gd" id="7_gp0ih"]
+[ext_resource type="PackedScene" path="res://scenes/world/apple_tree_mature.tscn" id="8_apple_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree_mature.tscn" id="orange_tree"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rakyr"]
 texture = ExtResource("1_43ydm")
@@ -706,7 +708,7 @@ tile_set = ExtResource("5_rocks")
 
 [node name="Trees" type="TileMapLayer" parent="." unique_id=1788631455]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AADy/+X/AAAAAAAABADr/+b/AAAAAAAAAADm/+L/AAAAAAAABADm/+r/AAAAAAAABADy/+v/AAAAAAAABADt/+H/AAAAAAAABADp/+P/AAAAAAAABADj/+z/AAAAAAAABAA=")
+tile_map_data = PackedByteArray("AADy/+X/AAAAAAAABADr/+b/AAAAAAAAAADm/+L/AAAAAAAABADm/+r/AAAAAAAABADy/+v/AAAAAAAABADt/+H/AAAAAAAABADp/+P/AAAAAAAABADj/+z/AAAAAAAABADf/+r/AAAAAAAACQA=")
 tile_set = ExtResource("6_trees")
 
 [node name="Player" parent="." unique_id=2067848750 instance=ExtResource("3_player")]
@@ -716,3 +718,13 @@ position = Vector2(-264, -392)
 
 [node name="DayNightCycle" type="CanvasModulate" parent="." unique_id=578337992]
 script = ExtResource("7_gp0ih")
+
+[node name="AppleTree" parent="." unique_id=761913751 instance=ExtResource("8_apple_tree")]
+position = Vector2(-184, -296)
+apple_growth_seconds = 20.0
+starting_apples = 4
+
+[node name="OrangeTree" parent="." unique_id=1386654653 instance=ExtResource("orange_tree")]
+position = Vector2(-264, -280)
+orange_growth_seconds = 20.0
+starting_oranges = 4

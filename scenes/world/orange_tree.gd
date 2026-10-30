@@ -1,0 +1,24 @@
+extends "res://scenes/world/fruit_tree.gd"
+## Orange fruit settings; growth, harvesting, and chopping share the same lifecycle.
+@export_range(1.0, 600.0, 1.0) var orange_growth_seconds: float = 20.0:
+    set(value):
+        fruit_growth_seconds = value
+    get:
+        return fruit_growth_seconds
+@export_range(0, 4, 1) var starting_oranges: int = 0:
+    set(value):
+        starting_fruit = value
+    get:
+        return starting_fruit
+
+func _init() -> void:
+    fruit_stages.assign([
+        preload("res://assets/items/Orange_Stage1.png"),
+        preload("res://assets/items/Orange_Stage2.png")
+    ])
+    fruit_pickup_scene = preload("res://scenes/world/orange_pickup.tscn")
+
+func _ready() -> void:
+    super._ready()
+    add_to_group(&"orange_trees")
+    fruit_timer.name = "OrangeGrowthTimer"

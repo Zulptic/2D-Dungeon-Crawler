@@ -117,6 +117,43 @@ func move_quantity(source_group: StringName, source_index: int, target_group: St
     changed.emit()
     return moved
 
+func quick_transfer(source_group: StringName, source_index: int) -> int:
+    if source_group not in [&"hotbar", &"backpack"] or not _valid_slot(source_group, source_index):
+        return 0
+    var item := get_item(source_group, source_index)
+    var quantity := get_quantity(source_group, source_index)
+    if item == null or quantity <= 0:
+        return 0
+    var target_group: StringName = &"backpack" if source_group == &"hotbar" else &"hotbar"
+    var remaining := quantity
+    # Match stacks throughout the destination before using its empty slots.
+    for index in range(COUNTS[target_group]):
+        var current := get_item(target_group, index)
+        if not _can_stack(item, current):
+            continue
+        var amount := get_quantity(target_group, index)
+        var moved := mini(remaining, maxi(0, _slot_limit(target_group, current) - amount))
+        if moved > 0:
+            _write_slot(target_group, index, current, amount + moved)
+            remaining -= moved
+        if remaining == 0:
+            break
+    if remaining > 0:
+        for index in range(COUNTS[target_group]):
+            if get_item(target_group, index) != null:
+                continue
+            var moved := mini(remaining, _slot_limit(target_group, item))
+            _write_slot(target_group, index, item, moved)
+            remaining -= moved
+            if remaining == 0:
+                break
+    var transferred := quantity - remaining
+    if transferred > 0:
+        _write_slot(source_group, source_index, item if remaining > 0 else null, remaining)
+        # One coherent update; moving owned items is not a world pickup.
+        changed.emit()
+    return transferred
+
 func remove_quantity(group: StringName, index: int, quantity: int) -> bool:
     var item := get_item(group, index)
     var amount := get_quantity(group, index)

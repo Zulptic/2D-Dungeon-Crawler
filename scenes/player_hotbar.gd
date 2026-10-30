@@ -22,6 +22,7 @@ var _key_labels: Array[Label] = []
 var _dragged_slot: int = -1
 var _dragged_quantity: int = 0
 var _hotbar_drag: Dictionary = {}
+var _quick_transfer_pressed: bool = false
 
 func _ready() -> void:
     _update_layout()
@@ -114,11 +115,15 @@ func _on_gui_input(event: InputEvent) -> void:
     if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
         var index := _slot_at_local(event.position)
         if index >= 0:
-            select_slot(index + 1)
+            if event.shift_pressed and _inventory != null:
+                _quick_transfer_pressed = true
+                _inventory.quick_transfer(&"hotbar", index)
+            else:
+                select_slot(index + 1)
             accept_event()
 
 func _get_drag_data(at_position: Vector2) -> Variant:
-    if input_locked or _inventory == null:
+    if input_locked or _quick_transfer_pressed or _inventory == null:
         return null
     var index := _slot_at_local(at_position)
     if index < 0:
@@ -183,6 +188,7 @@ func _make_drag_preview(item: InventoryItem, quantity: int) -> Control:
     return preview
 
 func cancel_drag() -> void:
+    _quick_transfer_pressed = false
     if _hotbar_drag.is_empty():
         return
     if get_viewport().gui_is_dragging():
@@ -191,6 +197,8 @@ func cancel_drag() -> void:
     _refresh_items()
 
 func _input(event: InputEvent) -> void:
+    if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+        _quick_transfer_pressed = false
     if _hotbar_drag.is_empty():
         return
     if event is InputEventMouseButton and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN, MOUSE_BUTTON_WHEEL_LEFT, MOUSE_BUTTON_WHEEL_RIGHT]:

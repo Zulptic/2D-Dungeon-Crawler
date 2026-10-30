@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8wvcf32ml7c"
-path="res://.godot/imported/Crush_Side-Sheet.png-fa0639277da18cf25ca64a18170e57d8.ctex"
+uid="uid://6vux5xksyoop"
+path="res://.godot/imported/Crush_Down-Sheet-Iron.png-519ffa84f31a30921f9184dbc57cd729.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/Crush_Side-Sheet.png"
-dest_files=["res://.godot/imported/Crush_Side-Sheet.png-fa0639277da18cf25ca64a18170e57d8.ctex"]
+source_file="res://assets/characters/player/Crush_Down-Sheet-Iron.png"
+dest_files=["res://.godot/imported/Crush_Down-Sheet-Iron.png-519ffa84f31a30921f9184dbc57cd729.ctex"]
 
 [params]
 

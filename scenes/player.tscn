@@ -1,36 +1,56 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/characters/player/Walk_Down-Sheet.png" id="1_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Crush_Down-Sheet.png" id="2_f1ej7"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Walk_Up-Sheet.png" id="2_up"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Crush_Side-Sheet.png" id="3_oprun"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Walk_Side-Sheet.png" id="3_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Crush_Up-Sheet.png" id="4_a8ls1"]
-[ext_resource type="Script" path="res://scenes/player.gd" id="4_movement"]
-[ext_resource type="Script" path="res://scenes/player_mining.gd" id="5_mining"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Idle_Down-Sheet.png" id="tex_idle_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Idle_Side-Sheet.png" id="tex_idle_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Idle_Up-Sheet.png" id="tex_idle_up"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Run_Down-Sheet.png" id="tex_run_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Run_Side-Sheet.png" id="tex_run_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Run_Up-Sheet.png" id="tex_run_up"]
+[ext_resource type="Texture2D" uid="uid://b5d2t3u72rqxd" path="res://assets/characters/player/Walk_Down-Sheet.png" id="1_down"]
+[ext_resource type="Texture2D" uid="uid://6vux5xksyoop" path="res://assets/characters/player/Crush_Down-Sheet-Iron.png" id="2_f1ej7"]
+[ext_resource type="Texture2D" uid="uid://cs1r8cbk75p5t" path="res://assets/characters/player/Walk_Up-Sheet.png" id="2_up"]
+[ext_resource type="Texture2D" uid="uid://c8wvcf32ml7c" path="res://assets/characters/player/Crush_Side-Sheet-Iron.png" id="3_oprun"]
+[ext_resource type="Texture2D" uid="uid://pjnv4k0hcnmy" path="res://assets/characters/player/Walk_Side-Sheet.png" id="3_side"]
+[ext_resource type="Texture2D" uid="uid://c4jnak2j043tf" path="res://assets/characters/player/Crush_Up-Sheet-Iron.png" id="4_a8ls1"]
+[ext_resource type="Script" uid="uid://lvhd110s0l1s" path="res://scenes/player.gd" id="4_movement"]
+[ext_resource type="Script" uid="uid://c7rmhsmkp3sda" path="res://scenes/player_mining.gd" id="5_mining"]
+[ext_resource type="Texture2D" uid="uid://bhryoxbtnybk8" path="res://assets/characters/player/Idle_Down-Sheet.png" id="tex_idle_down"]
+[ext_resource type="Texture2D" uid="uid://dh8dhnjrpc050" path="res://assets/characters/player/Idle_Side-Sheet.png" id="tex_idle_side"]
+[ext_resource type="Texture2D" uid="uid://bsdutdnjeaspa" path="res://assets/characters/player/Idle_Up-Sheet.png" id="tex_idle_up"]
+[ext_resource type="Texture2D" uid="uid://ble0p41tf6d4x" path="res://assets/characters/player/Run_Down-Sheet.png" id="tex_run_down"]
+[ext_resource type="Texture2D" uid="uid://dh4yhfff0055k" path="res://assets/characters/player/Run_Side-Sheet.png" id="tex_run_side"]
+[ext_resource type="Texture2D" uid="uid://ducojv7sk6bmt" path="res://assets/characters/player/Run_Up-Sheet.png" id="tex_run_up"]
+[ext_resource type="Texture2D" uid="uid://divwkjbr34lt7" path="res://assets/characters/player/Slice_Down-Sheet.png" id="tex_slice_down"]
+[ext_resource type="Texture2D" uid="uid://c3r6dv4eeyngm" path="res://assets/characters/player/Slice_Side-Sheet.png" id="tex_slice_side"]
+[ext_resource type="Texture2D" uid="uid://r3fsia72ocf4" path="res://assets/characters/player/Slice_Up-Sheet.png" id="tex_slice_up"]
+[ext_resource type="Texture2D" uid="uid://btjwtunkjrkmw" path="res://assets/characters/player/Pierce_Down-Sheet.png" id="tex_pierce_down"]
+[ext_resource type="Texture2D" uid="uid://d2gouec2jtix6" path="res://assets/characters/player/Pierce_Side-Sheet.png" id="tex_pierce_side"]
+[ext_resource type="Texture2D" uid="uid://b7cf68ojq52qa" path="res://assets/characters/player/Pierce_Top-Sheet.png" id="tex_pierce_up"]
+[ext_resource type="Texture2D" uid="uid://bq13rsaicguou" path="res://assets/characters/player/Carry_Idle_Down-Sheet.png" id="tex_carry_idle_down"]
+[ext_resource type="Texture2D" uid="uid://2bytrq48s55w" path="res://assets/characters/player/Carry_Idle_Side-Sheet.png" id="tex_carry_idle_side"]
+[ext_resource type="Texture2D" uid="uid://dfaycb7kee0vy" path="res://assets/characters/player/Carry_Idle_Up-Sheet.png" id="tex_carry_idle_up"]
+[ext_resource type="Texture2D" uid="uid://dmy42tpbn5a4v" path="res://assets/characters/player/Carry_Walk_Down-Sheet.png" id="tex_carry_walk_down"]
+[ext_resource type="Texture2D" uid="uid://d2ho6sss8kgoj" path="res://assets/characters/player/Carry_Walk_Side-Sheet.png" id="tex_carry_walk_side"]
+[ext_resource type="Texture2D" uid="uid://bxcqd52lvxdq1" path="res://assets/characters/player/Carry_Walk_Up-Sheet.png" id="tex_carry_walk_up"]
+[ext_resource type="Texture2D" uid="uid://bompxgv0ajiu3" path="res://assets/characters/player/Carry_Run_Down-Sheet.png" id="tex_carry_run_down"]
+[ext_resource type="Texture2D" uid="uid://now11csbim8i" path="res://assets/characters/player/Carry_Run_Side-Sheet.png" id="tex_carry_run_side"]
+[ext_resource type="Texture2D" uid="uid://c0q7n2ncpv2kb" path="res://assets/characters/player/Carry_Run_Up-Sheet.png" id="tex_carry_run_up"]
+[ext_resource type="Texture2D" uid="uid://n5wv4fnkn0ya" path="res://assets/characters/player/Crush_Down-Sheet-Wood.png" id="tex_crush_down_wood"]
+[ext_resource type="Texture2D" uid="uid://cyxm0pj53ddn6" path="res://assets/characters/player/Crush_Down-Sheet-Copper.png" id="tex_crush_down_copper"]
+[ext_resource type="Texture2D" uid="uid://3nw5l7t7o8o4" path="res://assets/characters/player/Crush_Down-Sheet-Gold.png" id="tex_crush_down_gold"]
+[ext_resource type="Texture2D" uid="uid://btm237eqqb4ke" path="res://assets/characters/player/Crush_Down-Sheet-Echryte.png" id="tex_crush_down_echryte"]
+[ext_resource type="Texture2D" uid="uid://cspsogxdykkb4" path="res://assets/characters/player/Crush_Down-Sheet-Aetherite.png" id="tex_crush_down_aetherite"]
+[ext_resource type="Texture2D" uid="uid://df3g6r538u7qs" path="res://assets/characters/player/Crush_Down-Sheet-Ashenite.png" id="tex_crush_down_ashenite"]
+[ext_resource type="Texture2D" uid="uid://bv81gdnsd7ncn" path="res://assets/characters/player/Crush_Side-Sheet-Wood.png" id="tex_crush_side_wood"]
+[ext_resource type="Texture2D" uid="uid://evjy0f2my6ef" path="res://assets/characters/player/Crush_Side-Sheet-Copper.png" id="tex_crush_side_copper"]
+[ext_resource type="Texture2D" uid="uid://duah4s60lpqrn" path="res://assets/characters/player/Crush_Side-Sheet-Gold.png" id="tex_crush_side_gold"]
+[ext_resource type="Texture2D" uid="uid://df388jltyf0at" path="res://assets/characters/player/Crush_Side-Sheet-Echryte.png" id="tex_crush_side_echryte"]
+[ext_resource type="Texture2D" uid="uid://btntpcl0i2j8t" path="res://assets/characters/player/Crush_Side-Sheet-Aetherite.png" id="tex_crush_side_aetherite"]
+[ext_resource type="Texture2D" uid="uid://cyc054o32t5em" path="res://assets/characters/player/Crush_Side-Sheet-Ashenite.png" id="tex_crush_side_ashenite"]
 
-[ext_resource type="Texture2D" path="res://assets/characters/player/Slice_Down-Sheet.png" id="tex_slice_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Slice_Side-Sheet.png" id="tex_slice_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Slice_Up-Sheet.png" id="tex_slice_up"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Pierce_Down-Sheet.png" id="tex_pierce_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Pierce_Side-Sheet.png" id="tex_pierce_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Pierce_Top-Sheet.png" id="tex_pierce_up"]
 
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Idle_Down-Sheet.png" id="tex_carry_idle_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Idle_Side-Sheet.png" id="tex_carry_idle_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Idle_Up-Sheet.png" id="tex_carry_idle_up"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Walk_Down-Sheet.png" id="tex_carry_walk_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Walk_Side-Sheet.png" id="tex_carry_walk_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Walk_Up-Sheet.png" id="tex_carry_walk_up"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Run_Down-Sheet.png" id="tex_carry_run_down"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Run_Side-Sheet.png" id="tex_carry_run_side"]
-[ext_resource type="Texture2D" path="res://assets/characters/player/Carry_Run_Up-Sheet.png" id="tex_carry_run_up"]
+[ext_resource type="Texture2D" uid="uid://dkwiiojuj3717" path="res://assets/characters/player/Crush_Up-Sheet-Wood.png" id="tex_crush_up_wood"]
+[ext_resource type="Texture2D" uid="uid://dm3ofpppgk7ql" path="res://assets/characters/player/Crush_Up-Sheet-Copper.png" id="tex_crush_up_copper"]
+[ext_resource type="Texture2D" uid="uid://c2x1y7dtdy5e6" path="res://assets/characters/player/Crush_Up-Sheet-Gold.png" id="tex_crush_up_gold"]
+[ext_resource type="Texture2D" uid="uid://dhocbxsktbfd4" path="res://assets/characters/player/Crush_Up-Sheet-Echryte.png" id="tex_crush_up_echryte"]
+[ext_resource type="Texture2D" uid="uid://b2rf6q223kq8" path="res://assets/characters/player/Crush_Up-Sheet-Aetherite.png" id="tex_crush_up_aetherite"]
+[ext_resource type="Texture2D" uid="uid://cnj6cfus4splh" path="res://assets/characters/player/Crush_Up-Sheet-Ashenite.png" id="tex_crush_up_ashenite"]
+
+[ext_resource type="Script" path="res://scenes/world/player_fruit_interaction.gd" id="fruit_interaction"]
 
 [sub_resource type="AtlasTexture" id="Atlas_carry_idle_down_0"]
 atlas = ExtResource("tex_carry_idle_down")
@@ -824,8 +844,752 @@ atlas = ExtResource("tex_pierce_up")
 region = Rect2(448, 0, 64, 64)
 filter_clip = true
 
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_0"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_1"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_2"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_3"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_4"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_5"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_6"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_wood_7"]
+atlas = ExtResource("tex_crush_down_wood")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_0"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_1"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_2"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_3"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_4"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_5"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_6"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_copper_7"]
+atlas = ExtResource("tex_crush_down_copper")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_0"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_1"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_2"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_3"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_4"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_5"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_6"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_gold_7"]
+atlas = ExtResource("tex_crush_down_gold")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_0"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_1"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_2"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_3"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_4"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_5"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_6"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_echryte_7"]
+atlas = ExtResource("tex_crush_down_echryte")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_0"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_1"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_2"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_3"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_4"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_5"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_6"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_aetherite_7"]
+atlas = ExtResource("tex_crush_down_aetherite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_0"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_1"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_2"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_3"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_4"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_5"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_6"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_down_ashenite_7"]
+atlas = ExtResource("tex_crush_down_ashenite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_0"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_1"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_2"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_3"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_4"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_5"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_6"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_wood_7"]
+atlas = ExtResource("tex_crush_side_wood")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_0"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_1"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_2"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_3"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_4"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_5"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_6"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_copper_7"]
+atlas = ExtResource("tex_crush_side_copper")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_0"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_1"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_2"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_3"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_4"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_5"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_6"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_gold_7"]
+atlas = ExtResource("tex_crush_side_gold")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_0"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_1"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_2"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_3"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_4"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_5"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_6"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_echryte_7"]
+atlas = ExtResource("tex_crush_side_echryte")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_0"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_1"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_2"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_3"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_4"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_5"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_6"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_aetherite_7"]
+atlas = ExtResource("tex_crush_side_aetherite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_0"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_1"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_2"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_3"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_4"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_5"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_6"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_side_ashenite_7"]
+atlas = ExtResource("tex_crush_side_ashenite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_0"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_1"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_2"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_3"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_4"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_5"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_6"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_wood_7"]
+atlas = ExtResource("tex_crush_up_wood")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_0"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_1"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_2"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_3"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_4"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_5"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_6"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_copper_7"]
+atlas = ExtResource("tex_crush_up_copper")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_0"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_1"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_2"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_3"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_4"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_5"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_6"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_gold_7"]
+atlas = ExtResource("tex_crush_up_gold")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_0"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_1"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_2"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_3"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_4"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_5"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_6"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_echryte_7"]
+atlas = ExtResource("tex_crush_up_echryte")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_0"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_1"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_2"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_3"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_4"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_5"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_6"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_aetherite_7"]
+atlas = ExtResource("tex_crush_up_aetherite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_0"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_1"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_2"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_3"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_4"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_5"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_6"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_crush_up_ashenite_7"]
+atlas = ExtResource("tex_crush_up_ashenite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_w5j5w"]
-animations = [{
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_7")}], "loop": false, "name": &"crush_up_wood", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_copper_7")}], "loop": false, "name": &"crush_up_copper", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_487ah")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_md1ol")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_bj30b")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_jc3p3")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_hax0n")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_t4otl")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_j2b1d")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_cs1tg")}], "loop": false, "name": &"crush_up_iron", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_gold_7")}], "loop": false, "name": &"crush_up_gold", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_echryte_7")}], "loop": false, "name": &"crush_up_echryte", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_aetherite_7")}], "loop": false, "name": &"crush_up_aetherite", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_ashenite_7")}], "loop": false, "name": &"crush_up_ashenite", "speed": 12.0},
+
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_wood_7")}], "loop": false, "name": &"crush_side_wood", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_copper_7")}], "loop": false, "name": &"crush_side_copper", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_ke2ow")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_ujl30")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_31cv2")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_pf23h")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_dt7fs")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_wqfne")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_wnwbv")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_gl8cc")}], "loop": false, "name": &"crush_side_iron", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_gold_7")}], "loop": false, "name": &"crush_side_gold", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_echryte_7")}], "loop": false, "name": &"crush_side_echryte", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_aetherite_7")}], "loop": false, "name": &"crush_side_aetherite", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_side_ashenite_7")}], "loop": false, "name": &"crush_side_ashenite", "speed": 12.0},
+
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_wood_7")}], "loop": false, "name": &"crush_down_wood", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_copper_7")}], "loop": false, "name": &"crush_down_copper", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("AtlasTexture_qfm1y")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_fulsm")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_4r5pv")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_60mlk")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_i4ail")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_a38lo")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_4ni07")}, {"duration": 1.0, "texture": SubResource("AtlasTexture_l71n6")}], "loop": false, "name": &"crush_down_iron", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_gold_7")}], "loop": false, "name": &"crush_down_gold", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_echryte_7")}], "loop": false, "name": &"crush_down_echryte", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_aetherite_7")}], "loop": false, "name": &"crush_down_aetherite", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_down_ashenite_7")}], "loop": false, "name": &"crush_down_ashenite", "speed": 12.0},
+{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qfm1y")
@@ -1145,3 +1909,6 @@ zoom = Vector2(3, 3)
 
 [node name="Mining" type="Node2D" parent="." unique_id=1711090430]
 script = ExtResource("5_mining")
+
+[node name="FruitInteraction" type="Node2D" parent="."]
+script = ExtResource("fruit_interaction")

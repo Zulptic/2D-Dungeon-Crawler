@@ -5,14 +5,34 @@
 [ext_resource type="PackedScene" path="res://scenes/world/tree_medium.tscn" id="3_tree"]
 [ext_resource type="PackedScene" path="res://scenes/world/tree_large_medium.tscn" id="4_tree"]
 [ext_resource type="PackedScene" path="res://scenes/world/tree_mature.tscn" id="5_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/apple_tree.tscn" id="apple_0"]
+[ext_resource type="PackedScene" path="res://scenes/world/apple_tree_leaf_bud.tscn" id="apple_1"]
+[ext_resource type="PackedScene" path="res://scenes/world/apple_tree_medium.tscn" id="apple_2"]
+[ext_resource type="PackedScene" path="res://scenes/world/apple_tree_large_medium.tscn" id="apple_3"]
+[ext_resource type="PackedScene" path="res://scenes/world/apple_tree_mature.tscn" id="apple_4"]
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree.tscn" id="orange_0"]
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree_leaf_bud.tscn" id="orange_1"]
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree_medium.tscn" id="orange_2"]
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree_large_medium.tscn" id="orange_3"]
+[ext_resource type="PackedScene" path="res://scenes/world/orange_tree_mature.tscn" id="orange_4"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TreeStages"]
-resource_name = "Light Green Trees"
+resource_name = "Oak, Apple, and Orange Trees"
 scenes/0/scene = ExtResource("1_tree")
 scenes/1/scene = ExtResource("2_tree")
 scenes/2/scene = ExtResource("3_tree")
 scenes/3/scene = ExtResource("4_tree")
 scenes/4/scene = ExtResource("5_tree")
+scenes/5/scene = ExtResource("apple_0")
+scenes/6/scene = ExtResource("apple_1")
+scenes/7/scene = ExtResource("apple_2")
+scenes/8/scene = ExtResource("apple_3")
+scenes/9/scene = ExtResource("apple_4")
+scenes/10/scene = ExtResource("orange_0")
+scenes/11/scene = ExtResource("orange_1")
+scenes/12/scene = ExtResource("orange_2")
+scenes/13/scene = ExtResource("orange_3")
+scenes/14/scene = ExtResource("orange_4")
 
 [resource]
 sources/0 = SubResource("TreeStages")

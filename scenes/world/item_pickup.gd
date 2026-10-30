@@ -6,6 +6,7 @@ var _blocked_collector: Node2D
 @export_range(0.5, 4.0, 0.25) var pickup_radius_tiles: float = 1.5
 @export_range(0.08, 0.5, 0.01) var pull_duration: float = 0.18
 @export_range(1.0, 6.0, 0.5) var shadow_radius: float = 2.5
+@export_range(0.0, 16.0, 0.5) var hover_height: float = 4.0
 @onready var sprite: Sprite2D = $Sprite2D
 var _collected: bool = false
 var _retry: float = 0.0
@@ -80,7 +81,7 @@ func _process(delta: float) -> void:
     _update_visual()
 
 func _update_visual() -> void:
-    var lift := 4.0 + sin(_hover_phase)*0.75
+    var lift := hover_height + sin(_hover_phase)*0.75
     if _pulling:
         var progress := clampf(_pull_elapsed/pull_duration,0.0,1.0)
         lift = lerpf(_pull_lift,10.0,progress*progress)

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3]
+
+[ext_resource type="Script" path="res://scenes/inventory_item.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/items/Orange_Stage2.png" id="2_fruit"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"orange"
+display_name = "Orange"
+description = "A juicy orange freshly picked from a tree."
+icon = ExtResource("2_fruit")
+category = 5
+subtype = &"fruit"
+material = &"orange"
+max_stack = 999
+sale_price = 3

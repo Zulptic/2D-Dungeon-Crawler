@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4jnak2j043tf"
-path="res://.godot/imported/Crush_Up-Sheet.png-a613d561e89fb275ec0ca690a31f7c04.ctex"
+uid="uid://cnj6cfus4splh"
+path="res://.godot/imported/Crush_Up-Sheet-Ashenite.png-58f865206cb0c0aab8c89a8cdbe5cea1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/Crush_Up-Sheet.png"
-dest_files=["res://.godot/imported/Crush_Up-Sheet.png-a613d561e89fb275ec0ca690a31f7c04.ctex"]
+source_file="res://assets/characters/player/Crush_Up-Sheet-Ashenite.png"
+dest_files=["res://.godot/imported/Crush_Up-Sheet-Ashenite.png-58f865206cb0c0aab8c89a8cdbe5cea1.ctex"]
 
 [params]
 

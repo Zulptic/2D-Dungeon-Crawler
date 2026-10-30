@@ -46,6 +46,7 @@ var stamina_exhausted: bool = false
 var _recharge_delay_left: float = 0.0
 
 func _ready() -> void:
+    add_to_group(&"player")
     stamina = max_stamina
     sprite.frame_changed.connect(_update_carried_visual)
     sprite.animation_changed.connect(_update_carried_visual)

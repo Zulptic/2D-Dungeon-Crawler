@@ -263,6 +263,12 @@ func try_swing(world_position: Vector2) -> bool:
 	var suffix := "side" if not is_zero_approx(player.facing.x) else ("up" if player.facing.y < 0.0 else "down")
 	sprite.flip_h = player.facing.x < 0.0
 	_swing_animation = StringName(String(TOOL_ANIMATIONS[item.subtype]) + "_" + suffix)
+	# Use a material-specific pickaxe sheet when that direction is available.
+	# Other directions keep their existing animation until their art is ready.
+	if item.subtype == &"pickaxe":
+		var material_animation := StringName(String(_swing_animation) + "_" + String(item.material))
+		if sprite.sprite_frames.has_animation(material_animation):
+			_swing_animation = material_animation
 	var interval := item.get_swing_interval()
 	_next_swing_usec = Time.get_ticks_usec() + roundi(interval * 1000000.0)
 	# Item speed controls the delay before another swing, keeping original playback.

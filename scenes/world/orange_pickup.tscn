@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/item_pickup.tscn" id="1_pickup"]
+[ext_resource type="Script" path="res://scenes/world/falling_fruit.gd" id="2_fall"]
+[ext_resource type="Resource" path="res://scenes/items/orange.tres" id="3_orange"]
+
+[node name="OrangePickup" instance=ExtResource("1_pickup")]
+script = ExtResource("2_fall")
+item = ExtResource("3_orange")
+hover_height = 8.0
+
+[node name="Sprite2D" parent="." index="0"]
+scale = Vector2(1, 1)
