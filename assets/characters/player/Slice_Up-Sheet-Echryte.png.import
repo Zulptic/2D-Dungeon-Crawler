@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3r6dv4eeyngm"
-path="res://.godot/imported/Slice_Side-Sheet.png-e23eb235407357f6f01868915e2c75b3.ctex"
+uid="uid://fuqub4ka6ixs"
+path="res://.godot/imported/Slice_Up-Sheet-Echryte.png-792b5e5e8545019cd7cbaa9b0522dc13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/Slice_Side-Sheet.png"
-dest_files=["res://.godot/imported/Slice_Side-Sheet.png-e23eb235407357f6f01868915e2c75b3.ctex"]
+source_file="res://assets/characters/player/Slice_Up-Sheet-Echryte.png"
+dest_files=["res://.godot/imported/Slice_Up-Sheet-Echryte.png-792b5e5e8545019cd7cbaa9b0522dc13.ctex"]
 
 [params]
 

@@ -27,7 +27,11 @@ func show_pickup(item: InventoryItem, quantity: int = 1) -> void:
         return
     for entry in entries:
         if entry.matches_item(item):
+            var before: Vector2 = entry.get_art_size()
             entry.show_pickup(item, quantity)
+            if entry.get_art_size() != before:
+                _update_layout_metrics()
+                _arrange_entries(true)
             return
     # Retire before adding so even a rapid burst never draws a sixth row.
     while entries.size() >= MAX_ENTRIES:
@@ -39,14 +43,21 @@ func show_pickup(item: InventoryItem, quantity: int = 1) -> void:
     add_child(entry)
     entries.append(entry)
     entry.finished.connect(_on_entry_finished)
-    entry.scale = Vector2.ONE * _layout_scale
-    entry.position = _rest_position + Vector2(0.0, 6.0 * _layout_scale)
     show()
     entry.show_pickup(item, quantity)
+    _update_layout_metrics()
+    entry.scale = Vector2.ONE * _layout_scale
+    entry.position = _rest_position + Vector2(0.0, 6.0 * _layout_scale)
     _arrange_entries(true)
 
+func _stack_art_size() -> Vector2:
+    var width := ART_SIZE.x
+    for entry in entries:
+        width = maxf(width, entry.get_art_size().x)
+    return Vector2(width, ART_SIZE.y)
+
 func _bottom_position(amount: int) -> Vector2:
-    var art_size := ART_SIZE * amount
+    var art_size := _stack_art_size() * amount
     var bottom := Vector2(screen_margin, get_viewport_rect().size.y - screen_margin - art_size.y)
     var hotbar := get_node_or_null(hotbar_path) as Control
     if hotbar != null and hotbar.is_visible_in_tree():
@@ -56,14 +67,17 @@ func _bottom_position(amount: int) -> Vector2:
     return bottom.floor()
 
 func _update_layout() -> void:
+    _update_layout_metrics()
+    _arrange_entries(false)
+
+func _update_layout_metrics() -> void:
     var screen := get_viewport_rect().size
-    var width_fit := maxi(1, floori((screen.x - screen_margin * 2.0) / ART_SIZE.x))
+    var width_fit := maxi(1, floori((screen.x - screen_margin * 2.0) / _stack_art_size().x))
     var top_limit := float(screen_margin)
     var health := get_node_or_null(health_hud_path) as Control
     if health != null and health.is_visible_in_tree():
         top_limit = maxf(top_limit, health.get_global_rect().end.y + 8.0)
-    # Fit the full five-row stack at an integer scale before pickups arrive,
-    # so notices do not suddenly shrink when another item type is collected.
+    # Reserve the full five-row height while fitting the widest active entry.
     _layout_scale = 1
     for amount in range(mini(pixel_scale, width_fit), 0, -1):
         var bottom := _bottom_position(amount)
@@ -72,7 +86,6 @@ func _update_layout() -> void:
             _layout_scale = amount
             break
     _rest_position = _bottom_position(_layout_scale)
-    _arrange_entries(false)
 
 func _arrange_entries(animated: bool) -> void:
     var step := (ART_SIZE.y + entry_spacing) * _layout_scale
@@ -94,4 +107,5 @@ func _remove_entry(entry: Control, rearrange: bool) -> void:
     if entries.is_empty():
         hide()
     elif rearrange:
+        _update_layout_metrics()
         _arrange_entries(true)

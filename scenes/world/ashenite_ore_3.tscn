@@ -14,7 +14,7 @@ max_health = 10
 drop_item = ExtResource("3_drop")
 drop_min = 1
 drop_max = 1
-required_mining_tier = 1
+required_mining_tier = 5
 
 [node name="Sprite2D" parent="." index="0"]
 texture = SubResource("OreTexture")

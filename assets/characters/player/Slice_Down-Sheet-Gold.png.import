@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://r3fsia72ocf4"
-path="res://.godot/imported/Slice_Up-Sheet.png-37eec5416329e4fa3ad8b5da2bc85aa7.ctex"
+uid="uid://plic4aletsku"
+path="res://.godot/imported/Slice_Down-Sheet-Gold.png-1d7d718ddd1cbdcd850a4457795c7b2b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/Slice_Up-Sheet.png"
-dest_files=["res://.godot/imported/Slice_Up-Sheet.png-37eec5416329e4fa3ad8b5da2bc85aa7.ctex"]
+source_file="res://assets/characters/player/Slice_Down-Sheet-Gold.png"
+dest_files=["res://.godot/imported/Slice_Down-Sheet-Gold.png-1d7d718ddd1cbdcd850a4457795c7b2b.ctex"]
 
 [params]
 

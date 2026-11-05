@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://c511udbc3dj2m"]
+
+[ext_resource type="Script" uid="uid://c7563gaqv5d7w" path="res://scenes/main_menu.gd" id="1_menu"]
+[ext_resource type="Theme" path="res://scenes/ui/pixel_theme.tres" id="2_theme"]
+
+[node name="MainMenu" type="Control" unique_id=738757109]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="." unique_id=481292962]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.065, 0.075, 0.105, 1)
+
+[node name="Content" type="Control" parent="." unique_id=1356768475]
+anchors_preset = 0
+offset_right = 320.0
+offset_bottom = 180.0
+mouse_filter = 2
+
+[node name="Menu" type="VBoxContainer" parent="Content" unique_id=307045734]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 20.0
+offset_right = 258.0
+offset_bottom = 155.0
+theme_override_constants/separation = 8
+
+[node name="GameTitle" type="Label" parent="Content/Menu" unique_id=1689510672]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "2D Dungeon Crawler"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Content/Menu" unique_id=811280766]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="NewGame" type="Button" parent="Content/Menu" unique_id=2125150335]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "New Game"
+
+[node name="Settings" type="Button" parent="Content/Menu" unique_id=933246884]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Settings"
+
+[node name="QuitGame" type="Button" parent="Content/Menu" unique_id=665979594]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Quit Game"
+
+[node name="SettingsPanel" type="PanelContainer" parent="Content" unique_id=1679365670]
+visible = false
+layout_mode = 0
+offset_left = 55.0
+offset_top = 15.0
+offset_right = 265.0
+offset_bottom = 165.0
+
+[node name="Margin" type="MarginContainer" parent="Content/SettingsPanel" unique_id=1137074400]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="Options" type="VBoxContainer" parent="Content/SettingsPanel/Margin" unique_id=540176108]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Content/SettingsPanel/Margin/Options" unique_id=866796216]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="Fullscreen" type="CheckButton" parent="Content/SettingsPanel/Margin/Options" unique_id=631266881]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="VSync" type="CheckButton" parent="Content/SettingsPanel/Margin/Options" unique_id=884946565]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+button_pressed = true
+text = "VSync"
+
+[node name="Status" type="Label" parent="Content/SettingsPanel/Margin/Options" unique_id=1056985438]
+visible = false
+layout_mode = 2
+text = "Settings could not be saved."
+horizontal_alignment = 1
+
+[node name="Back" type="Button" parent="Content/SettingsPanel/Margin/Options" unique_id=1159216572]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+text = "Back"
+
+[node name="Status" type="Label" parent="Content" unique_id=150981233]
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 162.0
+offset_right = 280.0
+offset_bottom = 177.0
+text = "Unable to start the game."
+horizontal_alignment = 1

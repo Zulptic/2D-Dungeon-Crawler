@@ -45,91 +45,98 @@ const ASHENITE_SWING_SECONDS: float = 8.0 / 12.0
 @export_range(0, 28, 1) var swing_speed: int = 0
 
 func get_title() -> String:
-    return display_name if not display_name.is_empty() else String(id).capitalize()
+	return display_name if not display_name.is_empty() else String(id).capitalize()
 
 func get_category_name() -> String:
-    return CATEGORY_NAMES[category]
+	return CATEGORY_NAMES[category]
 
 func is_action_item() -> bool:
-    return category in [Category.TOOL, Category.WEAPON]
+	return category in [Category.TOOL, Category.WEAPON]
 
 func get_swing_interval() -> float:
-    if not is_action_item() or subtype not in [&"axe", &"pickaxe", &"sword"]:
-        return 0.0
-    var progress := clampf(float(swing_speed - WOOD_SWING_SPEED) / float(ASHENITE_SWING_SPEED - WOOD_SWING_SPEED), 0.0, 1.0)
-    return lerpf(WOOD_SWING_SECONDS, ASHENITE_SWING_SECONDS, progress)
+	if not is_action_item() or subtype not in [&"axe", &"pickaxe", &"sword"]:
+		return 0.0
+	var progress := clampf(float(swing_speed - WOOD_SWING_SPEED) / float(ASHENITE_SWING_SPEED - WOOD_SWING_SPEED), 0.0, 1.0)
+	return lerpf(WOOD_SWING_SECONDS, ASHENITE_SWING_SECONDS, progress)
 
 func fits_equipment_slot(slot: String) -> bool:
-    if slot == "heirloom":
-        return category == Category.ACCESSORY and equipment_slot == slot
-    return category == Category.ARMOR and equipment_slot == slot
+	if slot == "heirloom":
+		return category == Category.ACCESSORY and equipment_slot == slot
+	return category == Category.ARMOR and equipment_slot == slot
 
 func can_sell() -> bool:
-    return category != Category.QUEST_ITEM
+	return category != Category.QUEST_ITEM
 
 func get_sale_price() -> int:
-    # Every non-quest item is sellable, including a newly created definition.
-    return maxi(1, sale_price) if can_sell() else 0
+	# Every non-quest item is sellable, including a newly created definition.
+	return maxi(1, sale_price) if can_sell() else 0
 
 func get_sale_value(quantity: int = 1) -> int:
-    return get_sale_price() * maxi(0, quantity)
+	return get_sale_price() * maxi(0, quantity)
 
 func get_damage_modifier(target: DamageTarget) -> float:
-    var target_modifier: float = 0.0
-    match target:
-        DamageTarget.ROCK:
-            target_modifier = rock_damage_modifier
-        DamageTarget.TREE:
-            target_modifier = tree_damage_modifier
-        DamageTarget.MONSTER:
-            target_modifier = monster_damage_modifier
-    return maxf(0.0, damage_multiplier) * maxf(0.0, target_modifier)
+	var target_modifier: float = 0.0
+	match target:
+		DamageTarget.ROCK:
+			target_modifier = rock_damage_modifier
+		DamageTarget.TREE:
+			target_modifier = tree_damage_modifier
+		DamageTarget.MONSTER:
+			target_modifier = monster_damage_modifier
+	return maxf(0.0, damage_multiplier) * maxf(0.0, target_modifier)
 
 func get_damage_range(target: DamageTarget) -> Vector2i:
-    var modifier := get_damage_modifier(target)
-    var low := maxi(0, mini(damage_min, damage_max))
-    var high := maxi(0, maxi(damage_min, damage_max))
-    return Vector2i(maxi(0, roundi(low * modifier)), maxi(0, roundi(high * modifier)))
+	var modifier := get_damage_modifier(target)
+	var low := maxi(0, mini(damage_min, damage_max))
+	var high := maxi(0, maxi(damage_min, damage_max))
+	return Vector2i(maxi(0, roundi(low * modifier)), maxi(0, roundi(high * modifier)))
 
 func roll_damage(target: DamageTarget) -> int:
-    # Apply modifiers to the endpoints, then roll every integer in the displayed range.
-    var damage := get_damage_range(target)
-    return randi_range(damage.x, damage.y)
+	var damage := get_damage_range(target)
+	return randi_range(damage.x, damage.y)
+
+static func format_damage(value: int) -> String:
+	return str(value)
+
+static func format_damage_range(damage: Vector2i) -> String:
+	if damage.x == damage.y:
+		return format_damage(damage.x)
+	return "%s-%s" % [format_damage(damage.x), format_damage(damage.y)]
 
 func roll_hit(target: DamageTarget) -> DamageRoll:
-    var hit := DamageRoll.new()
-    hit.base_damage = roll_damage(target)
-    hit.damage = hit.base_damage
-    if hit.base_damage > 0 and is_action_item() and randf() < clampf(critical_chance, 0.0, 1.0):
-        hit.is_critical = true
-        hit.multiplier = _roll_critical_multiplier()
-        hit.damage = roundi(hit.base_damage * hit.multiplier)
-    return hit
+	var hit := DamageRoll.new()
+	hit.base_damage = roll_damage(target)
+	hit.damage = hit.base_damage
+	if hit.base_damage > 0 and is_action_item() and randf() < clampf(critical_chance, 0.0, 1.0):
+		hit.is_critical = true
+		hit.multiplier = _roll_critical_multiplier()
+		hit.damage = roundi(hit.base_damage * hit.multiplier)
+	return hit
 
 func _roll_critical_multiplier() -> float:
-    var roll := randi_range(1, 10000)
-    for index in range(CRITICAL_WEIGHTS.size()):
-        roll -= CRITICAL_WEIGHTS[index]
-        if roll <= 0:
-            return CRITICAL_MULTIPLIERS[index]
-    return CRITICAL_MULTIPLIERS[-1]
+	var roll := randi_range(1, 10000)
+	for index in range(CRITICAL_WEIGHTS.size()):
+		roll -= CRITICAL_WEIGHTS[index]
+		if roll <= 0:
+			return CRITICAL_MULTIPLIERS[index]
+	return CRITICAL_MULTIPLIERS[-1]
 
 func get_stat_lines() -> Array[String]:
-    var lines: Array[String] = []
-    var targets := [DamageTarget.ROCK, DamageTarget.TREE, DamageTarget.MONSTER]
-    var labels := ["Rock damage", "Tree damage", "Monster dmg"]
-    for index in range(targets.size()):
-        var damage := get_damage_range(targets[index])
-        if damage.y > 0:
-            lines.append("%s: %d-%d" % [labels[index], damage.x, damage.y])
-    if is_action_item() and not is_equal_approx(damage_multiplier, 1.0):
-        lines.append("Damage mod: x%.2f" % damage_multiplier)
-    if category == Category.TOOL and subtype == &"pickaxe":
-        lines.append("Mining tier: %d" % mining_tier)
-    return lines
+	var lines: Array[String] = []
+	var targets := [DamageTarget.ROCK, DamageTarget.TREE, DamageTarget.MONSTER]
+	var labels := ["Rock damage", "Tree damage", "Monster dmg"]
+	for index in range(targets.size()):
+		var damage := get_damage_range(targets[index])
+		if damage.y > 0:
+			lines.append("%s: %s" % [labels[index], format_damage_range(damage)])
+	if is_action_item() and not is_equal_approx(damage_multiplier, 1.0):
+		lines.append("Damage mod: x%.2f" % damage_multiplier)
+	if category == Category.TOOL and subtype == &"pickaxe":
+		lines.append("Mining tier: %d" % mining_tier)
+	return lines
 
 class DamageRoll extends RefCounted:
-    var base_damage: int = 0
-    var damage: int = 0
-    var is_critical: bool = false
-    var multiplier: float = 1.0
+	var base_damage: int = 0
+	var damage: int = 0
+	var is_critical: bool = false
+	var multiplier: float = 1.0

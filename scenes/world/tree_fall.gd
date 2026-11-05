@@ -1,7 +1,7 @@
 extends Node2D
 ## A detached crown owns its landing loot, even if the stump is removed first.
 const PICKUP := preload("res://scenes/world/item_pickup.tscn")
-const DEBRIS := preload("res://scenes/world/rock_debris.gd")
+const LEAVES := preload("res://scenes/world/tree_leaves.gd")
 var fall_direction := Vector2.RIGHT
 var duration: float = 0.75
 var elapsed: float = 0.0
@@ -66,10 +66,9 @@ func _land() -> void:
     _landed = true
     var world := get_parent()
     var landing := landing_position()
-    var debris := DEBRIS.new()
-    debris.setup(_texture, true, fall_direction)
-    world.add_child(debris)
-    debris.global_position = landing
+    var leaves := LEAVES.new()
+    leaves.setup(_texture, crown.global_transform, Transform2D(0.0, global_scale, 0.0, _ground_origin), 16)
+    world.add_child(leaves)
     if _drop_item != null:
         for index in range(_drop_count):
             var pickup := PICKUP.instantiate()

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://divwkjbr34lt7"
-path="res://.godot/imported/Slice_Down-Sheet.png-3543c50c63ad54c81bbe2fc740211266.ctex"
+uid="uid://cxtuercwvgrae"
+path="res://.godot/imported/Slice_Side-Sheet-Wood.png-7ff4cec56a1568d1603f2e54d2daa921.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/Slice_Down-Sheet.png"
-dest_files=["res://.godot/imported/Slice_Down-Sheet.png-3543c50c63ad54c81bbe2fc740211266.ctex"]
+source_file="res://assets/characters/player/Slice_Side-Sheet-Wood.png"
+dest_files=["res://.godot/imported/Slice_Side-Sheet-Wood.png-7ff4cec56a1568d1603f2e54d2daa921.ctex"]
 
 [params]
 

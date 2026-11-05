@@ -5,8 +5,8 @@ signal felled(tree: Node2D, direction: Vector2)
 @export_enum("Brown bud", "Leaf bud", "Medium", "Large medium", "Mature") var starting_stage: int = 0
 @export_range(0.1, 600.0, 0.1) var growth_seconds: float = 10.0
 @export var growth_enabled: bool = true
-@export_range(1, 10000, 1) var tree_health: int = 35
-@export_range(1, 100, 1) var stump_health: int = 3
+@export_range(1, 10000, 1) var tree_health: int = 45
+@export_range(1, 100, 1) var stump_health: int = 15
 @export_range(1, 99, 1) var stump_drop_min: int = 1
 @export_range(1, 99, 1) var stump_drop_max: int = 2
 @export_range(0.1, 3.0, 0.05) var fall_seconds: float = 0.75
@@ -14,6 +14,7 @@ const GROWTH_SHEET := preload("res://assets/tiles/Size_02.png")
 const MATURE_SHEET := preload("res://assets/tiles/Size_03.png")
 const CHOPPED_SHEET := preload("res://assets/tiles/Size_03_Chopped.png")
 const FALLING_TOP := preload("res://scenes/world/tree_fall.gd")
+const LEAVES := preload("res://scenes/world/tree_leaves.gd")
 const GROWTH_REGIONS := [Rect2(0, 48, 16, 16), Rect2(0, 32, 16, 16), Rect2(16, 32, 16, 32), Rect2(32, 0, 32, 64)]
 const FALL_DIRECTIONS := [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
 @onready var stump: Sprite2D = $Stump
@@ -139,7 +140,15 @@ func _set_shake_offset(offset: Vector2) -> void:
     sprite.position = _sprite_origin + pixels
     stump.position = _stump_origin + pixels
 
+func _shed_leaves(count: int = 10) -> void:
+    if is_stump or growth_stage < 1 or not sprite.visible:
+        return
+    var leaves := LEAVES.new()
+    leaves.setup(sprite.texture, sprite.global_transform, global_transform, mini(count, maxi(3, sprite.texture.get_width() / 4)))
+    _world_parent().add_child(leaves)
+
 func _spawn_chips(shatter: bool, direction: Vector2) -> void:
+    _shed_leaves(12 if shatter else 8)
     var debris := DEBRIS.new()
     debris.setup(stump.texture if stump.texture != null else sprite.texture, shatter, direction)
     _world_parent().add_child(debris)
@@ -219,7 +228,7 @@ class TreeDamageNumber extends Node2D:
         z_index = 20
         label = Label.new()
         label.theme = UI_THEME
-        label.text = str(amount)
+        label.text = InventoryItem.format_damage(amount)
         label.mouse_filter = Control.MOUSE_FILTER_IGNORE
         label.add_theme_color_override("font_color", CRITICAL_COLOR if is_critical else NORMAL_COLOR)
         label.add_theme_color_override("font_outline_color", Color(0.13, 0.08, 0.05))

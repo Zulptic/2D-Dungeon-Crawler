@@ -10,7 +10,7 @@ filter_clip = true
 
 [node name="OrangeLeafBud" instance=ExtResource("1_tree")]
 starting_stage = 1
-max_health = 35
+max_health = 45
 
 [node name="Sprite2D" parent="." index="2"]
 position = Vector2(-8, -8)

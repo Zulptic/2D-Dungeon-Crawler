@@ -101,10 +101,7 @@ func harvest() -> bool:
         return false
     _drop_fruit()
     _play_hit_shake()
-    var leaves := DEBRIS.new()
-    leaves.setup(_atlas(CHOPPED_SHEET, Rect2(0, 0, 48, 48)), false, Vector2.DOWN)
-    _world_parent().add_child(leaves)
-    leaves.global_position = global_position + Vector2(0, -40)
+    _shed_leaves(12)
     _schedule_fruit()
     return true
 

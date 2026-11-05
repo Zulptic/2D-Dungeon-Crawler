@@ -31,7 +31,9 @@ filter_clip = true
 [node name="GrowingTree" type="StaticBody2D" groups=["choppable_trees"]]
 texture_filter = 1
 script = ExtResource("1_script")
-max_health = 35
+max_health = 45
+tree_health = 45
+stump_health = 15
 drop_item = ExtResource("6_log")
 drop_min = 4
 drop_max = 7

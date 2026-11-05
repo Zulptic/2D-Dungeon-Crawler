@@ -14,9 +14,9 @@
 [ext_resource type="Texture2D" uid="uid://ble0p41tf6d4x" path="res://assets/characters/player/Run_Down-Sheet.png" id="tex_run_down"]
 [ext_resource type="Texture2D" uid="uid://dh4yhfff0055k" path="res://assets/characters/player/Run_Side-Sheet.png" id="tex_run_side"]
 [ext_resource type="Texture2D" uid="uid://ducojv7sk6bmt" path="res://assets/characters/player/Run_Up-Sheet.png" id="tex_run_up"]
-[ext_resource type="Texture2D" uid="uid://divwkjbr34lt7" path="res://assets/characters/player/Slice_Down-Sheet.png" id="tex_slice_down"]
-[ext_resource type="Texture2D" uid="uid://c3r6dv4eeyngm" path="res://assets/characters/player/Slice_Side-Sheet.png" id="tex_slice_side"]
-[ext_resource type="Texture2D" uid="uid://r3fsia72ocf4" path="res://assets/characters/player/Slice_Up-Sheet.png" id="tex_slice_up"]
+[ext_resource type="Texture2D" uid="uid://divwkjbr34lt7" path="res://assets/characters/player/Slice_Down-Sheet-Iron.png" id="tex_slice_down"]
+[ext_resource type="Texture2D" uid="uid://c3r6dv4eeyngm" path="res://assets/characters/player/Slice_Side-Sheet-Iron.png" id="tex_slice_side"]
+[ext_resource type="Texture2D" uid="uid://r3fsia72ocf4" path="res://assets/characters/player/Slice_Up-Sheet-Iron.png" id="tex_slice_up"]
 [ext_resource type="Texture2D" uid="uid://btjwtunkjrkmw" path="res://assets/characters/player/Pierce_Down-Sheet.png" id="tex_pierce_down"]
 [ext_resource type="Texture2D" uid="uid://d2gouec2jtix6" path="res://assets/characters/player/Pierce_Side-Sheet.png" id="tex_pierce_side"]
 [ext_resource type="Texture2D" uid="uid://b7cf68ojq52qa" path="res://assets/characters/player/Pierce_Top-Sheet.png" id="tex_pierce_up"]
@@ -41,16 +41,32 @@
 [ext_resource type="Texture2D" uid="uid://df388jltyf0at" path="res://assets/characters/player/Crush_Side-Sheet-Echryte.png" id="tex_crush_side_echryte"]
 [ext_resource type="Texture2D" uid="uid://btntpcl0i2j8t" path="res://assets/characters/player/Crush_Side-Sheet-Aetherite.png" id="tex_crush_side_aetherite"]
 [ext_resource type="Texture2D" uid="uid://cyc054o32t5em" path="res://assets/characters/player/Crush_Side-Sheet-Ashenite.png" id="tex_crush_side_ashenite"]
-
-
 [ext_resource type="Texture2D" uid="uid://dkwiiojuj3717" path="res://assets/characters/player/Crush_Up-Sheet-Wood.png" id="tex_crush_up_wood"]
 [ext_resource type="Texture2D" uid="uid://dm3ofpppgk7ql" path="res://assets/characters/player/Crush_Up-Sheet-Copper.png" id="tex_crush_up_copper"]
 [ext_resource type="Texture2D" uid="uid://c2x1y7dtdy5e6" path="res://assets/characters/player/Crush_Up-Sheet-Gold.png" id="tex_crush_up_gold"]
 [ext_resource type="Texture2D" uid="uid://dhocbxsktbfd4" path="res://assets/characters/player/Crush_Up-Sheet-Echryte.png" id="tex_crush_up_echryte"]
 [ext_resource type="Texture2D" uid="uid://b2rf6q223kq8" path="res://assets/characters/player/Crush_Up-Sheet-Aetherite.png" id="tex_crush_up_aetherite"]
 [ext_resource type="Texture2D" uid="uid://cnj6cfus4splh" path="res://assets/characters/player/Crush_Up-Sheet-Ashenite.png" id="tex_crush_up_ashenite"]
+[ext_resource type="Script" uid="uid://ciwhx4ew8ofuw" path="res://scenes/world/player_fruit_interaction.gd" id="fruit_interaction"]
+[ext_resource type="Texture2D" uid="uid://cxtuercwvgrae" path="res://assets/characters/player/Slice_Side-Sheet-Wood.png" id="tex_slice_side_wood"]
+[ext_resource type="Texture2D" uid="uid://bpmq0uw4p621v" path="res://assets/characters/player/Slice_Side-Sheet-Copper.png" id="tex_slice_side_copper"]
+[ext_resource type="Texture2D" uid="uid://cnqfwdnsvsjm2" path="res://assets/characters/player/Slice_Side-Sheet-Gold.png" id="tex_slice_side_gold"]
+[ext_resource type="Texture2D" uid="uid://23xcnlq1hiej" path="res://assets/characters/player/Slice_Side-Sheet-Echryte.png" id="tex_slice_side_echryte"]
+[ext_resource type="Texture2D" uid="uid://d35bujmlxwiui" path="res://assets/characters/player/Slice_Side-Sheet-Aetherite.png" id="tex_slice_side_aetherite"]
+[ext_resource type="Texture2D" uid="uid://dlntd351jm5e5" path="res://assets/characters/player/Slice_Side-Sheet-Ashenite.png" id="tex_slice_side_ashenite"]
+[ext_resource type="Texture2D" uid="uid://dbooahcrrkynu" path="res://assets/characters/player/Slice_Up-Sheet-Wood.png" id="tex_slice_up_wood"]
+[ext_resource type="Texture2D" uid="uid://cendheo4cujob" path="res://assets/characters/player/Slice_Up-Sheet-Copper.png" id="tex_slice_up_copper"]
+[ext_resource type="Texture2D" uid="uid://jfwsgb0qhttf" path="res://assets/characters/player/Slice_Up-Sheet-Gold.png" id="tex_slice_up_gold"]
+[ext_resource type="Texture2D" uid="uid://fuqub4ka6ixs" path="res://assets/characters/player/Slice_Up-Sheet-Echryte.png" id="tex_slice_up_echryte"]
+[ext_resource type="Texture2D" uid="uid://de4mgw4uumpmj" path="res://assets/characters/player/Slice_Up-Sheet-Aetherite.png" id="tex_slice_up_aetherite"]
+[ext_resource type="Texture2D" uid="uid://cajqa3yl5vxet" path="res://assets/characters/player/Slice_Up-Sheet-Ashenite.png" id="tex_slice_up_ashenite"]
 
-[ext_resource type="Script" path="res://scenes/world/player_fruit_interaction.gd" id="fruit_interaction"]
+[ext_resource type="Texture2D" uid="uid://b7xgc2r6qk561" path="res://assets/characters/player/Slice_Down-Sheet-Wood.png" id="tex_slice_down_wood"]
+[ext_resource type="Texture2D" uid="uid://dpjjyqstxn1jy" path="res://assets/characters/player/Slice_Down-Sheet-Copper.png" id="tex_slice_down_copper"]
+[ext_resource type="Texture2D" uid="uid://plic4aletsku" path="res://assets/characters/player/Slice_Down-Sheet-Gold.png" id="tex_slice_down_gold"]
+[ext_resource type="Texture2D" uid="uid://bp875jtx0d4an" path="res://assets/characters/player/Slice_Down-Sheet-Echryte.png" id="tex_slice_down_echryte"]
+[ext_resource type="Texture2D" uid="uid://dwo5dnlr2lydk" path="res://assets/characters/player/Slice_Down-Sheet-Aetherite.png" id="tex_slice_down_aetherite"]
+[ext_resource type="Texture2D" uid="uid://dxfast77ljvmp" path="res://assets/characters/player/Slice_Down-Sheet-Ashenite.png" id="tex_slice_down_ashenite"]
 
 [sub_resource type="AtlasTexture" id="Atlas_carry_idle_down_0"]
 atlas = ExtResource("tex_carry_idle_down")
@@ -1564,6 +1580,726 @@ atlas = ExtResource("tex_crush_up_ashenite")
 region = Rect2(448, 0, 64, 64)
 filter_clip = true
 
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_0"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_1"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_2"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_3"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_4"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_5"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_6"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_wood_7"]
+atlas = ExtResource("tex_slice_side_wood")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_0"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_1"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_2"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_3"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_4"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_5"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_6"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_copper_7"]
+atlas = ExtResource("tex_slice_side_copper")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_0"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_1"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_2"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_3"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_4"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_5"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_6"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_gold_7"]
+atlas = ExtResource("tex_slice_side_gold")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_0"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_1"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_2"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_3"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_4"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_5"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_6"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_echryte_7"]
+atlas = ExtResource("tex_slice_side_echryte")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_0"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_1"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_2"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_3"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_4"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_5"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_6"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_aetherite_7"]
+atlas = ExtResource("tex_slice_side_aetherite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_0"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_1"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_2"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_3"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_4"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_5"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_6"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_side_ashenite_7"]
+atlas = ExtResource("tex_slice_side_ashenite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_0"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_1"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_2"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_3"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_4"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_5"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_6"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_wood_7"]
+atlas = ExtResource("tex_slice_up_wood")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_0"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_1"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_2"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_3"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_4"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_5"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_6"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_copper_7"]
+atlas = ExtResource("tex_slice_up_copper")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_0"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_1"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_2"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_3"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_4"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_5"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_6"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_gold_7"]
+atlas = ExtResource("tex_slice_up_gold")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_0"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_1"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_2"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_3"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_4"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_5"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_6"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_echryte_7"]
+atlas = ExtResource("tex_slice_up_echryte")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_0"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_1"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_2"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_3"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_4"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_5"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_6"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_aetherite_7"]
+atlas = ExtResource("tex_slice_up_aetherite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_0"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_1"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_2"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_3"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_4"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_5"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_6"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_up_ashenite_7"]
+atlas = ExtResource("tex_slice_up_ashenite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_0"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_1"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_2"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_3"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_4"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_5"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_6"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_wood_7"]
+atlas = ExtResource("tex_slice_down_wood")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_0"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_1"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_2"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_3"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_4"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_5"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_6"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_copper_7"]
+atlas = ExtResource("tex_slice_down_copper")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_0"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_1"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_2"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_3"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_4"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_5"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_6"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_gold_7"]
+atlas = ExtResource("tex_slice_down_gold")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_0"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_1"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_2"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_3"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_4"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_5"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_6"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_echryte_7"]
+atlas = ExtResource("tex_slice_down_echryte")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_0"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_1"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_2"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_3"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_4"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_5"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_6"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_aetherite_7"]
+atlas = ExtResource("tex_slice_down_aetherite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_0"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_1"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_2"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_3"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_4"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_5"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_6"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(384, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_slice_down_ashenite_7"]
+atlas = ExtResource("tex_slice_down_ashenite")
+region = Rect2(448, 0, 64, 64)
+filter_clip = true
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_w5j5w"]
 animations = [
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_crush_up_wood_7")}], "loop": false, "name": &"crush_up_wood", "speed": 12.0},
@@ -1867,8 +2603,29 @@ animations = [
 "speed": 8.0
 },
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_7")}], "loop": false, "name": &"slice_down", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_wood_7")}], "loop": false, "name": &"slice_down_wood", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_copper_7")}], "loop": false, "name": &"slice_down_copper", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_7")}], "loop": false, "name": &"slice_down_iron", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_gold_7")}], "loop": false, "name": &"slice_down_gold", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_echryte_7")}], "loop": false, "name": &"slice_down_echryte", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_aetherite_7")}], "loop": false, "name": &"slice_down_aetherite", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_down_ashenite_7")}], "loop": false, "name": &"slice_down_ashenite", "speed": 12.0},
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_7")}], "loop": false, "name": &"slice_side", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_wood_7")}], "loop": false, "name": &"slice_side_wood", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_copper_7")}], "loop": false, "name": &"slice_side_copper", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_7")}], "loop": false, "name": &"slice_side_iron", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_gold_7")}], "loop": false, "name": &"slice_side_gold", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_echryte_7")}], "loop": false, "name": &"slice_side_echryte", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_aetherite_7")}], "loop": false, "name": &"slice_side_aetherite", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_side_ashenite_7")}], "loop": false, "name": &"slice_side_ashenite", "speed": 12.0},
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_7")}], "loop": false, "name": &"slice_up", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_wood_7")}], "loop": false, "name": &"slice_up_wood", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_copper_7")}], "loop": false, "name": &"slice_up_copper", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_7")}], "loop": false, "name": &"slice_up_iron", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_gold_7")}], "loop": false, "name": &"slice_up_gold", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_echryte_7")}], "loop": false, "name": &"slice_up_echryte", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_aetherite_7")}], "loop": false, "name": &"slice_up_aetherite", "speed": 12.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_0")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_1")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_2")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_3")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_4")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_5")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_6")}, {"duration": 1.0, "texture": SubResource("Atlas_slice_up_ashenite_7")}], "loop": false, "name": &"slice_up_ashenite", "speed": 12.0},
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_pierce_down_0")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_1")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_2")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_3")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_4")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_5")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_6")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_down_7")}], "loop": false, "name": &"pierce_down", "speed": 12.0},
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_pierce_side_0")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_1")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_2")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_3")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_4")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_5")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_6")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_side_7")}], "loop": false, "name": &"pierce_side", "speed": 12.0},
 {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_pierce_up_0")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_1")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_2")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_3")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_4")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_5")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_6")}, {"duration": 1.0, "texture": SubResource("Atlas_pierce_up_7")}], "loop": false, "name": &"pierce_up", "speed": 12.0},
