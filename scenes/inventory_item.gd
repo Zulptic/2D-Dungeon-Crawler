@@ -25,6 +25,10 @@ const ASHENITE_SWING_SECONDS: float = 8.0 / 12.0
 @export var tags: PackedStringArray = []
 @export_enum("none", "helmet", "chestplate", "leggings", "boots", "heirloom", "ring", "necklace", "charm") var equipment_slot: String = "none"
 
+@export_group("Placement")
+@export var placement_texture: Texture2D
+@export var placement_footprint: Vector2i = Vector2i.ONE
+
 @export_group("Inventory and Value")
 @export_range(1, 999, 1) var max_stack: int = 1
 @export_range(0, 1000000, 1) var sale_price: int = 1

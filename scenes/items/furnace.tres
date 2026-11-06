@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://bbrdra38cro8k"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://do2byffvcbg54" path="res://assets/items/Bricks_01-Off.png" id="2_icon"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_furnace_icon"]
+atlas = ExtResource("2_icon")
+region = Rect2(1, 7, 30, 41)
+margin = Rect2(1, 1, 2, 2)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+id = &"furnace"
+display_name = "Furnace"
+description = "A brick furnace for smelting ore."
+icon = SubResource("AtlasTexture_furnace_icon")
+category = 6
+subtype = &"furnace"
+placement_texture = ExtResource("2_icon")
+placement_footprint = Vector2i(2, 1)

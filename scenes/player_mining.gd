@@ -1,10 +1,11 @@
 extends Node2D
-## Mouse/facing harvest assist selects rocks for pickaxes and tree trunks for axes.
+## Mouse/facing harvest assist selects rocks, placed items, and tree trunks.
 @export_range(1, 8, 1) var reach_tiles: int = 3
 @export_range(0.0, 0.15, 0.005) var impact_pause_duration: float = 0.04
 @export_range(0.0, 24.0, 1.0) var mouse_snap_distance: float = 8.0
 @export_range(1.0, 89.0, 1.0) var facing_half_angle: float = 45.0
 const TILE_SIZE: int = 16
+const PLACED_ITEM := preload("res://scenes/world/placed_item.gd")
 const IMPACT_FRAME: int = 4
 const AXE_IMPACT_FRAME: int = 3
 const HARVEST_GROUPS := {&"pickaxe": &"mineable_rocks", &"axe": &"choppable_trees"}
@@ -19,14 +20,13 @@ const SELECTOR_SHEETS := {
 @onready var hotbar: Control = get_node_or_null("../../PlayerHUD/Screen/Hotbar")
 @onready var ground: TileMapLayer = get_node_or_null("../../Ground")
 var selector: AnimatedSprite2D
-var target_cell := Vector2i.ZERO
 var target_position := Vector2.ZERO
 var target_in_reach: bool = false
 var target_rock: Node2D
 var _busy: bool = false
 var _hit_applied: bool = false
 var _swing_rock: Node2D
-var _swing_cell := Vector2i.ZERO
+var _swing_position := Vector2.ZERO
 var _impact_resume_usec: int = 0
 var _swing_item: InventoryItem
 var _swing_animation: StringName = &""
@@ -48,6 +48,7 @@ func _ready() -> void:
 			frame.region = Rect2(index * 48, 0, 48, 48)
 			frame.filter_clip = true
 			frames.add_frame(animation, frame)
+	_add_wide_selector(frames)
 	selector = AnimatedSprite2D.new()
 	selector.name = "HoveredTile"
 	selector.sprite_frames = frames
@@ -58,6 +59,19 @@ func _ready() -> void:
 	sprite.frame_changed.connect(_on_frame_changed)
 	sprite.animation_finished.connect(_on_animation_finished)
 	call_deferred("_connect_inventory")
+
+func _add_wide_selector(frames: SpriteFrames) -> void:
+	# Move the right-hand corners one tile over, keeping their native pixels.
+	var sheet: Image = SELECTOR_SHEETS[&"small"].get_image()
+	sheet.convert(Image.FORMAT_RGBA8)
+	frames.add_animation(&"wide")
+	frames.set_animation_speed(&"wide", 4.0)
+	frames.set_animation_loop(&"wide", true)
+	for index in range(2):
+		var frame := Image.create_empty(48 + TILE_SIZE, 48, false, Image.FORMAT_RGBA8)
+		frame.blit_rect(sheet, Rect2i(index * 48, 0, 24, 48), Vector2i.ZERO)
+		frame.blit_rect(sheet, Rect2i(index * 48 + 24, 0, 24, 48), Vector2i(24 + TILE_SIZE, 0))
+		frames.add_frame(&"wide", ImageTexture.create_from_image(frame))
 
 func equipped_item() -> InventoryItem:
 	if inventory == null or hotbar == null or hotbar.selected_slot < 1:
@@ -140,28 +154,39 @@ func _clear_target() -> void:
 
 func _is_targetable(rock: Variant) -> bool:
 	# A broken node can be freed before the current swing finishes.
-	if not is_instance_valid(rock) or rock.get_viewport() != get_viewport() or rock.is_queued_for_deletion() or not rock.is_visible_in_tree() or rock._breaking or rock.health <= 0:
+	if not is_instance_valid(rock) or rock.get_viewport() != get_viewport() or rock.is_queued_for_deletion() or not rock.is_visible_in_tree():
 		return false
 	var item := equipped_item()
-	return item != null and HARVEST_GROUPS.has(item.subtype) and rock.is_in_group(HARVEST_GROUPS[item.subtype])
+	if item == null or not HARVEST_GROUPS.has(item.subtype):
+		return false
+	if rock is PLACED_ITEM:
+		return item.subtype == &"pickaxe" and rock.item != null
+	return rock.is_in_group(HARVEST_GROUPS[item.subtype]) and not rock._breaking and rock.health > 0
 
-func _rock_cells(rock: Node2D) -> Rect2i:
+func _target_bounds(rock: Node2D) -> Rect2:
+	if rock is PLACED_ITEM:
+		var to_ground := ground.global_transform.affine_inverse() * rock.global_transform
+		return to_ground * rock.get_local_footprint()
 	var anchor := ground.local_to_map(ground.to_local(rock.global_position))
-	return Rect2i(anchor + rock.mining_footprint.position, rock.mining_footprint.size)
+	var cells := Rect2i(anchor + rock.mining_footprint.position, rock.mining_footprint.size)
+	return Rect2(ground.map_to_local(cells.position) - Vector2.ONE * TILE_SIZE * 0.5, Vector2(cells.size) * TILE_SIZE)
 
-func _cell_position(cell: Vector2i) -> Vector2:
-	return ground.to_global(ground.map_to_local(cell))
+func _can_reach_hit(rock: Variant, point: Vector2, reach_squared: float) -> bool:
+	return _is_targetable(rock) and player.global_position.distance_squared_to(point) <= reach_squared and _target_bounds(rock).has_point(ground.to_local(point))
 
-func _show_target(rock: Node2D, cell: Vector2i) -> void:
+func _show_target(rock: Node2D, point: Vector2) -> void:
 	target_rock = rock
-	target_cell = cell
-	target_position = _cell_position(cell)
+	target_position = point
 	target_in_reach = true
-	var cells := _rock_cells(rock)
-	var center := ground.map_to_local(cells.position) + (Vector2(cells.size) - Vector2.ONE) * TILE_SIZE * 0.5
-	selector.global_position = ground.to_global(center)
+	var bounds := _target_bounds(rock)
+	selector.global_position = ground.to_global(bounds.get_center())
 	selector.global_scale = ground.global_scale
-	var animation: StringName = &"small" if cells.size == Vector2i.ONE else &"large"
+	var size := Vector2i((bounds.size / TILE_SIZE).round())
+	var animation: StringName = &"small" if size == Vector2i.ONE else &"large"
+	if rock is PLACED_ITEM:
+		animation = &"wide" if size == Vector2i(2, 1) else &"small"
+		if animation == &"small":
+			selector.global_scale *= bounds.size / TILE_SIZE
 	if selector.animation != animation:
 		# Both sheets share the same two-frame timing, so size changes stay smooth.
 		var frame := selector.frame
@@ -177,32 +202,35 @@ func update_target(world_position: Vector2) -> void:
 		return
 	var reach_squared := pow(reach_tiles * TILE_SIZE + 0.001, 2.0)
 	# The marker stays with the rock being struck until this swing ends.
-	if _busy and _is_targetable(_swing_rock) and _swing_rock.covers_tile(ground, _swing_cell) and player.global_position.distance_squared_to(_cell_position(_swing_cell)) <= reach_squared:
-		_show_target(_swing_rock, _swing_cell)
+	if _busy and _can_reach_hit(_swing_rock, _swing_position, reach_squared):
+		_show_target(_swing_rock, _swing_position)
 		return
 	var mouse_local := ground.to_local(world_position)
 	var facing: Vector2 = player.facing.normalized()
 	var facing_threshold := cos(deg_to_rad(facing_half_angle))
 	var mouse_rock: Node2D
-	var mouse_cell := Vector2i.ZERO
+	var mouse_point := Vector2.ZERO
 	var mouse_score: float = INF
 	var mouse_cell_score: float = INF
 	var facing_rock: Node2D
-	var facing_cell := Vector2i.ZERO
+	var facing_point := Vector2.ZERO
 	var facing_distance: float = INF
 	var facing_alignment: float = -1.0
 	var group: StringName = HARVEST_GROUPS[equipped_item().subtype]
-	for rock: Node2D in get_tree().get_nodes_in_group(group):
+	var candidates := get_tree().get_nodes_in_group(group)
+	if has_pickaxe():
+		candidates.append_array(get_tree().get_nodes_in_group(PLACED_ITEM.GROUP))
+	for rock: Node2D in candidates:
 		if not _is_targetable(rock):
 			continue
-		var cells := _rock_cells(rock)
-		var local_bounds := Rect2(ground.map_to_local(cells.position) - Vector2.ONE * TILE_SIZE * 0.5, Vector2(cells.size) * TILE_SIZE)
+		var local_bounds := _target_bounds(rock)
+		var size := Vector2i((local_bounds.size / TILE_SIZE).round())
 		var closest_local := mouse_local.clamp(local_bounds.position, local_bounds.end)
 		var cursor_distance := world_position.distance_squared_to(ground.to_global(closest_local))
-		for y in range(cells.position.y, cells.end.y):
-			for x in range(cells.position.x, cells.end.x):
-				var cell := Vector2i(x, y)
-				var point := _cell_position(cell)
+		for y in range(size.y):
+			for x in range(size.x):
+				var local_center := local_bounds.position + (Vector2(x, y) + Vector2(0.5, 0.5)) * TILE_SIZE
+				var point := ground.to_global(local_center)
 				var offset := point - player.global_position
 				var player_distance := offset.length_squared()
 				if player_distance > reach_squared:
@@ -210,7 +238,7 @@ func update_target(world_position: Vector2) -> void:
 				var cursor_cell_distance := world_position.distance_squared_to(point)
 				if cursor_distance <= mouse_snap_distance * mouse_snap_distance and (cursor_distance < mouse_score or (is_equal_approx(cursor_distance, mouse_score) and cursor_cell_distance < mouse_cell_score)):
 					mouse_rock = rock
-					mouse_cell = cell
+					mouse_point = point
 					mouse_score = cursor_distance
 					mouse_cell_score = cursor_cell_distance
 				if offset.is_zero_approx():
@@ -218,13 +246,13 @@ func update_target(world_position: Vector2) -> void:
 				var alignment := offset.normalized().dot(facing)
 				if alignment + 0.00001 >= facing_threshold and (player_distance < facing_distance or (is_equal_approx(player_distance, facing_distance) and alignment > facing_alignment)):
 					facing_rock = rock
-					facing_cell = cell
+					facing_point = point
 					facing_distance = player_distance
 					facing_alignment = alignment
 	if mouse_rock != null:
-		_show_target(mouse_rock, mouse_cell)
+		_show_target(mouse_rock, mouse_point)
 	elif facing_rock != null:
-		_show_target(facing_rock, facing_cell)
+		_show_target(facing_rock, facing_point)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -253,7 +281,7 @@ func try_swing(world_position: Vector2) -> bool:
 		else:
 			player.facing = Vector2.UP if direction.y < 0.0 else Vector2.DOWN
 	_swing_rock = target_rock if HARVEST_GROUPS.has(item.subtype) else null
-	_swing_cell = target_cell
+	_swing_position = target_position
 	_swing_item = item
 	_impact_resume_usec = 0
 	_hit_applied = false
@@ -282,9 +310,9 @@ func _on_frame_changed() -> void:
 	if sprite.frame < impact_frame:
 		return
 	_hit_applied = true
-	# Large rocks can be struck on any occupied tile, within the same reach circle.
-	var hit_position := ground.to_global(ground.map_to_local(_swing_cell))
-	if not player.movement_locked and equipped_item() == _swing_item and _is_targetable(_swing_rock) and _swing_rock.covers_tile(ground, _swing_cell) and player.global_position.distance_to(hit_position) <= reach_tiles * TILE_SIZE + 0.001:
+	# Recheck the footprint and reach when the tool actually connects.
+	var reach_squared := pow(reach_tiles * TILE_SIZE + 0.001, 2.0)
+	if not player.movement_locked and equipped_item() == _swing_item and _can_reach_hit(_swing_rock, _swing_position, reach_squared):
 		var direction: Vector2 = (_swing_rock.global_position-player.global_position).normalized()
 		var applied: bool
 		if _swing_item.subtype == &"pickaxe":

@@ -9,7 +9,7 @@ signal opened_changed(open: bool)
 @export_range(0.05, 1.0, 0.01) var close_duration: float = 0.14
 
 const PICKUP := preload("res://scenes/world/item_pickup.tscn")
-const STARTING_BACKPACK_TOOLS: Array[InventoryItem] = [
+const STARTING_BACKPACK_ITEMS: Array[InventoryItem] = [
 	preload("res://scenes/items/copper_pickaxe.tres"),
 	preload("res://scenes/items/copper_sword.tres"),
 	preload("res://scenes/items/copper_axe.tres"),
@@ -27,7 +27,8 @@ const STARTING_BACKPACK_TOOLS: Array[InventoryItem] = [
 	preload("res://scenes/items/aetherite_axe.tres"),
 	preload("res://scenes/items/ashenite_pickaxe.tres"),
 	preload("res://scenes/items/ashenite_sword.tres"),
-	preload("res://scenes/items/ashenite_axe.tres")
+	preload("res://scenes/items/ashenite_axe.tres"),
+	preload("res://scenes/items/furnace.tres")
 ]
 const STACK_COUNT := preload("res://scenes/item_stack_count.gd")
 const ART_SIZE := Vector2(231, 151)
@@ -79,8 +80,8 @@ func _ready() -> void:
 	model.set_item(&"hotbar", 0, preload("res://scenes/items/wood_pickaxe.tres"))
 	model.set_item(&"hotbar", 1, preload("res://scenes/items/wood_sword.tres"))
 	model.set_item(&"hotbar", 2, preload("res://scenes/items/wood_axe.tres"))
-	for index in range(STARTING_BACKPACK_TOOLS.size()):
-		model.set_item(&"backpack", index, STARTING_BACKPACK_TOOLS[index])
+	for index in range(STARTING_BACKPACK_ITEMS.size()):
+		model.set_item(&"backpack", index, STARTING_BACKPACK_ITEMS[index])
 	if hotbar != null:
 		hotbar.bind_inventory(model)
 	get_viewport().size_changed.connect(_update_layout)

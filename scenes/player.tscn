@@ -68,6 +68,8 @@
 [ext_resource type="Texture2D" uid="uid://dwo5dnlr2lydk" path="res://assets/characters/player/Slice_Down-Sheet-Aetherite.png" id="tex_slice_down_aetherite"]
 [ext_resource type="Texture2D" uid="uid://dxfast77ljvmp" path="res://assets/characters/player/Slice_Down-Sheet-Ashenite.png" id="tex_slice_down_ashenite"]
 
+[ext_resource type="Script" path="res://scenes/player_placement_preview.gd" id="placement_preview"]
+
 [sub_resource type="AtlasTexture" id="Atlas_carry_idle_down_0"]
 atlas = ExtResource("tex_carry_idle_down")
 region = Rect2(0, 0, 64, 64)
@@ -2669,3 +2671,8 @@ script = ExtResource("5_mining")
 
 [node name="FruitInteraction" type="Node2D" parent="."]
 script = ExtResource("fruit_interaction")
+
+[node name="PlacementPreview" type="Node2D" parent="."]
+show_behind_parent = true
+visible = false
+script = ExtResource("placement_preview")
