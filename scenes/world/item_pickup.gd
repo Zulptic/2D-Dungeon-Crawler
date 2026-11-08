@@ -7,6 +7,7 @@ var _blocked_collector: Node2D
 @export_range(0.08, 0.5, 0.01) var pull_duration: float = 0.18
 @export_range(1.0, 6.0, 0.5) var shadow_radius: float = 2.5
 @export_range(0.0, 16.0, 0.5) var hover_height: float = 4.0
+@export var show_stack_count: bool = false
 @onready var sprite: Sprite2D = $Sprite2D
 var _collected: bool = false
 var _retry: float = 0.0
@@ -29,6 +30,10 @@ var _return_from := Vector2.ZERO
 var _return_elapsed: float = 0.0
 var _return_lift: float = 4.0
 var _rest_z: int = 0
+var _launch_direction := Vector2.ZERO
+var _stack_count: Control
+const STACK_COUNT := preload("res://scenes/item_stack_count.gd")
+const DROP_SCALE: float = 0.625
 const RETURN_DURATION: float = 0.12
 
 func _ready() -> void:
@@ -39,6 +44,15 @@ func _ready() -> void:
     _rng.randomize()
     _hover_phase = _rng.randf_range(0.0,TAU)
     sprite.texture = item.icon if item != null else null
+    # All non-fruit sources share one size, including Smeltry and inventory drops.
+    if item != null and item.subtype != &"fruit":
+        sprite.scale = Vector2.ONE * DROP_SCALE
+    if show_stack_count:
+        _stack_count = STACK_COUNT.new()
+        _stack_count.name = "StackCount"
+        _stack_count.suffix = "x"
+        _stack_count.position = Vector2(-8, 1)
+        sprite.add_child(_stack_count)
     _update_visual()
 
 func dropped_by(collector: Node2D) -> void:
@@ -46,6 +60,7 @@ func dropped_by(collector: Node2D) -> void:
     _blocked_collector = collector
 
 func launch(origin: Vector2) -> void:
+    _launch_direction = Vector2.ZERO
     _pulling = false
     _returning = false
     _pull_target = null
@@ -61,6 +76,10 @@ func launch(origin: Vector2) -> void:
     _retry = 0.0
     _update_visual()
 
+func launch_forward(origin: Vector2, direction: Vector2 = Vector2.DOWN) -> void:
+    launch(origin)
+    _launch_direction = direction.normalized() if not direction.is_zero_approx() else Vector2.DOWN
+
 func _choose_landing() -> void:
     # Choose the landing point during physics processing, away from solid bodies.
     var query := PhysicsPointQueryParameters2D.new()
@@ -69,6 +88,8 @@ func _choose_landing() -> void:
     query.collide_with_bodies = true
     for attempt in range(8):
         var angle := _rng.randf_range(0.0,TAU)
+        if not _launch_direction.is_zero_approx():
+            angle = _launch_direction.angle() + _rng.randf_range(-0.45, 0.45)
         var candidate := (_launch_from + Vector2.from_angle(angle)*_rng.randf_range(minf(toss_distance.x,toss_distance.y),maxf(toss_distance.x,toss_distance.y))).round()
         query.position = candidate
         if get_world_2d().direct_space_state.intersect_point(query,1).is_empty():
@@ -92,6 +113,8 @@ func _update_visual() -> void:
         var progress := clampf(_toss_elapsed/_toss_duration,0.0,1.0)
         lift += sin(progress*PI)*_arc_height
     sprite.position = Vector2(0.0,-lift)
+    if _stack_count != null and _stack_count.amount != quantity:
+        _stack_count.amount = quantity
 
 func _draw() -> void:
     # The root follows the ground point; only the item sprite rises above this circle.
@@ -179,6 +202,7 @@ func _return_to_ground() -> void:
     _return_from = global_position
     _return_elapsed = 0.0
     _return_lift = -sprite.position.y
+    _update_visual()
 
 func _advance_return(delta: float) -> void:
     _return_elapsed = minf(RETURN_DURATION,_return_elapsed+delta)

@@ -718,7 +718,6 @@ position = Vector2(-264, -392)
 
 [node name="DayNightCycle" type="CanvasModulate" parent="." unique_id=578337992]
 script = ExtResource("7_gp0ih")
-full_day_seconds = 60.0
 
 [node name="AppleTree" parent="." unique_id=761913751 instance=ExtResource("8_apple_tree")]
 position = Vector2(-203, -415)

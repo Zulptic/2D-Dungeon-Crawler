@@ -21,10 +21,12 @@ extends CanvasLayer
 @onready var stamina_fill: TextureRect = $Screen/Art/StaminaClip/Fill
 @onready var day_night_cycle: CanvasModulate = get_node_or_null("../DayNightCycle")
 const ITEM_TOOLTIP := preload("res://scenes/item_tooltip.gd")
+const SMELTRY_UI := preload("res://scenes/smeltry_ui.tscn")
 const STATUS_BAR := preload("res://scenes/status_bar.gd")
 const STAMINA_WIDTH: int = 58
 const ART_SIZE := Vector2(128, 48)
 const HUD_GAP: int = 8
+var smeltry_ui: Control
 var status_bar: Control
 
 func _ready() -> void:
@@ -32,6 +34,10 @@ func _ready() -> void:
 	_update_layout()
 	var inventory: PlayerInventoryModel = $Screen/Inventory.model
 	inventory.item_collected.connect($Screen/ItemPickupNotice.show_pickup)
+	smeltry_ui = SMELTRY_UI.instantiate()
+	smeltry_ui.preview_on_start = false
+	smeltry_ui.show_reference_queue = false
+	$Screen.add_child(smeltry_ui)
 	$Screen.add_child(ITEM_TOOLTIP.new())
 	get_viewport().size_changed.connect(_update_layout)
 	var player := get_node_or_null(player_path)
@@ -86,3 +92,6 @@ func _on_stamina_changed(value: float, maximum: float, _exhausted: bool) -> void
 	stamina_fill.size = Vector2(visible_columns, 2)
 	stamina_clip.size.x = visible_columns
 	stamina_clip.visible = visible_columns > 0
+
+func open_smeltry(furnace: Node2D) -> bool:
+	return smeltry_ui.open_for(furnace)

@@ -12,8 +12,8 @@ filter_clip = true
 [resource]
 script = ExtResource("1_item")
 id = &"furnace"
-display_name = "Furnace"
-description = "A brick furnace for smelting ore."
+display_name = "Smeltry"
+description = "A brick smeltry for turning raw materials into useful goods."
 icon = SubResource("AtlasTexture_furnace_icon")
 category = 6
 subtype = &"furnace"

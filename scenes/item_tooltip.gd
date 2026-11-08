@@ -99,6 +99,9 @@ func _position_at_mouse(mouse: Vector2) -> void:
 	position = point.clamp(Vector2.ONE * SCREEN_MARGIN, maximum).floor()
 
 func _hovered_slot(point: Vector2) -> Dictionary:
+	var workstation := get_node_or_null("../SmeltryUI")
+	if workstation != null and workstation.visible:
+		return {}
 	# Dragging and the modal's closing animation own the pointer until finished.
 	if get_viewport().gui_is_dragging() or not inventory._drag.is_empty() or (inventory.visible and not inventory.is_open):
 		return {}

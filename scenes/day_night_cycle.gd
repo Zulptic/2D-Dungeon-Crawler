@@ -2,6 +2,7 @@ extends CanvasModulate
 ## Time advances continuously; the text clock shows five-minute intervals.
 
 signal time_changed(display_minutes: int)
+signal time_advanced(minutes: float)
 
 const MINUTES_PER_DAY: float = 1440.0
 const START_MINUTES: float = 360.0
@@ -30,10 +31,13 @@ func _process(delta: float) -> void:
 func advance_time(real_seconds: float) -> void:
 	if real_seconds <= 0.0:
 		return
-	var advanced := _minutes_of_day + real_seconds * MINUTES_PER_DAY / maxf(1.0, full_day_seconds)
+	var elapsed_minutes := real_seconds * MINUTES_PER_DAY / maxf(1.0, full_day_seconds)
+	var advanced := _minutes_of_day + elapsed_minutes
 	_day_number += floori(advanced / MINUTES_PER_DAY)
 	_minutes_of_day = fposmod(advanced, MINUTES_PER_DAY)
 	_refresh_time()
+	# Gameplay receives exact elapsed time, including midnight and large time steps.
+	time_advanced.emit(elapsed_minutes)
 
 func get_minutes_of_day() -> float:
 	return _minutes_of_day

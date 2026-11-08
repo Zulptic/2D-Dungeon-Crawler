@@ -1,0 +1,80 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_QueueRow.png" id="row"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_OutputSlot.png" id="slot"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_Clock.png" id="clock"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Mineral_Levels.png" id="minerals"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_CopperIngot.png" id="copper_icon"]
+
+[sub_resource type="AtlasTexture" id="Copper"]
+atlas = ExtResource("minerals")
+region = Rect2(64, 16, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Coal"]
+atlas = ExtResource("minerals")
+region = Rect2(48, 0, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Ore"]
+atlas = ExtResource("minerals")
+region = Rect2(48, 16, 16, 16)
+filter_clip = true
+
+[node name="QueueRow" type="Control"]
+custom_minimum_size = Vector2(73, 30)
+mouse_filter = 2
+texture_filter = 1
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 73.0
+offset_bottom = 30.0
+mouse_filter = 2
+texture = ExtResource("row")
+expand_mode = 1
+
+[node name="OutputSlot" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 25.0
+offset_bottom = 25.0
+mouse_filter = 2
+texture = ExtResource("slot")
+expand_mode = 1
+
+[node name="OutputIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 22.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = ExtResource("copper_icon")
+expand_mode = 1
+
+[node name="Clock" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 5.0
+offset_right = 53.0
+offset_bottom = 14.0
+mouse_filter = 2
+texture = ExtResource("clock")
+expand_mode = 1
+
+[node name="Duration" type="Label" parent="."]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 15.0
+offset_right = 71.0
+offset_bottom = 27.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "15 Minutes"
+horizontal_alignment = 1
+vertical_alignment = 1
+

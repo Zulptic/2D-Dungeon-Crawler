@@ -1,5 +1,5 @@
 extends Node2D
-## The closest ripe tree or furnace owns the interaction outline and E prompt.
+## The closest ripe tree or Smeltry owns the interaction outline and E prompt.
 const PLACED_ITEM := preload("res://scenes/world/placed_item.gd")
 @export_range(0.5, 4.0, 0.25) var reach_tiles: float = 1.5
 @export_range(0.5, 4.0, 0.25) var furnace_reach_tiles: float = 2.5
@@ -45,7 +45,17 @@ func _unhandled_key_input(event: InputEvent) -> void:
     _update_target()
     if not is_instance_valid(target):
         return
-    var interacted: bool = target.toggle_fire() if target is PLACED_ITEM else target.harvest()
+    var interacted: bool
+    if target is PLACED_ITEM:
+        if event.shift_pressed:
+            interacted = target.toggle_fire()
+        elif target.has_completed_output():
+            interacted = target.eject_completed()
+        else:
+            var hud := player.get_parent().get_node_or_null("PlayerHUD")
+            interacted = hud != null and hud.open_smeltry(target)
+    else:
+        interacted = target.harvest()
     if interacted:
         _update_target()
         get_viewport().set_input_as_handled()

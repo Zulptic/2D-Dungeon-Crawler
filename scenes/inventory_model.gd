@@ -32,10 +32,69 @@ func get_quantity(group: StringName, index: int) -> int:
 		return 0
 	return int(_quantities[group][index])
 
+func get_total_quantity(item: InventoryItem) -> int:
+	# Crafting availability includes every matching stack in carried storage.
+	if item == null:
+		return 0
+	var total: int = 0
+	for group in PICKUP_ORDER:
+		for index in range(COUNTS[group]):
+			if _same_item(get_item(group, index), item):
+				total += get_quantity(group, index)
+	return total
+
 func _slot_limit(group: StringName, item: InventoryItem) -> int:
 	if item == null:
 		return 0
 	return 1 if group == &"equipment" or group == &"accessories" else maxi(1, item.max_stack)
+
+func _ingredient_totals(ingredients: Array[Dictionary]) -> Array[Dictionary]:
+	var totals: Array[Dictionary] = []
+	for ingredient in ingredients:
+		var item := ingredient.get("item") as InventoryItem
+		var quantity := int(ingredient.get("quantity", 0))
+		if item == null or quantity < 1:
+			return []
+		var matched := false
+		for total in totals:
+			if _same_item(total.item, item):
+				total.quantity = int(total.quantity) + quantity
+				matched = true
+				break
+		if not matched:
+			totals.append({"item": item, "quantity": quantity})
+	return totals
+
+func get_craftable_quantity(ingredients: Array[Dictionary]) -> int:
+	var totals := _ingredient_totals(ingredients)
+	if totals.is_empty():
+		return 0
+	var batches: int = 2147483647
+	for total in totals:
+		batches = mini(batches, floori(float(get_total_quantity(total.item)) / int(total.quantity)))
+	return batches
+
+func consume_ingredients(ingredients: Array[Dictionary], batches: int = 1) -> bool:
+	if batches < 1 or get_craftable_quantity(ingredients) < batches:
+		return false
+	# Preflight every cost before changing any stack; emit one coherent update.
+	for total in _ingredient_totals(ingredients):
+		var remaining: int = int(total.quantity) * batches
+		for group in PICKUP_ORDER:
+			for index in range(COUNTS[group]):
+				var current := get_item(group, index)
+				if not _same_item(current, total.item):
+					continue
+				var amount := get_quantity(group, index)
+				var taken := mini(remaining, amount)
+				_write_slot(group, index, current if amount > taken else null, amount - taken)
+				remaining -= taken
+				if remaining == 0:
+					break
+			if remaining == 0:
+				break
+	changed.emit()
+	return true
 
 func _same_item(first: InventoryItem, second: InventoryItem) -> bool:
 	return first != null and second != null and (first == second or (first.id != &"" and first.id == second.id))

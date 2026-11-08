@@ -1,0 +1,211 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/smeltry_ui.gd" id="script"]
+[ext_resource type="Theme" path="res://scenes/ui/pixel_theme.tres" id="theme"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_MainFrame.png" id="main"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_TitleFrame.png" id="title"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_QueueFrame.png" id="queue"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_QueueTitleFrame.png" id="queue_title"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_CloseButton_Normal.png" id="close"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_CloseButton_Pressed.png" id="close_pressed"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_RecipeRow.png" id="row"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_ScrollTrack.png" id="track"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_ScrollThumb.png" id="thumb"]
+[ext_resource type="PackedScene" path="res://scenes/smeltry_recipe_row.tscn" id="recipe_row"]
+[ext_resource type="PackedScene" path="res://scenes/smeltry_queue_row.tscn" id="queue_row"]
+
+[node name="SmeltryUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 60
+texture_filter = 1
+theme = ExtResource("theme")
+script = ExtResource("script")
+preview_on_start = true
+show_reference_queue = true
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="Control" parent="."]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 345.0
+offset_bottom = 193.0
+mouse_filter = 2
+
+[node name="QueueFrame" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 39.0
+offset_right = 345.0
+offset_bottom = 149.0
+mouse_filter = 2
+texture = ExtResource("queue")
+expand_mode = 1
+
+[node name="MainFrame" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 9.0
+offset_right = 260.0
+offset_bottom = 193.0
+mouse_filter = 2
+texture = ExtResource("main")
+expand_mode = 1
+
+[node name="TitleFrame" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 0.0
+offset_right = 194.0
+offset_bottom = 15.0
+mouse_filter = 2
+texture = ExtResource("title")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 3.0
+offset_right = 182.0
+offset_bottom = 13.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Smeltery - Level 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QueueTitleFrame" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_left = 262.0
+offset_top = 30.0
+offset_right = 331.0
+offset_bottom = 45.0
+mouse_filter = 2
+texture = ExtResource("queue_title")
+expand_mode = 1
+
+[node name="QueueTitle" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 274.0
+offset_top = 33.0
+offset_right = 321.0
+offset_bottom = 43.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Queue"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Close" type="TextureButton" parent="Panel"]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 6.0
+offset_right = 263.0
+offset_bottom = 19.0
+focus_mode = 0
+texture_normal = ExtResource("close")
+texture_pressed = ExtResource("close_pressed")
+
+[node name="Recipes" type="ScrollContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 11.0
+offset_top = 20.0
+offset_right = 239.0
+offset_bottom = 182.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+clip_contents = true
+
+[node name="Rows" type="VBoxContainer" parent="Panel/Recipes"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+mouse_filter = 2
+
+[node name="Copper" parent="Panel/Recipes/Rows" instance=ExtResource("recipe_row")]
+layout_mode = 2
+
+[node name="EmptyRow1" type="TextureRect" parent="Panel/Recipes/Rows"]
+custom_minimum_size = Vector2(228, 30)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("row")
+
+[node name="EmptyRow2" type="TextureRect" parent="Panel/Recipes/Rows"]
+custom_minimum_size = Vector2(228, 30)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("row")
+
+[node name="EmptyRow3" type="TextureRect" parent="Panel/Recipes/Rows"]
+custom_minimum_size = Vector2(228, 30)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("row")
+
+[node name="EmptyRow4" type="TextureRect" parent="Panel/Recipes/Rows"]
+custom_minimum_size = Vector2(228, 30)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("row")
+
+[node name="ScrollTrack" type="Control" parent="Panel"]
+layout_mode = 0
+offset_left = 241.0
+offset_top = 20.0
+offset_right = 250.0
+offset_bottom = 182.0
+
+[node name="Rail" type="TextureRect" parent="Panel/ScrollTrack"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 0.0
+offset_right = 8.0
+offset_bottom = 162.0
+mouse_filter = 2
+texture = ExtResource("track")
+expand_mode = 1
+
+[node name="Thumb" type="TextureRect" parent="Panel/ScrollTrack"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 10.0
+offset_right = 9.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = ExtResource("thumb")
+expand_mode = 1
+
+[node name="QueueEntries" type="ScrollContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 261.0
+offset_top = 50.0
+offset_right = 334.0
+offset_bottom = 144.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+clip_contents = true
+
+[node name="Rows" type="VBoxContainer" parent="Panel/QueueEntries"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+mouse_filter = 2
+
+[node name="ReferenceEntry" parent="Panel/QueueEntries/Rows" instance=ExtResource("queue_row")]
+layout_mode = 2
+

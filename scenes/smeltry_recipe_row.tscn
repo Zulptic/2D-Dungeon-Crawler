@@ -1,0 +1,190 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_RecipeRow.png" id="row"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_OutputSlot.png" id="slot"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_IngredientSlots.png" id="ingredients"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_RecipeDivider.png" id="divider"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_QuantityButtons.png" id="buttons"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_Clock.png" id="clock"]
+[ext_resource type="Texture2D" path="res://assets/tiles/Mineral_Levels.png" id="minerals"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_CopperIngot.png" id="copper_icon"]
+
+[sub_resource type="AtlasTexture" id="Copper"]
+atlas = ExtResource("minerals")
+region = Rect2(64, 16, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Coal"]
+atlas = ExtResource("minerals")
+region = Rect2(48, 0, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Ore"]
+atlas = ExtResource("minerals")
+region = Rect2(48, 16, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Once"]
+atlas = ExtResource("buttons")
+region = Rect2(0, 0, 17, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Five"]
+atlas = ExtResource("buttons")
+region = Rect2(20, 0, 19, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Maximum"]
+atlas = ExtResource("buttons")
+region = Rect2(42, 0, 25, 16)
+filter_clip = true
+
+[node name="RecipeRow" type="Control"]
+custom_minimum_size = Vector2(228, 30)
+mouse_filter = 2
+texture_filter = 1
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 228.0
+offset_bottom = 30.0
+mouse_filter = 2
+texture = ExtResource("row")
+expand_mode = 1
+
+[node name="OutputSlot" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 25.0
+offset_bottom = 25.0
+mouse_filter = 2
+texture = ExtResource("slot")
+expand_mode = 1
+
+[node name="OutputIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 22.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = ExtResource("copper_icon")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 5.0
+offset_right = 84.0
+offset_bottom = 14.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Copper Ingot"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="Clock" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 15.0
+offset_right = 37.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("clock")
+expand_mode = 1
+
+[node name="Duration" type="Label" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 16.0
+offset_right = 85.0
+offset_bottom = 25.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "15 Minutes"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="DividerLeft" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 87.0
+offset_bottom = 25.0
+mouse_filter = 2
+texture = ExtResource("divider")
+expand_mode = 1
+
+[node name="IngredientSlots" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 5.0
+offset_right = 148.0
+offset_bottom = 25.0
+mouse_filter = 2
+texture = ExtResource("ingredients")
+expand_mode = 1
+
+[node name="FuelIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 93.0
+offset_top = 7.0
+offset_right = 109.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = SubResource("Coal")
+expand_mode = 1
+
+[node name="OreIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 7.0
+offset_right = 145.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = SubResource("Ore")
+expand_mode = 1
+
+[node name="DividerRight" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 152.0
+offset_top = 5.0
+offset_right = 154.0
+offset_bottom = 25.0
+mouse_filter = 2
+texture = ExtResource("divider")
+expand_mode = 1
+
+[node name="Once" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 158.0
+offset_top = 7.0
+offset_right = 175.0
+offset_bottom = 23.0
+focus_mode = 0
+texture_normal = SubResource("Once")
+texture_pressed = SubResource("Once")
+
+[node name="Five" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 178.0
+offset_top = 7.0
+offset_right = 197.0
+offset_bottom = 23.0
+focus_mode = 0
+texture_normal = SubResource("Five")
+texture_pressed = SubResource("Five")
+
+[node name="Maximum" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 7.0
+offset_right = 225.0
+offset_bottom = 23.0
+focus_mode = 0
+texture_normal = SubResource("Maximum")
+texture_pressed = SubResource("Maximum")
+

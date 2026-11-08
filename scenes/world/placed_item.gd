@@ -9,6 +9,8 @@ const PROMPT_PULSE_SCALE := Vector2(0.625, 0.625)
 const PICKUP := preload("res://scenes/world/item_pickup.tscn")
 const FIRE_SHEET := preload("res://assets/items/Bricks_01-Sheet.png")
 const FIRE_FRAME_SECONDS: float = 0.125
+const SMELTRY_QUEUE := preload("res://scenes/smeltry_queue.gd")
+const OUTPUT_DISPLAY := preload("res://scenes/world/smeltry_output_display.gd")
 const LIGHT_SIZE := Vector2i(102, 78)
 const LIGHT_PIXEL_SIZE: int = 3
 
@@ -27,6 +29,9 @@ var _fire_timer: Timer
 var _fire_frame: int = 0
 var _fire_light: PointLight2D
 var _light_tween: Tween
+var smeltry_queue: Node
+var _smelting_was_active: bool = false
+var _output_display: Node2D
 
 func _ready() -> void:
     if item == null or item.subtype != &"furnace":
@@ -56,6 +61,55 @@ func _ready() -> void:
     _prompt.hide()
     add_child(_prompt)
     _setup_fire()
+    smeltry_queue = SMELTRY_QUEUE.new()
+    smeltry_queue.name = "SmeltryQueue"
+    add_child(smeltry_queue)
+    smeltry_queue.changed.connect(_update_smelting_fire)
+    _output_display = OUTPUT_DISPLAY.new()
+    _output_display.name = "FinishedItems"
+    add_child(_output_display)
+    # Keep the scaled frame centered, with a five-pixel gap above the artwork.
+    var art_rect := _artwork.get_rect()
+    var display_half_height: float = _output_display.FRAME.get_height() * _output_display.scale.y * 0.5
+    _output_display.set_anchor(_artwork.position + Vector2(art_rect.get_center().x, art_rect.position.y - display_half_height - 5.0))
+    smeltry_queue.changed.connect(_update_completed_display)
+
+func _update_completed_display() -> void:
+    _output_display.set_outputs(smeltry_queue.get_completed_outputs())
+
+func has_completed_output() -> bool:
+    return smeltry_queue != null and not smeltry_queue.get_completed_outputs().is_empty()
+
+func eject_completed() -> bool:
+    if not has_completed_output() or is_queued_for_deletion():
+        return false
+    var ejected := false
+    for output: Dictionary in smeltry_queue.get_completed_outputs():
+        var pickup := PICKUP.instantiate()
+        pickup.item = output.item
+        pickup.quantity = int(output.quantity)
+        pickup.show_stack_count = true
+        pickup.toss_distance = Vector2(14.0, 22.0)
+        var world := get_parent()
+        world.add_child(pickup)
+        if pickup.get_parent() != world:
+            pickup.queue_free()
+            continue
+        # Transfer ownership only after the world pickup exists successfully.
+        if not smeltry_queue.remove_completed(output.item, int(output.quantity)):
+            pickup.queue_free()
+            continue
+        pickup.launch_forward(to_global(Vector2(0, -4)), global_transform.y)
+        ejected = true
+    return ejected
+
+func _update_smelting_fire() -> void:
+    var active: bool = smeltry_queue.has_work()
+    if active and _fire_timer.is_stopped():
+        toggle_fire()
+    elif not active and _smelting_was_active and not _fire_timer.is_stopped():
+        toggle_fire()
+    _smelting_was_active = active
 
 func _setup_fire() -> void:
     if _fire_frames.is_empty():
@@ -88,6 +142,8 @@ func _setup_fire() -> void:
 
 func toggle_fire() -> bool:
     if _fire_timer == null or is_queued_for_deletion():
+        return false
+    if smeltry_queue != null and smeltry_queue.has_work() and not _fire_timer.is_stopped():
         return false
     if _fire_timer.is_stopped():
         _fire_light.enabled = true
@@ -160,6 +216,9 @@ func get_local_footprint() -> Rect2:
 
 func take_pickaxe_hit(tool: InventoryItem, _hit_direction: Vector2 = Vector2.ZERO) -> bool:
     if is_queued_for_deletion() or item == null or tool == null or tool.subtype != &"pickaxe":
+        return false
+    # Reserved materials and uncollected outputs stay owned by this furnace.
+    if smeltry_queue != null and smeltry_queue.has_items():
         return false
 
     var pickup := PICKUP.instantiate()
