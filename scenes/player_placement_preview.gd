@@ -6,7 +6,6 @@ enum PreviewState { HIDDEN, CLEAR, BLOCKED }
 @export_range(1, 16, 1) var reach_tiles: int = 6
 
 const SNAP_SUBDIVISIONS: int = 4
-const GRID_CUTOUT_PADDING_STEPS: int = 1
 const GRID_COLOR := Color(1.0, 1.0, 1.0, 0.19)
 const VALID_COLOR := Color(1.0, 1.0, 1.0, 0.48)
 const BLOCKED_COLOR := Color(1.0, 0.03, 0.08, 0.56)
@@ -243,9 +242,12 @@ func _draw_grid() -> void:
         return
     var cell_size := Vector2(_ground.tile_set.tile_size)
     var step := cell_size / SNAP_SUBDIVISIONS
+    var blockers: Array[Rect2i] = _placed_footprints.duplicate()
+    for cell in _blocked_cells:
+        blockers.append(Rect2i(cell * SNAP_SUBDIVISIONS, Vector2i.ONE * SNAP_SUBDIVISIONS))
     var lines := PackedVector2Array()
-    _append_open_grid_lines(lines, 0)
-    _append_open_grid_lines(lines, 1)
+    _append_blocked_grid_lines(lines, blockers, 0)
+    _append_blocked_grid_lines(lines, blockers, 1)
     if lines.is_empty():
         return
     var origin := _ground.map_to_local(Vector2i.ZERO) - cell_size * 0.5
@@ -253,16 +255,9 @@ func _draw_grid() -> void:
         lines[index] = origin + lines[index] * step
     _grid.draw_multiline(lines, GRID_COLOR, 0.4, true)
 
-func _append_open_grid_lines(lines: PackedVector2Array, axis: int) -> void:
-    # Clip each line against both terrain cells and the finer placed-object footprints.
+func _append_blocked_grid_lines(lines: PackedVector2Array, blockers: Array[Rect2i], axis: int) -> void:
     var along := 1 - axis
-    var gaps: Array[Rect2i] = []
-    for cell in _blocked_cells:
-        var tile := Rect2i(cell * SNAP_SUBDIVISIONS, Vector2i.ONE * SNAP_SUBDIVISIONS)
-        gaps.append(tile.grow(GRID_CUTOUT_PADDING_STEPS))
-    for footprint in _placed_footprints:
-        gaps.append(footprint.grow(GRID_CUTOUT_PADDING_STEPS))
-    gaps.sort_custom(func(a: Rect2i, b: Rect2i) -> bool: return a.position[along] < b.position[along])
+    blockers.sort_custom(func(a: Rect2i, b: Rect2i) -> bool: return a.position[along] < b.position[along])
 
     var direction := Vector2.ZERO
     direction[along] = 1.0
@@ -272,19 +267,26 @@ func _append_open_grid_lines(lines: PackedVector2Array, axis: int) -> void:
         var line_origin := Vector2.ZERO
         line_origin[axis] = line
         var run_start := span_start
-        for gap in gaps:
-            if gap.position[along] >= span_end:
+        var run_end := span_start
+        for blocker in blockers:
+            if blocker.position[along] >= span_end:
                 break
-            # Keep the outer edge of a cutout as the border of the next open square.
-            if line <= gap.position[axis] or line >= gap.end[axis] or gap.end[along] <= run_start:
+            if line < blocker.position[axis] or line > blocker.end[axis]:
                 continue
-            if run_start < gap.position[along]:
-                lines.append(line_origin + direction * run_start)
-                lines.append(line_origin + direction * gap.position[along])
-            run_start = mini(span_end, gap.end[along])
-        if run_start < span_end:
+            var start := maxi(span_start, blocker.position[along])
+            var end := mini(span_end, blocker.end[along])
+            if end <= run_end:
+                continue
+            # Merge touching and overlapping spans so each line is drawn once.
+            if start > run_end:
+                if run_start < run_end:
+                    lines.append(line_origin + direction * run_start)
+                    lines.append(line_origin + direction * run_end)
+                run_start = start
+            run_end = end
+        if run_start < run_end:
             lines.append(line_origin + direction * run_start)
-            lines.append(line_origin + direction * span_end)
+            lines.append(line_origin + direction * run_end)
 
 func _placement_state(bounds: Rect2, cell_size: Vector2, step: Vector2, grid_origin: Vector2) -> PreviewState:
     if not bounds.has_area():

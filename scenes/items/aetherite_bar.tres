@@ -13,4 +13,5 @@ script = ExtResource("1_script")
 id = &"aetherite_bar"
 display_name = "Aetherite Bar"
 icon = SubResource("ItemIcon")
+material = &"aetherite"
 max_stack = 999

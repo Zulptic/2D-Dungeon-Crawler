@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chnbwc4uwy7yv"
-path="res://.godot/imported/Wood_Pickaxe.png-f05beb4f05f485f2e3598762441c6028.ctex"
+uid="uid://da74uhi43qru3"
+path="res://.godot/imported/rare.png-6a6d52c4c7c097ade85bff76db72414b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/items/Wood_Pickaxe.png"
-dest_files=["res://.godot/imported/Wood_Pickaxe.png-f05beb4f05f485f2e3598762441c6028.ctex"]
+source_file="res://assets/hud/player_hud/rarity_frames/rare.png"
+dest_files=["res://.godot/imported/rare.png-6a6d52c4c7c097ade85bff76db72414b.ctex"]
 
 [params]
 

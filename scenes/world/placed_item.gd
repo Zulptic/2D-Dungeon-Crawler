@@ -2,7 +2,7 @@ extends StaticBody2D
 ## A placed object can be recovered as the same item with one pickaxe hit.
 
 const GROUP := &"placed_objects"
-const INTERACTION_GROUP := &"furnace_interactables"
+const INTERACTION_GROUP := &"placed_item_interactables"
 const INTERACT_ICON := preload("res://assets/hud/environmental_hud/input_keyboard_e.png")
 const PROMPT_REST_SCALE := Vector2(0.5, 0.5)
 const PROMPT_PULSE_SCALE := Vector2(0.625, 0.625)
@@ -11,6 +11,8 @@ const FIRE_SHEET := preload("res://assets/items/Bricks_01-Sheet.png")
 const FIRE_FRAME_SECONDS: float = 0.125
 const SMELTRY_QUEUE := preload("res://scenes/smeltry_queue.gd")
 const OUTPUT_DISPLAY := preload("res://scenes/world/smeltry_output_display.gd")
+const PROGRESS_BAR := preload("res://scenes/world/smeltry_progress_bar.tscn")
+const EJECT_INTERVAL: float = 0.12
 const LIGHT_SIZE := Vector2i(102, 78)
 const LIGHT_PIXEL_SIZE: int = 3
 
@@ -30,11 +32,14 @@ var _fire_frame: int = 0
 var _fire_light: PointLight2D
 var _light_tween: Tween
 var smeltry_queue: Node
-var _smelting_was_active: bool = false
 var _output_display: Node2D
+var _progress_bar: Node2D
+var _progress_fill: ColorRect
+var _eject_timer: Timer
+var _eject_outputs: Array[Dictionary] = []
 
 func _ready() -> void:
-    if item == null or item.subtype != &"furnace":
+    if item == null or item.subtype not in [&"furnace", &"bed"]:
         return
     add_to_group(INTERACTION_GROUP)
     var unlit := CanvasItemMaterial.new()
@@ -60,11 +65,18 @@ func _ready() -> void:
     _prompt.z_index = 7
     _prompt.hide()
     add_child(_prompt)
+
+    if item.subtype != &"furnace":
+        return
     _setup_fire()
     smeltry_queue = SMELTRY_QUEUE.new()
     smeltry_queue.name = "SmeltryQueue"
     add_child(smeltry_queue)
-    smeltry_queue.changed.connect(_update_smelting_fire)
+    _eject_timer = Timer.new()
+    _eject_timer.name = "EjectTimer"
+    _eject_timer.one_shot = true
+    _eject_timer.timeout.connect(_eject_next)
+    add_child(_eject_timer)
     _output_display = OUTPUT_DISPLAY.new()
     _output_display.name = "FinishedItems"
     add_child(_output_display)
@@ -72,44 +84,56 @@ func _ready() -> void:
     var art_rect := _artwork.get_rect()
     var display_half_height: float = _output_display.FRAME.get_height() * _output_display.scale.y * 0.5
     _output_display.set_anchor(_artwork.position + Vector2(art_rect.get_center().x, art_rect.position.y - display_half_height - 5.0))
-    smeltry_queue.changed.connect(_update_completed_display)
-
-func _update_completed_display() -> void:
-    _output_display.set_outputs(smeltry_queue.get_completed_outputs())
+    _progress_bar = PROGRESS_BAR.instantiate()
+    _progress_bar.position = _artwork.position + art_rect.position + Vector2(31, 7)
+    add_child(_progress_bar)
+    _progress_fill = _progress_bar.get_node("Fill")
+    smeltry_queue.changed.connect(_update_smeltry_visuals)
 
 func has_completed_output() -> bool:
     return smeltry_queue != null and not smeltry_queue.get_completed_outputs().is_empty()
 
 func eject_completed() -> bool:
-    if not has_completed_output() or is_queued_for_deletion():
+    if smeltry_queue == null or is_queued_for_deletion():
         return false
-    var ejected := false
-    for output: Dictionary in smeltry_queue.get_completed_outputs():
-        var pickup := PICKUP.instantiate()
-        pickup.item = output.item
-        pickup.quantity = int(output.quantity)
-        pickup.show_stack_count = true
-        pickup.toss_distance = Vector2(14.0, 22.0)
-        var world := get_parent()
-        world.add_child(pickup)
-        if pickup.get_parent() != world:
-            pickup.queue_free()
-            continue
-        # Transfer ownership only after the world pickup exists successfully.
-        if not smeltry_queue.remove_completed(output.item, int(output.quantity)):
-            pickup.queue_free()
-            continue
-        pickup.launch_forward(to_global(Vector2(0, -4)), global_transform.y)
-        ejected = true
-    return ejected
+    if not _eject_outputs.is_empty():
+        return true
+    _eject_outputs = smeltry_queue.get_completed_outputs()
+    return _eject_next()
 
-func _update_smelting_fire() -> void:
-    var active: bool = smeltry_queue.has_work()
-    if active and _fire_timer.is_stopped():
-        toggle_fire()
-    elif not active and _smelting_was_active and not _fire_timer.is_stopped():
-        toggle_fire()
-    _smelting_was_active = active
+func _eject_next() -> bool:
+    if _eject_outputs.is_empty() or is_queued_for_deletion():
+        return false
+    var output: Dictionary = _eject_outputs.front()
+    var pickup := PICKUP.instantiate()
+    pickup.item = output.item
+    pickup.quantity = 1
+    pickup.toss_distance = Vector2(14.0, 22.0)
+    var world := get_parent()
+    world.add_child(pickup)
+    # Transfer one item only after its world pickup exists.
+    if pickup.get_parent() != world or not smeltry_queue.remove_completed(pickup.item, 1):
+        pickup.queue_free()
+        _eject_outputs.clear()
+        return false
+    pickup.launch_forward(to_global(Vector2(0, -4)), global_transform.y)
+    output.quantity -= 1
+    if output.quantity == 0:
+        _eject_outputs.pop_front()
+    if not _eject_outputs.is_empty():
+        _eject_timer.start(EJECT_INTERVAL)
+    return true
+
+func _update_smeltry_visuals() -> void:
+    _output_display.set_outputs(smeltry_queue.get_completed_outputs())
+    var remaining: float = smeltry_queue.get_work_remaining_ratio()
+    var active := remaining > 0.0
+    _progress_bar.visible = active
+    if active:
+        var rows := clampi(ceili(remaining * 15.0), 1, 15)
+        # Keep the bottom of the 3×15 slot fixed as the green fill drains.
+        _progress_fill.offset_top = 20.0 - rows
+    _set_fire_active(active)
 
 func _setup_fire() -> void:
     if _fire_frames.is_empty():
@@ -140,12 +164,11 @@ func _setup_fire() -> void:
     _fire_light.enabled = false
     add_child(_fire_light)
 
-func toggle_fire() -> bool:
-    if _fire_timer == null or is_queued_for_deletion():
-        return false
-    if smeltry_queue != null and smeltry_queue.has_work() and not _fire_timer.is_stopped():
-        return false
-    if _fire_timer.is_stopped():
+func _set_fire_active(active: bool) -> void:
+    var burning := not _fire_timer.is_stopped()
+    if active == burning:
+        return
+    if active:
         _fire_light.enabled = true
         _fire_frame = -1
         _advance_fire()
@@ -154,7 +177,6 @@ func toggle_fire() -> bool:
         _fire_timer.stop()
         _artwork.texture = _off_texture
         _fade_fire_light(0.0, 0.24)
-    return true
 
 func _advance_fire() -> void:
     _fire_frame = (_fire_frame + 1) % _fire_frames.size()

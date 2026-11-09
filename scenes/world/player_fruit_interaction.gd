@@ -1,8 +1,8 @@
 extends Node2D
-## The closest ripe tree or Smeltry owns the interaction outline and E prompt.
+## The closest ripe tree or interactable prop owns the outline and E prompt.
 const PLACED_ITEM := preload("res://scenes/world/placed_item.gd")
 @export_range(0.5, 4.0, 0.25) var reach_tiles: float = 1.5
-@export_range(0.5, 4.0, 0.25) var furnace_reach_tiles: float = 2.5
+@export_range(0.5, 4.0, 0.25) var placed_item_reach_tiles: float = 2.5
 @onready var player: CharacterBody2D = get_parent()
 var target: Node2D
 
@@ -22,7 +22,7 @@ func _update_target() -> void:
             var candidate_reach := reach_tiles
             if candidate is PLACED_ITEM:
                 point = candidate.to_global(candidate.get_local_footprint().get_center())
-                candidate_reach = furnace_reach_tiles
+                candidate_reach = placed_item_reach_tiles
             elif not candidate.can_harvest():
                 continue
             var distance := player.global_position.distance_squared_to(point)
@@ -47,12 +47,14 @@ func _unhandled_key_input(event: InputEvent) -> void:
         return
     var interacted: bool
     if target is PLACED_ITEM:
-        if event.shift_pressed:
-            interacted = target.toggle_fire()
+        var hud := player.get_parent().get_node_or_null("PlayerHUD")
+        if target.item.subtype == &"bed":
+            interacted = hud != null and hud.sleep_until_morning()
+        elif event.shift_pressed:
+            return
         elif target.has_completed_output():
             interacted = target.eject_completed()
         else:
-            var hud := player.get_parent().get_node_or_null("PlayerHUD")
             interacted = hud != null and hud.open_smeltry(target)
     else:
         interacted = target.harvest()

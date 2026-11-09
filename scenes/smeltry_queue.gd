@@ -8,7 +8,6 @@ const TIME_EPSILON: float = 0.000001
 var _inventory: PlayerInventoryModel
 var _clock: Node
 var _jobs: Array[Dictionary] = []
-var _next_id: int = 1
 var _updating: bool = false
 
 func configure(inventory: PlayerInventoryModel, clock: Node) -> bool:
@@ -44,11 +43,10 @@ func enqueue(output: InventoryItem, requested: int) -> int:
         _updating = false
         return 0
     _jobs.append({
-        "id": _next_id, "output": recipe.output, "remaining": quantity,
+        "output": recipe.output, "remaining": quantity,
         "completed": 0, "duration": float(recipe.duration_minutes),
         "remaining_minutes": float(recipe.duration_minutes)
     })
-    _next_id += 1
     _updating = false
     changed.emit()
     return quantity
@@ -62,17 +60,33 @@ func has_work() -> bool:
 func has_items() -> bool:
     return not _jobs.is_empty()
 
+func get_work_remaining_ratio() -> float:
+    for job in _jobs:
+        if int(job.remaining) > 0:
+            return clampf(float(job.remaining_minutes) / float(job.duration), 0.0, 1.0)
+    return 0.0
+
 func get_entries() -> Array[Dictionary]:
     var entries: Array[Dictionary] = []
+    var by_output: Dictionary[StringName, Dictionary] = {}
+    # Stack matching UI rows while the jobs themselves retain their queue order.
     for job in _jobs:
-        var minutes := maxi(1, ceili(float(job.remaining_minutes) - TIME_EPSILON))
-        entries.append({
-            "id": job.id, "output": job.output,
-            "quantity": int(job.remaining) + int(job.completed),
-            "duration_text": "%d Minutes" % minutes if int(job.remaining) > 0 else "Ready",
-            "ready": int(job.remaining) == 0,
-            "completed": int(job.completed), "remaining_minutes": job.remaining_minutes
-        })
+        var item: InventoryItem = job.output
+        if not by_output.has(item.id):
+            var row := {
+                "id": item.id, "output": item, "quantity": 0, "completed": 0,
+                "duration_text": "Ready", "ready": true, "remaining_minutes": 0.0,
+            }
+            by_output[item.id] = row
+            entries.append(row)
+        var entry := by_output[item.id]
+        entry.quantity += int(job.remaining)
+        entry.completed += int(job.completed)
+        if entry.ready and int(job.remaining) > 0:
+            var minutes := maxi(1, ceili(float(job.remaining_minutes) - TIME_EPSILON))
+            entry.duration_text = "%d Minutes" % minutes
+            entry.remaining_minutes = job.remaining_minutes
+            entry.ready = false
     return entries
 
 func advance_minutes(minutes: float) -> void:

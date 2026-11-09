@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_ProgressBar.png" id="1_frame"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_unshaded"]
+light_mode = 1
+
+[node name="SmeltingProgress" type="Node2D"]
+visible = false
+z_index = 8
+texture_filter = 1
+material = SubResource("CanvasItemMaterial_unshaded")
+
+[node name="Frame" type="Sprite2D" parent="."]
+use_parent_material = true
+texture = ExtResource("1_frame")
+centered = false
+
+[node name="Fill" type="ColorRect" parent="."]
+use_parent_material = true
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 7.0
+offset_bottom = 20.0
+mouse_filter = 2
+color = Color(0.19607843, 1, 0, 1)
+
+[node name="Shade" type="ColorRect" parent="Fill"]
+use_parent_material = true
+layout_mode = 1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+grow_horizontal = 0
+mouse_filter = 2
+color = Color(0.18039216, 0.91764706, 0, 1)

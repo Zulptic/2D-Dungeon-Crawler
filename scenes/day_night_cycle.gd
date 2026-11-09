@@ -33,8 +33,15 @@ func advance_time(real_seconds: float) -> void:
 		return
 	var elapsed_minutes := real_seconds * MINUTES_PER_DAY / maxf(1.0, full_day_seconds)
 	var advanced := _minutes_of_day + elapsed_minutes
-	_day_number += floori(advanced / MINUTES_PER_DAY)
-	_minutes_of_day = fposmod(advanced, MINUTES_PER_DAY)
+	_apply_time_change(floori(advanced / MINUTES_PER_DAY), fposmod(advanced, MINUTES_PER_DAY), elapsed_minutes)
+
+func advance_to_next_morning() -> void:
+	var minutes_until_morning := MINUTES_PER_DAY - _minutes_of_day + START_MINUTES
+	_apply_time_change(1, START_MINUTES, minutes_until_morning)
+
+func _apply_time_change(days_elapsed: int, minutes_of_day: float, elapsed_minutes: float) -> void:
+	_day_number += days_elapsed
+	_minutes_of_day = minutes_of_day
 	_refresh_time()
 	# Gameplay receives exact elapsed time, including midnight and large time steps.
 	time_advanced.emit(elapsed_minutes)

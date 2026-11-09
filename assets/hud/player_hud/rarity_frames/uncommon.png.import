@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://deiuf4p5pvowa"
-path="res://.godot/imported/Wood_Axe.png-f05028499f5a0304d24984d4c8cebcdb.ctex"
+uid="uid://cvqbib8u2fnf"
+path="res://.godot/imported/uncommon.png-90b1bb889e49c04346bf6723f4c5b2d9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/items/Wood_Axe.png"
-dest_files=["res://.godot/imported/Wood_Axe.png-f05028499f5a0304d24984d4c8cebcdb.ctex"]
+source_file="res://assets/hud/player_hud/rarity_frames/uncommon.png"
+dest_files=["res://.godot/imported/uncommon.png-90b1bb889e49c04346bf6723f4c5b2d9.ctex"]
 
 [params]
 

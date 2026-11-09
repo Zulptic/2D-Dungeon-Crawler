@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://bbvblkgpbbj6m"]
+
+[ext_resource type="Script" uid="uid://3ownfq07aypw" path="res://scenes/inventory_item.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cp4awftbygjjv" path="res://assets/items/Bed.png" id="2_bed"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bed_icon"]
+atlas = ExtResource("2_bed")
+region = Rect2(0, 0, 30, 54)
+margin = Rect2(2, 2, 4, 4)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+id = &"bed"
+display_name = "Bed"
+description = "A wooden bed with a blue blanket."
+icon = SubResource("AtlasTexture_bed_icon")
+category = 6
+subtype = &"bed"
+placement_texture = ExtResource("2_bed")
+placement_footprint = Vector2i(2, 3)

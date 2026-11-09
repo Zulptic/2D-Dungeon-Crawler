@@ -9,7 +9,11 @@ signal stamina_changed(value: float, maximum: float, exhausted: bool)
 @export_range(1.0, 1000.0, 1.0) var stamina_drain_per_second: float = 20.0
 @export_range(1.0, 1000.0, 1.0) var stamina_recharge_per_second: float = 25.0
 @export_range(0.0, 5.0, 0.05) var stamina_recharge_delay: float = 0.75
+@export_group("Footsteps")
+@export var footstep_sounds: Dictionary[String, AudioStream] = {}
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var _footsteps: AudioStreamPlayer2D = $Footsteps
+@onready var _footstep_ground: TileMapLayer = get_node_or_null("../Ground")
 @onready var carried_sprite: Sprite2D = $AnimatedSprite2D/CarriedItem
 @onready var _carry_inventory: Control = get_node_or_null("../PlayerHUD/Screen/Inventory")
 @onready var _carry_hotbar: Control = get_node_or_null("../PlayerHUD/Screen/Hotbar")
@@ -29,6 +33,8 @@ const CARRY_BOB := {
 var carried_item: InventoryItem
 var _carried_bounds := Rect2i()
 var _locomotion_state: String = "idle"
+var _footstep_rng := RandomNumberGenerator.new()
+var _steps_until_lower_pitch: int
 
 var movement_locked: bool = false:
     set(value):
@@ -48,7 +54,10 @@ var _recharge_delay_left: float = 0.0
 func _ready() -> void:
     add_to_group(&"player")
     stamina = max_stamina
+    _footstep_rng.randomize()
+    _steps_until_lower_pitch = _footstep_rng.randi_range(2, 5)
     sprite.frame_changed.connect(_update_carried_visual)
+    sprite.frame_changed.connect(_play_footstep)
     sprite.animation_changed.connect(_update_carried_visual)
     _play_animation("idle")
     call_deferred("_connect_carry_inventory")
@@ -100,6 +109,34 @@ func _play_animation(state: String) -> void:
     var prefix := "carry_" if carried_item != null else ""
     sprite.play(StringName(prefix + state + "_" + suffix))
     _update_carried_visual()
+
+func _play_footstep() -> void:
+    if movement_locked or is_using_tool or get_real_velocity().is_zero_approx() or _footstep_ground == null:
+        return
+    if sprite.frame != 1 and sprite.frame != 4:
+        return
+    var animation := String(sprite.animation).trim_prefix("carry_")
+    if not (animation.begins_with("walk_") or animation.begins_with("run_")):
+        return
+
+    var cell := _footstep_ground.local_to_map(_footstep_ground.to_local(global_position))
+    var tile := _footstep_ground.get_cell_tile_data(cell)
+    if tile == null or not tile.has_custom_data("footstep_surface"):
+        return
+    var surface := str(tile.get_custom_data("footstep_surface"))
+    var sound := footstep_sounds.get(surface) as AudioStream
+    if sound == null:
+        return
+
+    if _footsteps.stream != sound:
+        _footsteps.stream = sound
+    _steps_until_lower_pitch -= 1
+    if _steps_until_lower_pitch == 0:
+        _footsteps.pitch_scale = _footstep_rng.randf_range(0.945, 0.975)
+        _steps_until_lower_pitch = _footstep_rng.randi_range(2, 5)
+    else:
+        _footsteps.pitch_scale = _footstep_rng.randf_range(0.985, 1.025)
+    _footsteps.play()
 
 func get_inventory_model() -> PlayerInventoryModel:
     var inventory := get_node_or_null("../PlayerHUD/Screen/Inventory")

@@ -27,4 +27,4 @@ position = Vector2(8, 0)
 shape = SubResource("BoulderCollision")
 
 [node name="HealthBar" parent="." index="2"]
-position = Vector2(-1, -30)
+position = Vector2(0, -32)

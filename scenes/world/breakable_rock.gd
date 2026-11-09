@@ -7,6 +7,7 @@ signal broken(rock: Node2D)
 @export var mining_footprint := Rect2i(0, 0, 1, 1)
 @export var drop_offset := Vector2.ZERO
 @export_range(0, 10, 1) var required_mining_tier: int = 0
+const HEALTH_FILL_WIDTH: int = 10
 const DEBRIS := preload("res://scenes/world/rock_debris.gd")
 const PICKUP := preload("res://scenes/world/item_pickup.tscn")
 @onready var sprite: Sprite2D = $Sprite2D
@@ -41,9 +42,7 @@ func take_pickaxe_hit(tool: InventoryItem, hit_direction: Vector2 = Vector2.ZERO
     if _breaking or health <= 0 or tool == null or tool.subtype != &"pickaxe":
         return false
     if not can_mine_with(tool):
-        # A weak pickaxe still makes contact, but cannot damage or drop the ore.
-        health_bar.visible = true
-        _spawn_chips(false, hit_direction)
+        # Below-tier hits only shake the rock.
         _play_hit_shake()
         return false
     return take_hit(tool.roll_damage(InventoryItem.DamageTarget.ROCK), hit_direction)
@@ -89,9 +88,9 @@ func _set_shake_offset(offset: Vector2) -> void:
 
 func _show_health(value: float) -> void:
     _display_health = value
-    var columns := clampi(ceili(value / max_health * 31.0 - 0.00001), 0, 31)
+    var columns := clampi(ceili(value / max_health * HEALTH_FILL_WIDTH - 0.00001), 0, HEALTH_FILL_WIDTH)
     var crop := health_fill.texture as AtlasTexture
-    crop.region = Rect2(3, 2, maxi(1, columns), 2)
+    crop.region = Rect2(3, 2, maxi(1, columns), 1)
     health_fill.visible = columns > 0
 
 func _world_parent() -> Node:

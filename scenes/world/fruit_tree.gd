@@ -7,6 +7,8 @@ var fruit_pickup_scene: PackedScene
 const MAX_FRUIT: int = 4
 const FRUIT_SPACING: float = 16.0
 const INTERACT_ICON := preload("res://assets/hud/environmental_hud/input_keyboard_e.png")
+const PROMPT_REST_SCALE := Vector2(0.5, 0.5)
+const PROMPT_PULSE_SCALE := Vector2(0.625, 0.625)
 var fruits: Array[Sprite2D] = []
 var fruit_timer: Timer
 var outline: Sprite2D
@@ -14,10 +16,7 @@ var interact_prompt: Sprite2D
 var interaction_selected: bool = false
 var _fruit_sites: Array[Vector2] = []
 var _fruit_slots: Array[Vector2] = []
-var _outline_origin := Vector2.ZERO
-var _outline_pulse: Tween
-var _outline_frames: Array[ImageTexture] = []
-var _outline_pixel_offset: int = 0
+var _prompt_pulse: Tween
 
 func _ready() -> void:
     super._ready()
@@ -35,15 +34,14 @@ func _ready() -> void:
     var unlit := CanvasItemMaterial.new()
     unlit.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
     outline.material = unlit
-    # Draw over the tree edge and under its fruits so inward motion stays visible.
+    outline.show_behind_parent = true
     sprite.add_child(outline)
-    sprite.move_child(outline, 0)
     interact_prompt = Sprite2D.new()
     interact_prompt.name = "InteractPrompt"
     interact_prompt.texture = INTERACT_ICON
+    interact_prompt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
     interact_prompt.material = unlit
-    interact_prompt.scale = Vector2.ONE * 0.5
-    interact_prompt.position = Vector2(0, -10)
+    interact_prompt.scale = PROMPT_REST_SCALE
     interact_prompt.z_index = 7
     interact_prompt.visible = false
     add_child(interact_prompt)
@@ -71,30 +69,19 @@ func _set_fruit_stage(fruit: Sprite2D, stage: int) -> void:
 
 func set_interaction_selected(selected: bool) -> void:
     var active := selected and can_harvest()
-    var changed := active != interaction_selected
+    if interact_prompt == null or active == interaction_selected:
+        return
     interaction_selected = active
-    if is_instance_valid(outline):
-        outline.visible = interaction_selected
-        if changed:
-            if _outline_pulse != null and _outline_pulse.is_valid():
-                _outline_pulse.kill()
-            _outline_pulse = null
-            outline.modulate.a = 1.0
-            _set_outline_offset(0.0)
-            if interaction_selected:
-                # Breathe by exactly one source pixel; never scale the tree or blur its edge.
-                _outline_pulse = create_tween().set_loops()
-                _outline_pulse.tween_method(_set_outline_offset, 0.0, -1.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-                _outline_pulse.tween_method(_set_outline_offset, -1.0, 0.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-    if is_instance_valid(interact_prompt):
-        interact_prompt.visible = interaction_selected
-
-func _set_outline_offset(value: float) -> void:
-    _outline_pixel_offset = clampi(roundi(value), -1, 0)
-    if is_instance_valid(outline) and _outline_frames.size() == 2:
-        var frame := _outline_frames[_outline_pixel_offset + 1]
-        if outline.texture != frame:
-            outline.texture = frame
+    outline.visible = active
+    interact_prompt.visible = active
+    if _prompt_pulse != null:
+        _prompt_pulse.kill()
+        _prompt_pulse = null
+    interact_prompt.scale = PROMPT_REST_SCALE
+    if active:
+        _prompt_pulse = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+        _prompt_pulse.tween_property(interact_prompt, "scale", PROMPT_PULSE_SCALE, 0.6)
+        _prompt_pulse.tween_property(interact_prompt, "scale", PROMPT_REST_SCALE, 0.6)
 
 func harvest() -> bool:
     if not can_harvest():
@@ -209,36 +196,16 @@ func _build_mature_visuals() -> void:
             if leafy:
                 _fruit_sites.append(Vector2(x,y))
     _plan_fruit_slots()
-    # Cache the normal outline and its one-pixel inward contour.
-    var crown_rect := Rect2i(Vector2i(_sprite_origin), crown.get_size())
-    var stump_image := stump.texture.get_image()
-    stump_image.convert(Image.FORMAT_RGBA8)
-    var stump_rect := Rect2i(Vector2i(_stump_origin), stump_image.get_size())
-    var bounds := crown_rect.merge(stump_rect).grow(1)
-    var mask := Image.create_empty(bounds.size.x, bounds.size.y, false, Image.FORMAT_RGBA8)
-    mask.blend_rect(stump_image, Rect2i(Vector2i.ZERO, stump_image.get_size()), stump_rect.position - bounds.position)
-    mask.blend_rect(crown, Rect2i(Vector2i.ZERO, crown.get_size()), crown_rect.position - bounds.position)
-    var inner := Image.create_empty(bounds.size.x, bounds.size.y, false, Image.FORMAT_RGBA8)
-    var resting := Image.create_empty(bounds.size.x, bounds.size.y, false, Image.FORMAT_RGBA8)
-    var limits := Rect2i(Vector2i.ZERO, bounds.size)
-    for y in range(bounds.size.y):
-        for x in range(bounds.size.x):
-            var occupied := mask.get_pixel(x,y).a > 0.1
-            var solid_within_one: bool = false
-            var clear_within_one: bool = false
-            for dy in range(-1,2):
-                for dx in range(-1,2):
-                    var neighbor := Vector2i(x+dx,y+dy)
-                    var solid := limits.has_point(neighbor) and mask.get_pixelv(neighbor).a > 0.1
-                    solid_within_one = solid_within_one or solid
-                    clear_within_one = clear_within_one or not solid
-            if occupied and clear_within_one:
-                inner.set_pixel(x,y,Color.WHITE)
-            elif not occupied and solid_within_one:
-                resting.set_pixel(x,y,Color.WHITE)
-    _outline_frames.clear()
-    for frame in [inner, resting]:
-        _outline_frames.append(ImageTexture.create_from_image(frame))
-    _set_outline_offset(0.0)
-    _outline_origin = Vector2(bounds.position) - _sprite_origin
-    outline.position = _outline_origin
+    # The standing texture already includes the trunk.
+    var edge := Image.create_empty(crown.get_width() + 2, crown.get_height() + 2, false, Image.FORMAT_RGBA8)
+    for y in range(crown.get_height()):
+        for x in range(crown.get_width()):
+            if crown.get_pixel(x, y).a > 0.1:
+                edge.fill_rect(Rect2i(x, y, 3, 3), Color.WHITE)
+    for y in range(crown.get_height()):
+        for x in range(crown.get_width()):
+            if crown.get_pixel(x, y).a > 0.1:
+                edge.set_pixel(x + 1, y + 1, Color.TRANSPARENT)
+    outline.texture = ImageTexture.create_from_image(edge)
+    outline.position = -Vector2.ONE
+    interact_prompt.position = _sprite_origin + Vector2(crown.get_width() * 0.5, 32.0)

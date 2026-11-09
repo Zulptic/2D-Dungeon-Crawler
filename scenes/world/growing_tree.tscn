@@ -25,7 +25,7 @@ size = Vector2(12, 8)
 [sub_resource type="AtlasTexture" id="HealthFill"]
 resource_local_to_scene = true
 atlas = ExtResource("5_fill")
-region = Rect2(3, 2, 31, 2)
+region = Rect2(3, 2, 10, 1)
 filter_clip = true
 
 [node name="GrowingTree" type="StaticBody2D" groups=["choppable_trees"]]
@@ -56,8 +56,7 @@ centered = false
 
 [node name="HealthBar" type="Node2D" parent="."]
 visible = false
-position = Vector2(-9, -20)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-8, -22)
 z_index = 6
 
 [node name="Frame" type="Sprite2D" parent="HealthBar"]

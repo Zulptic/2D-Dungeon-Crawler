@@ -28,9 +28,11 @@ const STARTING_BACKPACK_ITEMS: Array[InventoryItem] = [
 	preload("res://scenes/items/ashenite_pickaxe.tres"),
 	preload("res://scenes/items/ashenite_sword.tres"),
 	preload("res://scenes/items/ashenite_axe.tres"),
-	preload("res://scenes/items/furnace.tres")
+	preload("res://scenes/items/furnace.tres"),
+	preload("res://scenes/items/bed.tres")
 ]
 const STACK_COUNT := preload("res://scenes/item_stack_count.gd")
+const RARITY_FRAME := preload("res://scenes/ui/item_rarity_frame.gd")
 const ART_SIZE := Vector2(231, 151)
 const CLOSE_RECT := Rect2(218, 7, 13, 13)
 const CURSORS := {
@@ -96,6 +98,7 @@ func _make_slot(group: StringName, index: int, rect: Rect2) -> void:
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(icon)
+	icon.add_child(RARITY_FRAME.new())
 	var count := STACK_COUNT.new()
 	count.position = Vector2(0, 9)
 	icon.add_child(count)
@@ -452,6 +455,7 @@ func _refresh_icons() -> void:
 		if _same_slot(_drag, slot):
 			remaining = maxi(0, remaining - int(_drag.quantity))
 		icon.texture = item.icon if item != null else null
+		icon.get_node("RarityFrame").set_item(item)
 		slot.count.amount = remaining
 		icon.visible = item != null and remaining > 0
 	if not _drag.is_empty():

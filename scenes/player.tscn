@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://pjnv4k0hcnmy" path="res://assets/characters/player/Walk_Side-Sheet.png" id="3_side"]
 [ext_resource type="Texture2D" uid="uid://c4jnak2j043tf" path="res://assets/characters/player/Crush_Up-Sheet-Iron.png" id="4_a8ls1"]
 [ext_resource type="Script" uid="uid://lvhd110s0l1s" path="res://scenes/player.gd" id="4_movement"]
+[ext_resource type="AudioStream" path="res://assets/audio/footsteps/walk_grass_01.ogg" id="walk_grass"]
 [ext_resource type="Script" uid="uid://c7rmhsmkp3sda" path="res://scenes/player_mining.gd" id="5_mining"]
 [ext_resource type="Texture2D" uid="uid://bhryoxbtnybk8" path="res://assets/characters/player/Idle_Down-Sheet.png" id="tex_idle_down"]
 [ext_resource type="Texture2D" uid="uid://dh8dhnjrpc050" path="res://assets/characters/player/Idle_Side-Sheet.png" id="tex_idle_side"]
@@ -2648,6 +2649,9 @@ size = Vector2(10, 6)
 texture_filter = 1
 motion_mode = 1
 script = ExtResource("4_movement")
+footstep_sounds = Dictionary[String, AudioStream]({
+"grass": ExtResource("walk_grass")
+})
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1505026189]
 position = Vector2(0, -12)
@@ -2665,6 +2669,10 @@ shape = SubResource("RectangleShape2D_feet")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2094911320]
 zoom = Vector2(3, 3)
+
+[node name="Footsteps" type="AudioStreamPlayer2D" parent="."]
+volume_db = -20.0
+max_polyphony = 2
 
 [node name="Mining" type="Node2D" parent="." unique_id=1711090430]
 script = ExtResource("5_mining")

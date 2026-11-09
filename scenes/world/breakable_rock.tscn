@@ -13,7 +13,7 @@ size = Vector2(14, 8)
 [sub_resource type="AtlasTexture" id="Fill"]
 resource_local_to_scene = true
 atlas = ExtResource("4")
-region = Rect2(3, 2, 31, 2)
+region = Rect2(3, 2, 10, 1)
 filter_clip = true
 [node name="BreakableRock" type="StaticBody2D" groups=["mineable_rocks"]]
 texture_filter = 1
@@ -25,8 +25,7 @@ position = Vector2(0, 2)
 shape = SubResource("Shape")
 [node name="HealthBar" type="Node2D" parent="."]
 visible = false
-position = Vector2(-9, -14)
-scale = Vector2(0.5, 0.5)
+position = Vector2(-8, -16)
 z_index = 6
 [node name="Frame" type="Sprite2D" parent="HealthBar"]
 texture = ExtResource("3")

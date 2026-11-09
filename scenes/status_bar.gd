@@ -13,6 +13,15 @@ const CONTENT_TOP: int = 8
 const CONTENT_HEIGHT: int = 9
 const SECTION_PADDING: int = 4
 const ICON_GAP: int = 3
+const MORNING_MINUTES: float = 6.0 * 60.0
+const MINUTES_PER_DAY: float = 24.0 * 60.0
+const CLOCK_ORANGE := Color("#ffad59")
+const CLOCK_RED := Color("#ff6267")
+const MIDNIGHT_RED := Color("#d43b4d")
+const CLOCK_JITTER := [
+	Vector2(-2, 0), Vector2(1, -1), Vector2(-1, 1),
+	Vector2(2, 0), Vector2(-1, -1),
+]
 
 var _time_text: String = "6:00 AM"
 var _day_number: int = 1
@@ -20,6 +29,13 @@ var _coins: int = 0
 var _level: int = 1
 var _image: Image
 var _texture: ImageTexture
+var _clock_texture: ImageTexture
+var _date_texture: ImageTexture
+var _clock_origin := Vector2.ZERO
+var _clock_color := Color.WHITE
+var _clock_gradient := Gradient.new()
+var _clock_shake: Tween
+var _clock_offset := Vector2.ZERO
 var _font: FontFile = UI_THEME.default_font
 var _font_size: int = UI_THEME.default_font_size
 var _font_atlases: Dictionary = {}
@@ -34,11 +50,15 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	z_index = 10
+	# Color stops are fractions of the in-game day, including the midnight wrap.
+	_clock_gradient.offsets = PackedFloat32Array([0.0, 5.0 / 24.0, 6.0 / 24.0, 18.0 / 24.0, 20.0 / 24.0, 22.0 / 24.0, 1.0])
+	_clock_gradient.colors = PackedColorArray([MIDNIGHT_RED, MIDNIGHT_RED, Color.WHITE, Color.WHITE, CLOCK_ORANGE, CLOCK_RED, MIDNIGHT_RED])
 
 func _ready() -> void:
 	_build_texture()
 
-func set_values(time_text: String, day_number: int, coins: int, level: int) -> void:
+func set_values(time_text: String, day_number: int, coins: int, level: int, minutes_of_day: float = MORNING_MINUTES) -> void:
+	set_clock_time(minutes_of_day)
 	var day := maxi(1, day_number)
 	var balance := maxi(0, coins)
 	var player_level := maxi(1, level)
@@ -62,9 +82,35 @@ func format_coins(amount: int) -> String:
 		formatted += digits[index]
 	return formatted
 
+func set_clock_time(minutes_of_day: float) -> void:
+	var color := _clock_gradient.sample(minutes_of_day / MINUTES_PER_DAY)
+	if color != _clock_color:
+		_clock_color = color
+		queue_redraw()
+
+	var after_midnight := minutes_of_day < MORNING_MINUTES
+	if after_midnight and _clock_shake == null:
+		_clock_shake = create_tween().set_loops()
+		for offset: Vector2 in CLOCK_JITTER:
+			_clock_shake.tween_callback(_set_clock_offset.bind(offset))
+			_clock_shake.tween_interval(0.04)
+	elif not after_midnight and _clock_shake != null:
+		_clock_shake.kill()
+		_clock_shake = null
+		_set_clock_offset(Vector2.ZERO)
+
+func _set_clock_offset(offset: Vector2) -> void:
+	_clock_offset = offset
+	queue_redraw()
+
 func _draw() -> void:
 	if _texture != null:
 		draw_texture(_texture, Vector2.ZERO)
+	if _clock_texture != null:
+		# Keep the jolts in HUD pixels after scaling the artwork.
+		var nudge := _clock_offset / scale
+		draw_texture(_clock_texture, _clock_origin + nudge, _clock_color)
+		draw_texture(_date_texture, _clock_origin + Vector2(_clock_texture.get_width(), 0), _clock_color)
 
 func _build_texture() -> void:
 	var labels: Array[String] = ["%s Day %d" % [_time_text, _day_number], format_coins(_coins), "Lvl. %d" % _level]
@@ -104,7 +150,16 @@ func _build_texture() -> void:
 		if index == 0:
 			text_y += 1
 		var text_rect := Rect2i(Vector2i(ink_x + icon_width, text_y), text.get_size())
-		_image.blend_rect(text, Rect2i(Vector2i.ZERO, text.get_size()), text_rect.position)
+		if index == 0:
+			# Separate the time and date so both can share a tint while only the time moves.
+			var clock_width := _text_image(_time_text).get_width()
+			var clock_area := Rect2i(0, 0, clock_width, text.get_height())
+			_clock_texture = ImageTexture.create_from_image(text.get_region(clock_area))
+			_clock_origin = Vector2(text_rect.position)
+			var date_area := Rect2i(clock_width, 0, text.get_width() - clock_width, text.get_height())
+			_date_texture = ImageTexture.create_from_image(text.get_region(date_area))
+		else:
+			_image.blend_rect(text, Rect2i(Vector2i.ZERO, text.get_size()), text_rect.position)
 		_icon_rects.append(icon_rect)
 		_text_rects.append(text_rect)
 		x = section.end.x

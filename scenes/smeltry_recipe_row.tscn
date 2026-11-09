@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_IngredientSlots.png" id="ingredients"]
 [ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_RecipeDivider.png" id="divider"]
 [ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_QuantityButtons.png" id="buttons"]
+[ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_QuantityButtons_Pressed.png" id="buttons_pressed"]
 [ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_Clock.png" id="clock"]
 [ext_resource type="Texture2D" path="res://assets/tiles/Mineral_Levels.png" id="minerals"]
 [ext_resource type="Texture2D" path="res://assets/hud/smeltry/Smeltry_CopperIngot.png" id="copper_icon"]
@@ -36,6 +37,21 @@ filter_clip = true
 
 [sub_resource type="AtlasTexture" id="Maximum"]
 atlas = ExtResource("buttons")
+region = Rect2(42, 0, 25, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="OncePressed"]
+atlas = ExtResource("buttons_pressed")
+region = Rect2(0, 0, 17, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="FivePressed"]
+atlas = ExtResource("buttons_pressed")
+region = Rect2(20, 0, 19, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="MaximumPressed"]
+atlas = ExtResource("buttons_pressed")
 region = Rect2(42, 0, 25, 16)
 filter_clip = true
 
@@ -166,7 +182,8 @@ offset_right = 175.0
 offset_bottom = 23.0
 focus_mode = 0
 texture_normal = SubResource("Once")
-texture_pressed = SubResource("Once")
+texture_pressed = SubResource("OncePressed")
+texture_disabled = SubResource("OncePressed")
 
 [node name="Five" type="TextureButton" parent="."]
 layout_mode = 0
@@ -176,7 +193,8 @@ offset_right = 197.0
 offset_bottom = 23.0
 focus_mode = 0
 texture_normal = SubResource("Five")
-texture_pressed = SubResource("Five")
+texture_pressed = SubResource("FivePressed")
+texture_disabled = SubResource("FivePressed")
 
 [node name="Maximum" type="TextureButton" parent="."]
 layout_mode = 0
@@ -186,5 +204,6 @@ offset_right = 225.0
 offset_bottom = 23.0
 focus_mode = 0
 texture_normal = SubResource("Maximum")
-texture_pressed = SubResource("Maximum")
+texture_pressed = SubResource("MaximumPressed")
+texture_disabled = SubResource("MaximumPressed")
 

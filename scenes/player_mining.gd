@@ -10,16 +10,14 @@ const IMPACT_FRAME: int = 4
 const AXE_IMPACT_FRAME: int = 3
 const HARVEST_GROUPS := {&"pickaxe": &"mineable_rocks", &"axe": &"choppable_trees"}
 const TOOL_ANIMATIONS := {&"pickaxe": &"crush", &"sword": &"pierce", &"axe": &"slice"}
-const SELECTOR_SHEETS := {
-	&"small": preload("res://assets/hud/player_hud/sheet_cursor_hovered_tile16.png"),
-	&"large": preload("res://assets/hud/player_hud/sheet_cursor_hovered_tile32.png")
-}
+const SELECTOR_FRAME := preload("res://assets/hud/player_hud/cursor_hovered_tile.png")
 @onready var player: CharacterBody2D = get_parent()
 @onready var sprite: AnimatedSprite2D = get_node("../AnimatedSprite2D")
 @onready var inventory: Control = get_node_or_null("../../PlayerHUD/Screen/Inventory")
 @onready var hotbar: Control = get_node_or_null("../../PlayerHUD/Screen/Hotbar")
 @onready var ground: TileMapLayer = get_node_or_null("../../Ground")
-var selector: AnimatedSprite2D
+var selector: Node2D
+var _selector_size := Vector2.ONE * TILE_SIZE
 var target_position := Vector2.ZERO
 var target_in_reach: bool = false
 var target_rock: Node2D
@@ -35,43 +33,26 @@ var _held_item: InventoryItem
 var _next_swing_usec: int = 0
 
 func _ready() -> void:
-	var frames := SpriteFrames.new()
-	frames.remove_animation(&"default")
-	for animation: StringName in SELECTOR_SHEETS:
-		var sheet: Texture2D = SELECTOR_SHEETS[animation]
-		frames.add_animation(animation)
-		frames.set_animation_speed(animation, 4.0)
-		frames.set_animation_loop(animation, true)
-		for index in range(2):
-			var frame := AtlasTexture.new()
-			frame.atlas = sheet
-			frame.region = Rect2(index * 48, 0, 48, 48)
-			frame.filter_clip = true
-			frames.add_frame(animation, frame)
-	_add_wide_selector(frames)
-	selector = AnimatedSprite2D.new()
+	selector = Node2D.new()
 	selector.name = "HoveredTile"
-	selector.sprite_frames = frames
+	selector.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	selector.z_index = 5
+	selector.draw.connect(_draw_selector)
 	add_child(selector)
-	selector.play(&"small")
 	visible = false
 	sprite.frame_changed.connect(_on_frame_changed)
 	sprite.animation_finished.connect(_on_animation_finished)
 	call_deferred("_connect_inventory")
 
-func _add_wide_selector(frames: SpriteFrames) -> void:
-	# Move the right-hand corners one tile over, keeping their native pixels.
-	var sheet: Image = SELECTOR_SHEETS[&"small"].get_image()
-	sheet.convert(Image.FORMAT_RGBA8)
-	frames.add_animation(&"wide")
-	frames.set_animation_speed(&"wide", 4.0)
-	frames.set_animation_loop(&"wide", true)
-	for index in range(2):
-		var frame := Image.create_empty(48 + TILE_SIZE, 48, false, Image.FORMAT_RGBA8)
-		frame.blit_rect(sheet, Rect2i(index * 48, 0, 24, 48), Vector2i.ZERO)
-		frame.blit_rect(sheet, Rect2i(index * 48 + 24, 0, 24, 48), Vector2i(24 + TILE_SIZE, 0))
-		frames.add_frame(&"wide", ImageTexture.create_from_image(frame))
+func _draw_selector() -> void:
+	# Move the four corners to fit the footprint at their original pixel size.
+	var texture_size := SELECTOR_FRAME.get_size()
+	var half := texture_size * 0.5
+	var size := _selector_size + texture_size - Vector2.ONE * TILE_SIZE
+	for corner: Vector2 in [Vector2.ZERO, Vector2.RIGHT, Vector2.DOWN, Vector2.ONE]:
+		var source := Rect2(corner * half, half)
+		var destination := Rect2(corner * (size - half) - size * 0.5, half)
+		selector.draw_texture_rect_region(SELECTOR_FRAME, destination, source)
 
 func equipped_item() -> InventoryItem:
 	if inventory == null or hotbar == null or hotbar.selected_slot < 1:
@@ -181,19 +162,9 @@ func _show_target(rock: Node2D, point: Vector2) -> void:
 	var bounds := _target_bounds(rock)
 	selector.global_position = ground.to_global(bounds.get_center())
 	selector.global_scale = ground.global_scale
-	var size := Vector2i((bounds.size / TILE_SIZE).round())
-	var animation: StringName = &"small" if size == Vector2i.ONE else &"large"
-	if rock is PLACED_ITEM:
-		animation = &"wide" if size == Vector2i(2, 1) else &"small"
-		if animation == &"small":
-			selector.global_scale *= bounds.size / TILE_SIZE
-	if selector.animation != animation:
-		# Both sheets share the same two-frame timing, so size changes stay smooth.
-		var frame := selector.frame
-		var progress := selector.frame_progress
-		selector.play(animation)
-		selector.set_frame_and_progress(frame, progress)
-	selector.modulate = Color.WHITE
+	if _selector_size != bounds.size:
+		_selector_size = bounds.size
+		selector.queue_redraw()
 	selector.visible = true
 
 func update_target(world_position: Vector2) -> void:

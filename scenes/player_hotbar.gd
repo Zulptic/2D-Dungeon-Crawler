@@ -7,6 +7,7 @@ signal selection_changed(slot: int)
 @export_range(0, 100, 1) var bottom_margin: int = 16
 
 const STACK_COUNT := preload("res://scenes/item_stack_count.gd")
+const RARITY_FRAME := preload("res://scenes/ui/item_rarity_frame.gd")
 const SLOT_COUNT: int = 9
 const ART_SIZE := Vector2(210, 53)
 const SLOT_ORIGIN := Vector2(11, 20)
@@ -232,6 +233,7 @@ func bind_inventory(inventory: PlayerInventoryModel) -> void:
             icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
             add_child(icon)
             move_child(icon, highlight.get_index())
+            icon.add_child(RARITY_FRAME.new())
             var count := STACK_COUNT.new()
             count.name = "Count"
             count.position = Vector2(0, 9)
@@ -250,11 +252,13 @@ func _refresh_items() -> void:
         return
     for index in range(_item_icons.size()):
         var item := _inventory.get_item(&"hotbar", index)
-        _item_icons[index].texture = item.icon if item != null else null
+        var icon := _item_icons[index]
+        icon.texture = item.icon if item != null else null
+        icon.get_node("RarityFrame").set_item(item)
         var remaining := _inventory.get_quantity(&"hotbar", index)
         if index == _dragged_slot:
             remaining = maxi(0, remaining - _dragged_quantity) if _dragged_quantity >= 0 else 0
         if _valid_hotbar_drag(_hotbar_drag) and index == int(_hotbar_drag.index):
             remaining = maxi(0, remaining - int(_hotbar_drag.quantity))
-        _item_icons[index].get_node("Count").amount = remaining
-        _item_icons[index].visible = item != null and remaining > 0
+        icon.get_node("Count").amount = remaining
+        icon.visible = item != null and remaining > 0

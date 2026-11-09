@@ -44,8 +44,9 @@ var _transition_tween: Tween
 var _reveal_progress: float = 0.0
 var _closing: bool = false
 var _ingredient_counts: Array[Dictionary] = []
+var _recipe_rows: Array[Dictionary] = []
 var _queue: Node
-var _queue_row_ids: Array[int] = []
+var _queue_row_ids: Array[StringName] = []
 
 func _ready() -> void:
     get_viewport().size_changed.connect(_update_layout)
@@ -54,7 +55,7 @@ func _ready() -> void:
     recipe_scroll.get_v_scroll_bar().value_changed.connect(_update_scroll_thumb)
     recipe_scroll.get_v_scroll_bar().changed.connect(_update_scroll_thumb)
     if inventory != null:
-        inventory.model.changed.connect(_update_ingredient_counts)
+        inventory.model.changed.connect(_refresh_recipe_availability)
     set_recipes(RECIPES.get_recipes())
     set_queue_entries([{"output": COPPER, "duration_text": "60 Minutes"}] if show_reference_queue else [])
     _update_layout()
@@ -140,9 +141,9 @@ func _refresh_queue() -> void:
     if not is_instance_valid(_queue):
         return
     var entries: Array = _queue.get_entries()
-    var ids: Array[int] = []
+    var ids: Array[StringName] = []
     for entry: Dictionary in entries:
-        ids.append(int(entry.id))
+        ids.append(entry.id)
     if ids != _queue_row_ids or queue_list.get_child_count() != entries.size():
         set_queue_entries(entries)
         _queue_row_ids = ids
@@ -211,6 +212,7 @@ func _clear_rows(container: VBoxContainer) -> void:
 
 func set_recipes(recipes: Array) -> void:
     _ingredient_counts.clear()
+    _recipe_rows.clear()
     _clear_rows(recipe_list)
     for recipe: Dictionary in recipes:
         var output := recipe.get("output") as InventoryItem
@@ -231,11 +233,10 @@ func set_recipes(recipes: Array) -> void:
         row.get_node("OreIcon").texture = ore.icon if ore != null else null
         _add_ingredient_count(row, "FuelCount", fuel, int(recipe.get("fuel_required", 1)), "FuelIcon")
         _add_ingredient_count(row, "OreCount", ore, int(recipe.get("ore_required", 1)), "OreIcon")
+        _recipe_rows.append({"row": row, "ingredients": RECIPES.get_ingredients(recipe)})
         for pair in [["Once", 1], ["Five", 5], ["Maximum", 0]]:
             var button: TextureButton = row.get_node(pair[0])
-            button.pressed.connect(_request_quantity.bind(output, int(pair[1])))
-            button.button_down.connect(_press_visual.bind(button, true))
-            button.button_up.connect(_press_visual.bind(button, false))
+            button.pressed.connect(_request_quantity.bind(output, int(pair[1]), button))
     # Keep the five-row layout from the reference as recipes are added.
     for index in range(maxi(0, 5 - recipe_list.get_child_count())):
         var blank := TextureRect.new()
@@ -244,7 +245,7 @@ func set_recipes(recipes: Array) -> void:
         blank.custom_minimum_size = Vector2(228, 30)
         blank.mouse_filter = Control.MOUSE_FILTER_IGNORE
         recipe_list.add_child(blank)
-    _update_ingredient_counts()
+    _refresh_recipe_availability()
     recipe_scroll.scroll_vertical = 0
     _update_scroll_thumb.call_deferred()
 
@@ -258,7 +259,16 @@ func _add_ingredient_count(row: Control, node_name: String, ingredient: Inventor
     row.add_child(count)
     _ingredient_counts.append({"count": count, "item": ingredient, "required": maxi(0, required), "recipe": row.get_instance_id()})
 
-func _update_ingredient_counts() -> void:
+func _refresh_recipe_availability() -> void:
+    var model: PlayerInventoryModel = inventory.model if inventory != null else null
+    for recipe in _recipe_rows:
+        var affordable := model.get_craftable_quantity(recipe.ingredients) if model != null else 0
+        var row: Control = recipe.row
+        row.get_node("Once").disabled = affordable < 1
+        row.get_node("Five").disabled = affordable < 5
+        # Max is a bulk action; use 1x for a single item.
+        row.get_node("Maximum").disabled = affordable < 2
+
     var remaining_by_recipe: Dictionary = {}
     for binding in _ingredient_counts:
         var count = binding.count
@@ -272,20 +282,17 @@ func _update_ingredient_counts() -> void:
         var remaining: Dictionary = remaining_by_recipe[binding.recipe]
         var item_key: Variant = ingredient.id if ingredient.id != &"" else ingredient
         if not remaining.has(item_key):
-            remaining[item_key] = inventory.model.get_total_quantity(ingredient) if inventory != null else 0
+            remaining[item_key] = model.get_total_quantity(ingredient) if model != null else 0
         var owned: int = remaining[item_key]
         count.font_color = COUNT_SUFFICIENT if owned >= required else COUNT_INSUFFICIENT
         # Repeated ingredient slots share the available stock within this recipe.
         remaining[item_key] = maxi(0, owned - required)
 
-func _request_quantity(output: InventoryItem, amount: int) -> void:
-    if not is_open:
+func _request_quantity(output: InventoryItem, amount: int, button: TextureButton) -> void:
+    if not is_open or button.disabled:
         return
     if is_instance_valid(_queue) and _queue.enqueue(output, amount) > 0:
         quantity_requested.emit(output, amount)
-
-func _press_visual(button: TextureButton, pressed: bool) -> void:
-    button.self_modulate = Color(0.78, 0.78, 0.78) if pressed else Color.WHITE
 
 func set_queue_entries(entries: Array) -> void:
     _queue_row_ids.clear()
@@ -299,14 +306,18 @@ func set_queue_entries(entries: Array) -> void:
         row.get_node("OutputIcon").texture = COPPER_ICON if output.id == COPPER.id else output.icon
         var count := STACK_COUNT.new()
         count.name = "Quantity"
+        count.show_single = true
         count.position = row.get_node("OutputIcon").position + Vector2(0, 9)
         row.add_child(count)
         _update_queue_row(row, entry)
 
 func _update_queue_row(row: Control, entry: Dictionary) -> void:
     row.get_node("Quantity").amount = int(entry.get("quantity", 1))
-    row.get_node("Duration").text = entry.get("duration_text", "")
-    row.get_node("Clock").visible = not entry.get("ready", false)
+    var ready := bool(entry.get("ready", false))
+    var duration := row.get_node("Duration") as Label
+    duration.text = entry.get("duration_text", "")
+    duration.position.y = 9.0 if ready else 15.0
+    row.get_node("Clock").visible = not ready
 
 func _update_scroll_thumb(_value: float = 0.0) -> void:
     var bar := recipe_scroll.get_v_scroll_bar()

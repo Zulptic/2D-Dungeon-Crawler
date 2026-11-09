@@ -16,20 +16,26 @@ extends CanvasLayer
 		level = maxi(1, value)
 		_refresh_status_bar()
 
+@onready var player: CharacterBody2D = get_node_or_null(player_path)
+@onready var sleep_fade: ColorRect = $Screen/SleepFade
 @onready var art: Control = $Screen/Art
 @onready var stamina_clip: Control = $Screen/Art/StaminaClip
 @onready var stamina_fill: TextureRect = $Screen/Art/StaminaClip/Fill
+@onready var stamina_value: Label = $Screen/Art/StaminaValue
 @onready var day_night_cycle: CanvasModulate = get_node_or_null("../DayNightCycle")
 const ITEM_TOOLTIP := preload("res://scenes/item_tooltip.gd")
 const SMELTRY_UI := preload("res://scenes/smeltry_ui.tscn")
 const STATUS_BAR := preload("res://scenes/status_bar.gd")
-const STAMINA_WIDTH: int = 58
-const ART_SIZE := Vector2(128, 48)
+const BAR_WIDTH: int = 70
+const BAR_HEIGHT: int = 3
+const BAR_PATTERN_WIDTH: int = 3
+const ART_SIZE := Vector2(129, 44)
 const HUD_GAP: int = 8
 var smeltry_ui: Control
 var status_bar: Control
 
 func _ready() -> void:
+	_prepare_bar_fills()
 	_create_status_bar()
 	_update_layout()
 	var inventory: PlayerInventoryModel = $Screen/Inventory.model
@@ -40,12 +46,12 @@ func _ready() -> void:
 	$Screen.add_child(smeltry_ui)
 	$Screen.add_child(ITEM_TOOLTIP.new())
 	get_viewport().size_changed.connect(_update_layout)
-	var player := get_node_or_null(player_path)
 	if player != null and player.has_signal("stamina_changed"):
 		player.connect("stamina_changed", _on_stamina_changed)
 		_on_stamina_changed(float(player.get("stamina")), float(player.get("max_stamina")), bool(player.get("stamina_exhausted")))
 	if day_night_cycle != null:
 		day_night_cycle.connect("time_changed", _on_time_changed)
+		day_night_cycle.connect("time_advanced", _on_time_advanced)
 		_on_time_changed(day_night_cycle.get_display_minutes())
 
 func _create_status_bar() -> void:
@@ -56,15 +62,20 @@ func _create_status_bar() -> void:
 func _on_time_changed(_display_minutes: int) -> void:
 	_refresh_status_bar()
 
+func _on_time_advanced(_elapsed_minutes: float) -> void:
+	status_bar.set_clock_time(day_night_cycle.get_minutes_of_day())
+
 func _refresh_status_bar() -> void:
 	if not is_instance_valid(status_bar):
 		return
 	var time_text := "6:00 AM"
+	var minutes_of_day := 6.0 * 60.0
 	var day: int = 1
 	if day_night_cycle != null:
 		time_text = day_night_cycle.get_clock_text()
+		minutes_of_day = day_night_cycle.get_minutes_of_day()
 		day = day_night_cycle.get_day_number()
-	status_bar.set_values(time_text, day, coins, level)
+	status_bar.set_values(time_text, day, coins, level, minutes_of_day)
 	_update_layout()
 
 func _update_layout() -> void:
@@ -81,17 +92,69 @@ func _update_layout() -> void:
 	status_bar.scale = Vector2.ONE * amount
 	status_bar.position = Vector2(maxf(0.0, screen.x - right_margin - status_bar.size.x * amount), top_margin).floor()
 
+func _prepare_bar_fills() -> void:
+	var health_fill: TextureRect = $Screen/Art/Health
+	var mana_fill: TextureRect = $Screen/Art/Mana
+	health_fill.texture = _extend_bar_fill(health_fill.texture)
+	mana_fill.texture = _extend_bar_fill(mana_fill.texture)
+	var stamina_crop := stamina_fill.texture as AtlasTexture
+	stamina_crop.atlas = _extend_bar_fill(stamina_crop.atlas)
+	stamina_crop.region = Rect2(0, 0, BAR_WIDTH, BAR_HEIGHT)
+
+func _extend_bar_fill(texture: Texture2D) -> ImageTexture:
+	var source := texture.get_image()
+	var copied := mini(source.get_width(), BAR_WIDTH)
+	var result := Image.create_empty(BAR_WIDTH, BAR_HEIGHT, false, source.get_format())
+	result.blit_rect(source, Rect2i(0, 0, copied, BAR_HEIGHT), Vector2i.ZERO)
+	# Continue the last three-pixel repeat so the new width keeps the original pixel pattern.
+	for x in range(copied, BAR_WIDTH, BAR_PATTERN_WIDTH):
+		var width := mini(BAR_PATTERN_WIDTH, BAR_WIDTH - x)
+		var segment := Rect2i(copied - BAR_PATTERN_WIDTH, 0, width, BAR_HEIGHT)
+		result.blit_rect(source, segment, Vector2i(x, 0))
+	return ImageTexture.create_from_image(result)
+
 func _on_stamina_changed(value: float, maximum: float, _exhausted: bool) -> void:
+	stamina_value.text = str(ceili(maxf(0.0, value)))
 	var ratio := clampf(value / maximum, 0.0, 1.0) if maximum > 0.0 else 0.0
 	if maximum > 0.0 and is_equal_approx(value, maximum):
 		ratio = 1.0
-	var visible_columns := clampi(floori(ratio * STAMINA_WIDTH + 0.00001), 0, STAMINA_WIDTH)
+	var visible_columns := clampi(floori(ratio * BAR_WIDTH + 0.00001), 0, BAR_WIDTH)
 	# Crop the source image itself; a scaled scissor can cut its last screen pixel.
 	var crop := stamina_fill.texture as AtlasTexture
-	crop.region = Rect2(0, 0, maxi(1, visible_columns), 2)
-	stamina_fill.size = Vector2(visible_columns, 2)
+	crop.region = Rect2(0, 0, maxi(1, visible_columns), BAR_HEIGHT)
+	stamina_fill.size = Vector2(visible_columns, BAR_HEIGHT)
 	stamina_clip.size.x = visible_columns
 	stamina_clip.visible = visible_columns > 0
 
 func open_smeltry(furnace: Node2D) -> bool:
 	return smeltry_ui.open_for(furnace)
+
+func sleep_until_morning() -> bool:
+	if sleep_fade.visible or player == null or day_night_cycle == null or player.movement_locked or player.is_using_tool:
+		return false
+
+	var inventory := $Screen/Inventory
+	var hotbar := $Screen/Hotbar
+	var inventory_had_input := inventory.is_processing_input()
+	var hotbar_was_locked: bool = hotbar.input_locked
+	var clock_was_running := day_night_cycle.is_processing()
+	inventory.set_process_input(false)
+	hotbar.input_locked = true
+	player.movement_locked = true
+	day_night_cycle.set_process(false)
+
+	sleep_fade.modulate.a = 0.0
+	sleep_fade.show()
+	var fade := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	fade.tween_property(sleep_fade, "modulate:a", 1.0, 0.40)
+	fade.tween_callback(func(): day_night_cycle.advance_to_next_morning())
+	fade.tween_interval(0.20)
+	fade.tween_property(sleep_fade, "modulate:a", 0.0, 0.40)
+	fade.tween_callback(func():
+		sleep_fade.hide()
+		day_night_cycle.set_process(clock_was_running)
+		player.movement_locked = false
+		hotbar.input_locked = hotbar_was_locked
+		inventory.set_process_input(inventory_had_input)
+	)
+	return true
