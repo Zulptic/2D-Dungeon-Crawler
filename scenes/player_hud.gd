@@ -26,6 +26,7 @@ extends CanvasLayer
 const ITEM_TOOLTIP := preload("res://scenes/item_tooltip.gd")
 const SMELTRY_UI := preload("res://scenes/smeltry_ui.tscn")
 const STATUS_BAR := preload("res://scenes/status_bar.gd")
+const CABIN_TRAVEL := preload("res://scenes/world/cabin_travel.gd")
 const BAR_WIDTH: int = 70
 const BAR_HEIGHT: int = 3
 const BAR_PATTERN_WIDTH: int = 3
@@ -33,6 +34,7 @@ const ART_SIZE := Vector2(129, 44)
 const HUD_GAP: int = 8
 var smeltry_ui: Control
 var status_bar: Control
+var cabin_travel: CABIN_TRAVEL
 
 func _ready() -> void:
 	_prepare_bar_fills()
@@ -45,6 +47,9 @@ func _ready() -> void:
 	smeltry_ui.show_reference_queue = false
 	$Screen.add_child(smeltry_ui)
 	$Screen.add_child(ITEM_TOOLTIP.new())
+	cabin_travel = CABIN_TRAVEL.new()
+	cabin_travel.player = player
+	$Screen.add_child(cabin_travel)
 	get_viewport().size_changed.connect(_update_layout)
 	if player != null and player.has_signal("stamina_changed"):
 		player.connect("stamina_changed", _on_stamina_changed)

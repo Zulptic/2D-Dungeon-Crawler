@@ -141,7 +141,7 @@ func _is_targetable(rock: Variant) -> bool:
 	if item == null or not HARVEST_GROUPS.has(item.subtype):
 		return false
 	if rock is PLACED_ITEM:
-		return item.subtype == &"pickaxe" and rock.item != null
+		return item.subtype == &"pickaxe" and rock.is_recoverable()
 	return rock.is_in_group(HARVEST_GROUPS[item.subtype]) and not rock._breaking and rock.health > 0
 
 func _target_bounds(rock: Node2D) -> Rect2:

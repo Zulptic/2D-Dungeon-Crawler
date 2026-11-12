@@ -65,13 +65,21 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
     var direction := Vector2.ZERO if movement_locked or is_using_tool else Input.get_vector("move_left", "move_right", "move_up", "move_down")
-    var moving := not direction.is_zero_approx()
-    var running := moving and Input.is_action_pressed("run") and not stamina_exhausted and stamina > 0.0
+    var has_move_input := not direction.is_zero_approx()
+    var wants_to_run := has_move_input and Input.is_action_pressed("run") and not stamina_exhausted and stamina > 0.0
+    var stamina_cost := stamina_drain_per_second * delta
+    velocity = direction * (run_speed if wants_to_run and stamina > stamina_cost else move_speed)
+    var collided := move_and_slide()
+
+    var actual_velocity := get_real_velocity()
+    # Ignore small position corrections from contact with a wall.
+    var moving := direction.normalized().dot(actual_velocity) > 1.0
+    var running := wants_to_run and moving
     var previous_stamina := stamina
     var previous_exhausted := stamina_exhausted
 
     if running:
-        stamina = maxf(0.0, stamina - stamina_drain_per_second * delta)
+        stamina = maxf(0.0, stamina - stamina_cost)
         _recharge_delay_left = stamina_recharge_delay
         if stamina <= 0.0:
             stamina_exhausted = true
@@ -83,14 +91,14 @@ func _physics_process(delta: float) -> void:
             if stamina_exhausted and stamina >= max_stamina:
                 stamina_exhausted = false
 
-    velocity = direction * (run_speed if running else move_speed)
-    move_and_slide()
     if not is_using_tool:
-        if moving:
-            if not is_zero_approx(direction.x) and absf(direction.x) >= absf(direction.y):
-                facing = Vector2.LEFT if direction.x < 0.0 else Vector2.RIGHT
+        if has_move_input:
+            var look_direction := actual_velocity if moving and collided else direction
+            if not is_zero_approx(look_direction.x) and absf(look_direction.x) >= absf(look_direction.y):
+                facing = Vector2.LEFT if look_direction.x < 0.0 else Vector2.RIGHT
             else:
-                facing = Vector2.UP if direction.y < 0.0 else Vector2.DOWN
+                facing = Vector2.UP if look_direction.y < 0.0 else Vector2.DOWN
+        if moving:
             _play_animation("run" if running else "walk")
         else:
             _play_animation("idle")
@@ -153,9 +161,8 @@ func _sync_carried_item(_value: Variant = null) -> void:
     var selected: InventoryItem
     if _carry_inventory != null and _carry_hotbar != null and _carry_hotbar.selected_slot > 0:
         selected = _carry_inventory.model.get_item(&"hotbar", _carry_hotbar.selected_slot - 1)
-    # Tools and weapons use their own action animations; other selected items
-    # are carried. Empty slots and unselected inventory items do not activate it.
-    if selected != null and (selected.icon == null or selected.is_action_item()):
+    # The carry pose follows the selected item and its carry setting.
+    if selected != null and (selected.icon == null or selected.is_action_item() or not selected.show_in_hands):
         selected = null
     if carried_item != selected:
         carried_item = selected

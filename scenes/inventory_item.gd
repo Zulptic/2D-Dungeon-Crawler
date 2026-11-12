@@ -28,6 +28,12 @@ const ASHENITE_SWING_SECONDS: float = 8.0 / 12.0
 @export_group("Placement")
 @export var placement_texture: Texture2D
 @export var placement_footprint: Vector2i = Vector2i.ONE
+## Optional collision outline, measured from the placement texture's top-left corner.
+@export var placement_collision_polygon: PackedVector2Array
+## Draw order origin relative to the sprite's bottom edge, in world pixels.
+@export var placement_sort_offset: float = 0.0
+@export var recoverable_when_placed: bool = true
+@export var show_in_hands: bool = true
 
 @export_group("Inventory and Value")
 @export_range(1, 999, 1) var max_stack: int = 1

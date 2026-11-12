@@ -1,11 +1,14 @@
 extends StaticBody2D
-## A placed object can be recovered as the same item with one pickaxe hit.
+## Recoverable objects return as the same item with one pickaxe hit.
 
 const GROUP := &"placed_objects"
 const INTERACTION_GROUP := &"placed_item_interactables"
 const INTERACT_ICON := preload("res://assets/hud/environmental_hud/input_keyboard_e.png")
 const PROMPT_REST_SCALE := Vector2(0.5, 0.5)
 const PROMPT_PULSE_SCALE := Vector2(0.625, 0.625)
+const CABIN_DOOR := Rect2i(88, 92, 25, 35)
+const CABIN_THRESHOLD := Vector2(100, 132)
+const CABIN_REACH := 24.0
 const PICKUP := preload("res://scenes/world/item_pickup.tscn")
 const FIRE_SHEET := preload("res://assets/items/Bricks_01-Sheet.png")
 const FIRE_FRAME_SECONDS: float = 0.125
@@ -20,7 +23,7 @@ static var _fire_frames: Array[AtlasTexture] = []
 static var _light_texture: ImageTexture
 
 var item: InventoryItem
-@onready var _collision: CollisionShape2D = $CollisionShape2D
+@onready var _collision: Node2D = $CollisionPolygon2D if has_node("CollisionPolygon2D") else $CollisionShape2D
 @onready var _artwork: Sprite2D = $Sprite2D
 
 var _outline: Sprite2D
@@ -39,7 +42,7 @@ var _eject_timer: Timer
 var _eject_outputs: Array[Dictionary] = []
 
 func _ready() -> void:
-    if item == null or item.subtype not in [&"furnace", &"bed"]:
+    if item == null or item.subtype not in [&"furnace", &"bed", &"house"]:
         return
     add_to_group(INTERACTION_GROUP)
     var unlit := CanvasItemMaterial.new()
@@ -48,9 +51,13 @@ func _ready() -> void:
     _outline = Sprite2D.new()
     _outline.name = "InteractionOutline"
     _outline.centered = false
-    _outline.texture = _make_outline(_artwork.texture.get_image())
+    var is_cabin := item.subtype == &"house"
+    var image := _artwork.texture.get_image()
+    _outline.texture = _make_outline(image.get_region(CABIN_DOOR) if is_cabin else image)
     _outline.position = _artwork.offset - Vector2.ONE
-    _outline.show_behind_parent = true
+    if is_cabin:
+        _outline.position += Vector2(CABIN_DOOR.position)
+    _outline.show_behind_parent = not is_cabin
     _outline.material = unlit
     _outline.hide()
     _artwork.add_child(_outline)
@@ -61,6 +68,8 @@ func _ready() -> void:
     _prompt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
     _prompt.material = unlit
     _prompt.position = Vector2(0, -25)
+    if is_cabin:
+        _prompt.position = _artwork.position + _artwork.offset + Vector2(CABIN_THRESHOLD.x, CABIN_DOOR.position.y - 8)
     _prompt.scale = PROMPT_REST_SCALE
     _prompt.z_index = 7
     _prompt.hide()
@@ -233,11 +242,32 @@ func _make_outline(source: Image) -> ImageTexture:
     return ImageTexture.create_from_image(edge)
 
 func get_local_footprint() -> Rect2:
+    if _collision is CollisionPolygon2D:
+        var points: PackedVector2Array = _collision.polygon
+        var bounds := Rect2(points[0], Vector2.ZERO)
+        for point in points:
+            bounds = bounds.expand(point)
+        bounds.position += _collision.position
+        return bounds
     var shape := _collision.shape as RectangleShape2D
     return Rect2(_collision.position - shape.size * 0.5, shape.size)
 
+func get_interaction_point() -> Vector2:
+    if item.subtype == &"house":
+        return _artwork.to_global(_artwork.offset + CABIN_THRESHOLD)
+    return to_global(get_local_footprint().get_center())
+
+func can_interact_from(point: Vector2) -> bool:
+    if item.subtype != &"house":
+        return true
+    var image_point := _artwork.to_local(point) - _artwork.offset
+    return image_point.y >= CABIN_DOOR.end.y and image_point.distance_squared_to(CABIN_THRESHOLD) <= CABIN_REACH * CABIN_REACH
+
+func is_recoverable() -> bool:
+    return item != null and item.recoverable_when_placed
+
 func take_pickaxe_hit(tool: InventoryItem, _hit_direction: Vector2 = Vector2.ZERO) -> bool:
-    if is_queued_for_deletion() or item == null or tool == null or tool.subtype != &"pickaxe":
+    if is_queued_for_deletion() or not is_recoverable() or tool == null or tool.subtype != &"pickaxe":
         return false
     # Reserved materials and uncollected outputs stay owned by this furnace.
     if smeltry_queue != null and smeltry_queue.has_items():

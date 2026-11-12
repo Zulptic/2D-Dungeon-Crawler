@@ -20,6 +20,7 @@ const OAK_LOG := preload("res://scenes/items/oak_log.tres")
 const COPPER_ORE := preload("res://scenes/items/crushed_copper.tres")
 const SCROLL_INSET: float = 10.0
 const STACK_COUNT := preload("res://scenes/item_stack_count.gd")
+const RARITY_FRAME := preload("res://scenes/ui/item_rarity_frame.gd")
 const COUNT_SUFFICIENT := Color(0.45, 0.95, 0.55)
 const COUNT_INSUFFICIENT := Color(1.0, 0.38, 0.38)
 
@@ -221,7 +222,7 @@ func set_recipes(recipes: Array) -> void:
         var row: Control = RECIPE_ROW.instantiate()
         row.name = "Recipe_" + String(output.id)
         recipe_list.add_child(row)
-        row.get_node("OutputIcon").texture = COPPER_ICON if output.id == COPPER.id else output.icon
+        _populate_slot(row.get_node("OutputIcon"), output)
         row.get_node("Title").text = recipe.get("title", output.get_title())
         var duration_text: String = recipe.get("duration_text", "%d Minutes" % int(recipe.get("duration_minutes", 0)))
         row.get_node("Duration").text = duration_text
@@ -229,8 +230,8 @@ func set_recipes(recipes: Array) -> void:
         row.get_node("Clock").visible = not duration_text.is_empty()
         var fuel := recipe.get("fuel") as InventoryItem
         var ore := recipe.get("ore") as InventoryItem
-        row.get_node("FuelIcon").texture = fuel.icon if fuel != null else null
-        row.get_node("OreIcon").texture = ore.icon if ore != null else null
+        _populate_slot(row.get_node("FuelIcon"), fuel)
+        _populate_slot(row.get_node("OreIcon"), ore)
         _add_ingredient_count(row, "FuelCount", fuel, int(recipe.get("fuel_required", 1)), "FuelIcon")
         _add_ingredient_count(row, "OreCount", ore, int(recipe.get("ore_required", 1)), "OreIcon")
         _recipe_rows.append({"row": row, "ingredients": RECIPES.get_ingredients(recipe)})
@@ -248,6 +249,15 @@ func set_recipes(recipes: Array) -> void:
     _refresh_recipe_availability()
     recipe_scroll.scroll_vertical = 0
     _update_scroll_thumb.call_deferred()
+
+func _populate_slot(icon: TextureRect, item: InventoryItem) -> void:
+    if item == null:
+        icon.texture = null
+        return
+    icon.texture = COPPER_ICON if item.id == COPPER.id else item.icon
+    var rarity := RARITY_FRAME.new()
+    icon.add_child(rarity)
+    rarity.set_item(item)
 
 func _add_ingredient_count(row: Control, node_name: String, ingredient: InventoryItem, required: int, icon_name: String) -> void:
     var icon: Control = row.get_node(icon_name)
@@ -303,7 +313,7 @@ func set_queue_entries(entries: Array) -> void:
             continue
         var row: Control = QUEUE_ROW.instantiate()
         queue_list.add_child(row)
-        row.get_node("OutputIcon").texture = COPPER_ICON if output.id == COPPER.id else output.icon
+        _populate_slot(row.get_node("OutputIcon"), output)
         var count := STACK_COUNT.new()
         count.name = "Quantity"
         count.show_single = true

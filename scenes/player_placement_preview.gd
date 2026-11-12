@@ -118,7 +118,7 @@ func _physics_process(_delta: float) -> void:
         _requested_item = null
         if item == requested and _hotbar.selected_slot - 1 == _requested_slot:
             var clicked_bounds := _snapped_bounds(_requested_mouse, Vector2(item.placement_footprint) * cell_size, grid_origin, step)
-            if _placement_state(clicked_bounds, cell_size, step, grid_origin) == PreviewState.CLEAR:
+            if _placement_state(item, clicked_bounds, cell_size, step, grid_origin) == PreviewState.CLEAR:
                 _place_item(item, clicked_bounds, _snap_cells(clicked_bounds, grid_origin, step))
                 item = _selected_placeable()
                 visible = item != null
@@ -133,7 +133,7 @@ func _physics_process(_delta: float) -> void:
 
     var size := Vector2(item.placement_footprint) * cell_size
     var bounds := _snapped_bounds(_ground.to_local(get_global_mouse_position()), size, grid_origin, step)
-    var state := _placement_state(bounds, cell_size, step, grid_origin)
+    var state := _placement_state(item, bounds, cell_size, step, grid_origin)
     _ghost.visible = state != PreviewState.HIDDEN
     if not _ghost.visible:
         return
@@ -166,7 +166,8 @@ func _place_item(item: InventoryItem, bounds: Rect2, cells: Rect2i) -> void:
     var body := PLACED_ITEM.new()
     body.item = item
     body.name = item.get_title()
-    body.transform = world.global_transform.affine_inverse() * _ground.global_transform * Transform2D(0.0, _base_center(bounds))
+    var sort_offset := Vector2(0, item.placement_sort_offset)
+    body.transform = world.global_transform.affine_inverse() * _ground.global_transform * Transform2D(0.0, _base_center(bounds) + sort_offset)
     body.add_to_group(PLACED_ITEM.GROUP)
     body.set_meta(FOOTPRINT_META, cells)
 
@@ -175,17 +176,25 @@ func _place_item(item: InventoryItem, bounds: Rect2, cells: Rect2i) -> void:
     sprite.texture = item.placement_texture
     sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
     sprite.centered = false
+    sprite.position = -sort_offset
     # Draw from the bottom center so the pop keeps the object on the ground.
     sprite.offset = -sprite.texture.get_size() * Vector2(0.5, 1.0)
     body.add_child(sprite)
 
-    var shape := RectangleShape2D.new()
-    shape.size = bounds.size
-    var collision := CollisionShape2D.new()
-    collision.name = "CollisionShape2D"
-    collision.shape = shape
-    collision.position.y = -shape.size.y * 0.5
-    body.add_child(collision)
+    if item.placement_collision_polygon.size() >= 3:
+        var collision := CollisionPolygon2D.new()
+        collision.name = "CollisionPolygon2D"
+        collision.position = sprite.position + sprite.offset
+        collision.polygon = item.placement_collision_polygon
+        body.add_child(collision)
+    else:
+        var shape := RectangleShape2D.new()
+        shape.size = bounds.size
+        var collision := CollisionShape2D.new()
+        collision.name = "CollisionShape2D"
+        collision.shape = shape
+        collision.position = Vector2(0, -shape.size.y * 0.5) - sort_offset
+        body.add_child(collision)
     body.add_child(OCCLUSION_FADE.new())
 
     world.add_child(body, true)
@@ -288,7 +297,7 @@ func _append_blocked_grid_lines(lines: PackedVector2Array, blockers: Array[Rect2
             lines.append(line_origin + direction * run_start)
             lines.append(line_origin + direction * run_end)
 
-func _placement_state(bounds: Rect2, cell_size: Vector2, step: Vector2, grid_origin: Vector2) -> PreviewState:
+func _placement_state(item: InventoryItem, bounds: Rect2, cell_size: Vector2, step: Vector2, grid_origin: Vector2) -> PreviewState:
     if not bounds.has_area():
         return PreviewState.HIDDEN
 
@@ -296,14 +305,15 @@ func _placement_state(bounds: Rect2, cell_size: Vector2, step: Vector2, grid_ori
     if _player.global_position.distance_squared_to(_ground.to_global(_base_center(bounds))) > reach_squared:
         return PreviewState.HIDDEN
 
-    # Check the centers of the outer tile-sized sections at the snapped position.
-    var first_center := bounds.position + cell_size * 0.5
-    var last_center := bounds.end - cell_size * 0.5
-    for x: float in [first_center.x, last_center.x]:
-        for y: float in [first_center.y, last_center.y]:
-            var point := _ground.to_global(Vector2(x, y))
-            if _player.global_position.distance_squared_to(point) > reach_squared:
-                return PreviewState.HIDDEN
+    # Large props with custom outlines use the clicked base point for reach.
+    if item.placement_collision_polygon.size() < 3:
+        var first_center := bounds.position + cell_size * 0.5
+        var last_center := bounds.end - cell_size * 0.5
+        for x: float in [first_center.x, last_center.x]:
+            for y: float in [first_center.y, last_center.y]:
+                var point := _ground.to_global(Vector2(x, y))
+                if _player.global_position.distance_squared_to(point) > reach_squared:
+                    return PreviewState.HIDDEN
 
     # A shifted base can overlap extra terrain tiles. Sample just inside its edges.
     var first_cell := _ground.local_to_map(bounds.position + step * 0.5)

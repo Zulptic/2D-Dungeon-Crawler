@@ -8,6 +8,7 @@
 [ext_resource type="TileSet" uid="uid://cmv64q6ps5l84" path="res://scenes/world/trees_tileset.tres" id="6_trees"]
 [ext_resource type="Script" uid="uid://di3ppychepu3c" path="res://scenes/day_night_cycle.gd" id="7_gp0ih"]
 [ext_resource type="PackedScene" path="res://scenes/world/apple_tree_mature.tscn" id="8_apple_tree"]
+[ext_resource type="PackedScene" path="res://scenes/world/commuter_npc.tscn" id="commuter_npc"]
 [ext_resource type="PackedScene" path="res://scenes/world/orange_tree_mature.tscn" id="orange_tree"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rakyr"]
@@ -769,3 +770,8 @@ starting_apples = 4
 position = Vector2(-126, -406)
 orange_growth_seconds = 20.0
 starting_oranges = 4
+
+[node name="TavernMaid" parent="." unique_id=1284715333 instance=ExtResource("commuter_npc")]
+position = Vector2(-536, -536)
+seed_stop = Vector2i(-34, -34)
+apple_stop = Vector2i(-12, -25)

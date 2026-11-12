@@ -94,7 +94,7 @@ expand_mode = 1
 layout_mode = 0
 offset_left = 27.0
 offset_top = 5.0
-offset_right = 84.0
+offset_right = 91.0
 offset_bottom = 14.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -116,7 +116,7 @@ expand_mode = 1
 layout_mode = 0
 offset_left = 38.0
 offset_top = 16.0
-offset_right = 85.0
+offset_right = 91.0
 offset_bottom = 25.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -126,9 +126,9 @@ vertical_alignment = 1
 
 [node name="DividerLeft" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 85.0
+offset_left = 92.0
 offset_top = 5.0
-offset_right = 87.0
+offset_right = 94.0
 offset_bottom = 25.0
 mouse_filter = 2
 texture = ExtResource("divider")
@@ -136,9 +136,9 @@ expand_mode = 1
 
 [node name="IngredientSlots" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 91.0
+offset_left = 96.0
 offset_top = 5.0
-offset_right = 148.0
+offset_right = 153.0
 offset_bottom = 25.0
 mouse_filter = 2
 texture = ExtResource("ingredients")
@@ -146,9 +146,9 @@ expand_mode = 1
 
 [node name="FuelIcon" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 93.0
+offset_left = 98.0
 offset_top = 7.0
-offset_right = 109.0
+offset_right = 114.0
 offset_bottom = 23.0
 mouse_filter = 2
 texture = SubResource("Coal")
@@ -156,9 +156,9 @@ expand_mode = 1
 
 [node name="OreIcon" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 129.0
+offset_left = 134.0
 offset_top = 7.0
-offset_right = 145.0
+offset_right = 150.0
 offset_bottom = 23.0
 mouse_filter = 2
 texture = SubResource("Ore")
@@ -166,9 +166,9 @@ expand_mode = 1
 
 [node name="DividerRight" type="TextureRect" parent="."]
 layout_mode = 0
-offset_left = 152.0
+offset_left = 154.0
 offset_top = 5.0
-offset_right = 154.0
+offset_right = 156.0
 offset_bottom = 25.0
 mouse_filter = 2
 texture = ExtResource("divider")

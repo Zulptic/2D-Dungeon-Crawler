@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/commuter_npc.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/characters/npcs/Idle_Side-Sheet.png" id="2_idle"]
+[ext_resource type="Texture2D" path="res://assets/characters/npcs/Walk_Side-Sheet.png" id="3_walk"]
+
+[sub_resource type="AtlasTexture" id="Idle0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Idle1"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Idle2"]
+atlas = ExtResource("2_idle")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Idle3"]
+atlas = ExtResource("2_idle")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Walk0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Walk1"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Walk2"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Walk3"]
+atlas = ExtResource("3_walk")
+region = Rect2(192, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Walk4"]
+atlas = ExtResource("3_walk")
+region = Rect2(256, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Walk5"]
+atlas = ExtResource("3_walk")
+region = Rect2(320, 0, 64, 64)
+filter_clip = true
+
+[sub_resource type="SpriteFrames" id="NpcFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Idle0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Idle1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Idle2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Idle3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Walk0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Walk5")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="Feet"]
+size = Vector2(8, 6)
+
+[node name="TavernMaid" type="CharacterBody2D"]
+texture_filter = 1
+collision_layer = 0
+motion_mode = 1
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("NpcFrames")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Feet")

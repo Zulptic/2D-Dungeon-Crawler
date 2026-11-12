@@ -21,7 +21,9 @@ func _update_target() -> void:
             var point := candidate.global_position
             var candidate_reach := reach_tiles
             if candidate is PLACED_ITEM:
-                point = candidate.to_global(candidate.get_local_footprint().get_center())
+                if not candidate.can_interact_from(player.global_position):
+                    continue
+                point = candidate.get_interaction_point()
                 candidate_reach = placed_item_reach_tiles
             elif not candidate.can_harvest():
                 continue
@@ -42,16 +44,21 @@ func _unhandled_key_input(event: InputEvent) -> void:
         return
     if not event.is_action_pressed(&"interact"):
         return
+    var hud := player.get_parent().get_node_or_null("PlayerHUD")
+    if not event.shift_pressed and hud != null and hud.cabin_travel.try_exit():
+        get_viewport().set_input_as_handled()
+        return
     _update_target()
     if not is_instance_valid(target):
         return
     var interacted: bool
     if target is PLACED_ITEM:
-        var hud := player.get_parent().get_node_or_null("PlayerHUD")
         if target.item.subtype == &"bed":
             interacted = hud != null and hud.sleep_until_morning()
         elif event.shift_pressed:
             return
+        elif target.item.subtype == &"house":
+            interacted = hud != null and hud.cabin_travel.try_enter()
         elif target.has_completed_output():
             interacted = target.eject_completed()
         else:
