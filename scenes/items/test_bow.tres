@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3]
+
+[ext_resource type="Script" path="res://scenes/inventory_item.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/items/Test_Bow.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"test_bow"
+display_name = "Test Bow"
+description = "Hold left click to aim. Release to shoot."
+icon = ExtResource("2_icon")
+category = 2
+subtype = &"bow"
+material = &"wood"

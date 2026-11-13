@@ -28,6 +28,8 @@ const ASHENITE_SWING_SECONDS: float = 8.0 / 12.0
 @export_group("Placement")
 @export var placement_texture: Texture2D
 @export var placement_footprint: Vector2i = Vector2i.ONE
+## Optional footprint in world pixels for furniture smaller than a tile.
+@export var placement_size_pixels := Vector2i.ZERO
 ## Optional collision outline, measured from the placement texture's top-left corner.
 @export var placement_collision_polygon: PackedVector2Array
 ## Draw order origin relative to the sprite's bottom edge, in world pixels.
@@ -53,6 +55,11 @@ const ASHENITE_SWING_SECONDS: float = 8.0 / 12.0
 
 @export_group("Swing Timing")
 @export_range(0, 28, 1) var swing_speed: int = 0
+
+func get_placement_size(cell_size: Vector2) -> Vector2:
+	if placement_size_pixels.x > 0 and placement_size_pixels.y > 0:
+		return Vector2(placement_size_pixels)
+	return Vector2(placement_footprint) * cell_size
 
 func get_title() -> String:
 	return display_name if not display_name.is_empty() else String(id).capitalize()

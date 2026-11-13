@@ -2,6 +2,7 @@ extends StaticBody2D
 ## Recoverable objects return as the same item with one pickaxe hit.
 
 const GROUP := &"placed_objects"
+const OCCLUSION_FADE := preload("res://scenes/world/player_occlusion_fade.gd")
 const INTERACTION_GROUP := &"placed_item_interactables"
 const INTERACT_ICON := preload("res://assets/hud/environmental_hud/input_keyboard_e.png")
 const PROMPT_REST_SCALE := Vector2(0.5, 0.5)
@@ -22,9 +23,11 @@ const LIGHT_PIXEL_SIZE: int = 3
 static var _fire_frames: Array[AtlasTexture] = []
 static var _light_texture: ImageTexture
 
-var item: InventoryItem
-@onready var _collision: Node2D = $CollisionPolygon2D if has_node("CollisionPolygon2D") else $CollisionShape2D
-@onready var _artwork: Sprite2D = $Sprite2D
+@export var item: InventoryItem
+@export var fixed_in_place := false
+var placement_cell_size := Vector2(16, 16)
+var _collision: Node2D
+var _artwork: Sprite2D
 
 var _outline: Sprite2D
 var _prompt: Sprite2D
@@ -42,7 +45,12 @@ var _eject_timer: Timer
 var _eject_outputs: Array[Dictionary] = []
 
 func _ready() -> void:
-    if item == null or item.subtype not in [&"furnace", &"bed", &"house"]:
+    if item == null:
+        return
+    _setup_geometry()
+    if not fixed_in_place:
+        add_to_group(GROUP)
+    if item.subtype not in [&"furnace", &"bed", &"house"]:
         return
     add_to_group(INTERACTION_GROUP)
     var unlit := CanvasItemMaterial.new()
@@ -241,6 +249,42 @@ func _make_outline(source: Image) -> ImageTexture:
                 edge.set_pixel(x + 1, y + 1, Color.TRANSPARENT)
     return ImageTexture.create_from_image(edge)
 
+func _setup_geometry() -> void:
+    _artwork = get_node_or_null("Sprite2D") as Sprite2D
+    if _artwork == null:
+        _artwork = Sprite2D.new()
+        _artwork.name = "Sprite2D"
+        _artwork.texture = item.placement_texture
+        _artwork.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+        _artwork.centered = false
+        _artwork.position.y = -item.placement_sort_offset
+        # Draw from the bottom center so the placement pop stays on the ground.
+        _artwork.offset = -_artwork.texture.get_size() * Vector2(0.5, 1.0)
+        add_child(_artwork)
+
+    if item.placement_collision_polygon.size() >= 3:
+        var outline := CollisionPolygon2D.new()
+        outline.name = "CollisionPolygon2D"
+        outline.position = _artwork.position + _artwork.offset
+        outline.polygon = item.placement_collision_polygon
+        _collision = outline
+    else:
+        var bounds := get_local_placement_bounds()
+        var shape := RectangleShape2D.new()
+        shape.size = bounds.size
+        var box := CollisionShape2D.new()
+        box.name = "CollisionShape2D"
+        box.shape = shape
+        box.position = bounds.get_center()
+        _collision = box
+    add_child(_collision)
+
+    add_child(OCCLUSION_FADE.new())
+
+func get_local_placement_bounds() -> Rect2:
+    var size := item.get_placement_size(placement_cell_size)
+    return Rect2(Vector2(-size.x * 0.5, -size.y - item.placement_sort_offset), size)
+
 func get_local_footprint() -> Rect2:
     if _collision is CollisionPolygon2D:
         var points: PackedVector2Array = _collision.polygon
@@ -264,7 +308,7 @@ func can_interact_from(point: Vector2) -> bool:
     return image_point.y >= CABIN_DOOR.end.y and image_point.distance_squared_to(CABIN_THRESHOLD) <= CABIN_REACH * CABIN_REACH
 
 func is_recoverable() -> bool:
-    return item != null and item.recoverable_when_placed
+    return not fixed_in_place and item != null and item.recoverable_when_placed
 
 func take_pickaxe_hit(tool: InventoryItem, _hit_direction: Vector2 = Vector2.ZERO) -> bool:
     if is_queued_for_deletion() or not is_recoverable() or tool == null or tool.subtype != &"pickaxe":

@@ -45,9 +45,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
     if not event.is_action_pressed(&"interact"):
         return
     var hud := player.get_parent().get_node_or_null("PlayerHUD")
-    if not event.shift_pressed and hud != null and hud.cabin_travel.try_exit():
-        get_viewport().set_input_as_handled()
-        return
     _update_target()
     if not is_instance_valid(target):
         return

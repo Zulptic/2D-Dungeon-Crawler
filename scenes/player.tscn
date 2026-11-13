@@ -71,6 +71,8 @@
 
 [ext_resource type="Script" path="res://scenes/player_placement_preview.gd" id="placement_preview"]
 
+[ext_resource type="Script" path="res://scenes/player_bow.gd" id="test_bow"]
+
 [sub_resource type="AtlasTexture" id="Atlas_carry_idle_down_0"]
 atlas = ExtResource("tex_carry_idle_down")
 region = Rect2(0, 0, 64, 64)
@@ -2684,3 +2686,7 @@ script = ExtResource("fruit_interaction")
 show_behind_parent = true
 visible = false
 script = ExtResource("placement_preview")
+
+[node name="Bow" type="Node2D" parent="."]
+z_index = 5
+script = ExtResource("test_bow")

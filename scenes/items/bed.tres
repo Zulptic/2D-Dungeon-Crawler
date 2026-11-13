@@ -18,4 +18,4 @@ icon = SubResource("AtlasTexture_bed_icon")
 category = 6
 subtype = &"bed"
 placement_texture = ExtResource("2_bed")
-placement_footprint = Vector2i(2, 3)
+placement_size_pixels = Vector2i(28, 38)

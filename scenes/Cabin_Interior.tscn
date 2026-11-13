@@ -1,30 +1,229 @@
-[gd_scene format=4 uid="uid://vmf58engh5hj"]
+[gd_scene format=3 uid="uid://vmf58engh5hj"]
 
-[ext_resource type="TileSet" uid="uid://vhajsk5xx1tw" path="res://scenes/world/cabin_interior_tileset.tres" id="1_tiles"]
+[ext_resource type="Texture2D" uid="uid://cne4cvkwbv3jk" path="res://assets/tiles/Cabin_Shell.png" id="1_interior"]
+[ext_resource type="Script" uid="uid://hx8gbbbjsl04" path="res://scenes/world/interior_boundary.gd" id="2_boundary"]
+[ext_resource type="Script" uid="uid://cc8eor5t0dmb4" path="res://scenes/world/placed_item.gd" id="3_prop"]
+[ext_resource type="Script" uid="uid://bi00jw67p8nej" path="res://scenes/world/player_occlusion_fade.gd" id="4_fade"]
+[ext_resource type="Texture2D" uid="uid://cp4awftbygjjv" path="res://assets/items/Bed.png" id="art_Bed"]
+[ext_resource type="Texture2D" uid="uid://bd5puctjv5yqn" path="res://assets/items/cabin/Chair.png" id="art_Chair"]
+[ext_resource type="Texture2D" uid="uid://b34ei13nkf3fl" path="res://assets/items/cabin/Fireplace.png" id="art_Fireplace"]
+[ext_resource type="Texture2D" uid="uid://d14ltgrwyyjq2" path="res://assets/items/cabin/Flower.png" id="art_Flower"]
+[ext_resource type="Texture2D" uid="uid://cogscjbh7xtjg" path="res://assets/items/cabin/Mug.png" id="art_Mug"]
+[ext_resource type="Texture2D" uid="uid://doutki3q05171" path="res://assets/items/cabin/Nightstand.png" id="art_Nightstand"]
+[ext_resource type="Texture2D" uid="uid://b2dgnee7igjm8" path="res://assets/items/cabin/Rug.png" id="art_Rug"]
+[ext_resource type="Texture2D" uid="uid://cvvjr8g8wxp3u" path="res://assets/items/cabin/Table.png" id="art_Table"]
+[ext_resource type="Texture2D" uid="uid://bll732nn6nwhy" path="res://assets/items/cabin/WallSword.png" id="art_WallSword"]
+[ext_resource type="Texture2D" uid="uid://dgyl4yciday04" path="res://assets/items/cabin/Window.png" id="art_Window"]
+[ext_resource type="Resource" uid="uid://bbvblkgpbbj6m" path="res://scenes/items/bed.tres" id="item_Bed"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(43, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Chair"]
+size = Vector2(12, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Fireplace"]
+size = Vector2(48, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Flower"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Mug"]
+size = Vector2(8, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Nightstand"]
+size = Vector2(16, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Table"]
+size = Vector2(30, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_WallSword"]
+size = Vector2(28, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_Window"]
+size = Vector2(22, 22)
 
 [node name="Cabin_Interior" type="Node2D" unique_id=1853727397]
 y_sort_enabled = true
 texture_filter = 1
 
-[node name="Floor" type="TileMapLayer" parent="." unique_id=218722246]
+[node name="Backdrop" type="CanvasLayer" parent="." unique_id=495189268]
+layer = -1
+visible = false
+
+[node name="Black" type="ColorRect" parent="Backdrop" unique_id=719255854]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="InteriorArt" type="Sprite2D" parent="." unique_id=1611926794]
 z_index = -1
-tile_map_data = PackedByteArray("AAD8//3/AAABABQAAAAHAP3/AAADABQAAAD+//3/AAACABQAAAD///3/AAACABQAAAAAAP3/AAACABQAAAABAP3/AAACABQAAAACAP3/AAACABQAAAADAP3/AAACABQAAAAEAP3/AAACABQAAAAFAP3/AAACABQAAAAGAP3/AAACABQAAAD8////AAAAABYAAAD8/wAAAAAAABYAAAD8/wEAAAAAABYAAAD8/wIAAAAAABYAAAADAAMAAAABABgAAAAEAAMAAAACABgAAAAFAAMAAAADABgAAAAHAAIAAAAEABcAAAAHAAEAAAAEABYAAAAHAAAAAAAEABYAAAAHAP//AAAEABYAAAAHAP7/AAAEABYAAAD8//7/AAAAABYAAAD9//7/AAACABUAAAD9////AAABABYAAAD9/wAAAAABABUAAAD+//7/AAABABUAAAD+////AAABABYAAAD+/wAAAAABABUAAAD///7/AAABABUAAAD/////AAACABYAAAD//wAAAAABABUAAAAAAP7/AAABABUAAAAAAP//AAABABYAAAAAAAAAAAABABUAAAABAP7/AAABABUAAAABAP//AAABABYAAAABAAAAAAABABUAAAACAP7/AAACABcAAAACAP//AAABABYAAAACAAAAAAABABUAAAADAP7/AAABABUAAAADAP//AAACABYAAAADAAAAAAABABUAAAAEAP7/AAABABUAAAAEAP//AAABABYAAAAEAAAAAAABABUAAAAFAP7/AAABABUAAAAFAP//AAABABYAAAAFAAAAAAABABUAAAAGAP7/AAACABUAAAAGAP//AAABABYAAAAGAAAAAAABABUAAAAGAAEAAAABABYAAAAGAAIAAAABABcAAAAFAAEAAAACABUAAAAFAAIAAAABABcAAAAEAAEAAAABABYAAAAEAAIAAAABABcAAAADAAEAAAABABYAAAADAAIAAAABABcAAAACAAEAAAABABYAAAACAAIAAAACABcAAAABAAEAAAABABYAAAABAAIAAAABABcAAAAAAAEAAAACABcAAAAAAAIAAAABABcAAAD//wEAAAABABYAAAD//wIAAAABABcAAAD+/wEAAAABABYAAAD+/wIAAAABABcAAAD9/wEAAAABABYAAAD9/wIAAAACABYAAAD9//3/AAACABQAAAA=")
-tile_set = ExtResource("1_tiles")
+position = Vector2(46, 36)
+texture = ExtResource("1_interior")
+centered = false
 
-[node name="Walls" type="TileMapLayer" parent="." unique_id=470503434]
-y_sort_enabled = true
-tile_map_data = PackedByteArray("AAD8//n/AgAAAAEAAAD8//r/AgAAAAIAAAD8//v/AgAAAAMAAAD8//z/AgAAAAQAAAD9//n/AgADAAAAAAD9//r/AgADAAEAAAD9//v/AgADAAIAAAD9//z/AgADAAMAAAD+//n/AgACAAAAAAD+//r/AgACAAEAAAD+//v/AgACAAIAAAD+//z/AgACAAMAAAD///n/AgADAAAAAAD///r/AgADAAEAAAD///v/AgADAAIAAAD///z/AgADAAMAAAAAAPn/AgACAAAAAAAAAPr/AgACAAEAAAAAAPv/AgACAAIAAAAAAPz/AgACAAMAAAABAPn/AgADAAAAAAABAPr/AgADAAEAAAABAPv/AgADAAIAAAABAPz/AgADAAMAAAACAPn/AgACAAAAAAACAPr/AgACAAEAAAACAPv/AgACAAIAAAACAPz/AgACAAMAAAADAPn/AgADAAAAAAADAPr/AgADAAEAAAADAPv/AgADAAIAAAADAPz/AgADAAMAAAAEAPn/AgACAAAAAAAEAPr/AgACAAEAAAAEAPv/AgACAAIAAAAEAPz/AgACAAMAAAAFAPn/AgADAAAAAAAFAPr/AgADAAEAAAAFAPv/AgADAAIAAAAFAPz/AgADAAMAAAAGAPn/AgACAAAAAAAGAPr/AgACAAEAAAAGAPv/AgACAAIAAAAGAPz/AgACAAMAAAAHAPn/AgAFAAEAAAAHAPr/AgAFAAIAAAAHAPv/AgAFAAMAAAAHAPz/AgAFAAQAAAAHAP3/AgAFAAUAAAAHAP7/AgAFAAUAAAAHAP//AgAFAAYAAAAHAAAAAgAFAAcAAAAHAAEAAgAFAAgAAAAHAAIAAgAFAAkAAAD8//3/AgAAAAUAAAD8//7/AgAAAAUAAAD8////AgAAAAYAAAD8/wAAAgAAAAcAAAD8/wEAAgAAAAgAAAD8/wIAAgAAAAkAAAA=")
-tile_set = ExtResource("1_tiles")
+[node name="WalkableBoundary" type="StaticBody2D" parent="." unique_id=794813342]
 
-[node name="Props" type="TileMapLayer" parent="." unique_id=1583331088]
-y_sort_enabled = true
-tile_set = ExtResource("1_tiles")
-
-[node name="Roof" type="TileMapLayer" parent="." unique_id=1444790694]
-z_index = 1
-tile_set = ExtResource("1_tiles")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="WalkableBoundary" unique_id=810471335]
+build_mode = 1
+polygon = PackedVector2Array(52, 92, 229, 92, 229, 189, 176, 189, 176, 196, 133, 196, 133, 189, 52, 189)
+disabled = true
+script = ExtResource("2_boundary")
 
 [node name="Arrival" type="Marker2D" parent="." unique_id=1228715347]
+position = Vector2(154, 178)
 
-[node name="Exit" type="Marker2D" parent="." unique_id=1336786022]
-position = Vector2(0, 20)
+[node name="Exit" type="Area2D" parent="." unique_id=1336786022]
+position = Vector2(154, 192)
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit" unique_id=1452779537]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="Bed" type="StaticBody2D" parent="." unique_id=712696301]
+position = Vector2(90, 131)
+script = ExtResource("3_prop")
+item = ExtResource("item_Bed")
+fixed_in_place = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Bed" unique_id=1106179328]
+texture = ExtResource("art_Bed")
+centered = false
+offset = Vector2(-15, -54)
+
+[node name="Chair" type="StaticBody2D" parent="." unique_id=919874879]
+position = Vector2(182, 174)
+
+[node name="Sprite2D" type="Sprite2D" parent="Chair" unique_id=1953831221]
+texture = ExtResource("art_Chair")
+centered = false
+offset = Vector2(-6, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Chair" unique_id=163173546]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_Chair")
+
+[node name="OcclusionFade" type="Node" parent="Chair" unique_id=2075264264]
+script = ExtResource("4_fade")
+
+[node name="Fireplace" type="StaticBody2D" parent="." unique_id=282587383]
+position = Vector2(146, 118)
+
+[node name="Sprite2D" type="Sprite2D" parent="Fireplace" unique_id=808038229]
+texture = ExtResource("art_Fireplace")
+centered = false
+offset = Vector2(-24, -76)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fireplace" unique_id=337346663]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_Fireplace")
+
+[node name="OcclusionFade" type="Node" parent="Fireplace" unique_id=1865826586]
+script = ExtResource("4_fade")
+
+[node name="Flower" type="StaticBody2D" parent="." unique_id=1154913251]
+z_index = 1
+position = Vector2(210.5, 159)
+
+[node name="Sprite2D" type="Sprite2D" parent="Flower" unique_id=1121109942]
+texture = ExtResource("art_Flower")
+centered = false
+offset = Vector2(-7.5, -32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flower" unique_id=1641195361]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_Flower")
+
+[node name="OcclusionFade" type="Node" parent="Flower" unique_id=91783111]
+script = ExtResource("4_fade")
+
+[node name="Mug" type="StaticBody2D" parent="." unique_id=483464580]
+z_index = 1
+position = Vector2(61.5, 90)
+
+[node name="Sprite2D" type="Sprite2D" parent="Mug" unique_id=442918694]
+texture = ExtResource("art_Mug")
+centered = false
+offset = Vector2(-4.5, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mug" unique_id=581301165]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_Mug")
+
+[node name="OcclusionFade" type="Node" parent="Mug" unique_id=2063001787]
+script = ExtResource("4_fade")
+
+[node name="Nightstand" type="StaticBody2D" parent="." unique_id=720561989]
+position = Vector2(62, 105)
+
+[node name="Sprite2D" type="Sprite2D" parent="Nightstand" unique_id=1827113416]
+texture = ExtResource("art_Nightstand")
+centered = false
+offset = Vector2(-8, -23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Nightstand" unique_id=1345596066]
+position = Vector2(0, -6.5)
+shape = SubResource("RectangleShape2D_Nightstand")
+
+[node name="OcclusionFade" type="Node" parent="Nightstand" unique_id=1355446829]
+script = ExtResource("4_fade")
+
+[node name="Rug" type="Node2D" parent="." unique_id=527860436]
+z_index = -1
+position = Vector2(107, 183)
+
+[node name="Sprite2D" type="Sprite2D" parent="Rug" unique_id=1220246155]
+texture = ExtResource("art_Rug")
+centered = false
+offset = Vector2(-46, -48)
+
+[node name="Table" type="StaticBody2D" parent="." unique_id=1138653948]
+position = Vector2(205, 181)
+
+[node name="Sprite2D" type="Sprite2D" parent="Table" unique_id=1244480883]
+texture = ExtResource("art_Table")
+centered = false
+offset = Vector2(-17, -35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Table" unique_id=1053808549]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_Table")
+
+[node name="OcclusionFade" type="Node" parent="Table" unique_id=613249779]
+script = ExtResource("4_fade")
+
+[node name="WallSword" type="StaticBody2D" parent="." unique_id=1775999024]
+position = Vector2(85, 67)
+
+[node name="Sprite2D" type="Sprite2D" parent="WallSword" unique_id=2129531781]
+texture = ExtResource("art_WallSword")
+centered = false
+offset = Vector2(-14, -9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallSword" unique_id=1750214823]
+position = Vector2(0, -4.5)
+shape = SubResource("RectangleShape2D_WallSword")
+
+[node name="OcclusionFade" type="Node" parent="WallSword" unique_id=967137099]
+script = ExtResource("4_fade")
+
+[node name="Window" type="StaticBody2D" parent="." unique_id=237343509]
+position = Vector2(200, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="Window" unique_id=1818755630]
+texture = ExtResource("art_Window")
+centered = false
+offset = Vector2(-11, -22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Window" unique_id=1474289957]
+position = Vector2(0, -11)
+shape = SubResource("RectangleShape2D_Window")
+
+[node name="OcclusionFade" type="Node" parent="Window" unique_id=634299402]
+script = ExtResource("4_fade")

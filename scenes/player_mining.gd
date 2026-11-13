@@ -195,12 +195,15 @@ func update_target(world_position: Vector2) -> void:
 		if not _is_targetable(rock):
 			continue
 		var local_bounds := _target_bounds(rock)
-		var size := Vector2i((local_bounds.size / TILE_SIZE).round())
+		var size := Vector2i((local_bounds.size / TILE_SIZE).ceil())
+		if size.x <= 0 or size.y <= 0:
+			continue
+		var sample_step := local_bounds.size / Vector2(size)
 		var closest_local := mouse_local.clamp(local_bounds.position, local_bounds.end)
 		var cursor_distance := world_position.distance_squared_to(ground.to_global(closest_local))
 		for y in range(size.y):
 			for x in range(size.x):
-				var local_center := local_bounds.position + (Vector2(x, y) + Vector2(0.5, 0.5)) * TILE_SIZE
+				var local_center := local_bounds.position + (Vector2(x, y) + Vector2(0.5, 0.5)) * sample_step
 				var point := ground.to_global(local_center)
 				var offset := point - player.global_position
 				var player_distance := offset.length_squared()

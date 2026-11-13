@@ -10,8 +10,6 @@ const GRID_COLOR := Color(1.0, 1.0, 1.0, 0.19)
 const VALID_COLOR := Color(1.0, 1.0, 1.0, 0.48)
 const BLOCKED_COLOR := Color(1.0, 0.03, 0.08, 0.56)
 const PLACED_ITEM := preload("res://scenes/world/placed_item.gd")
-const FOOTPRINT_META := &"placement_cells"
-const OCCLUSION_FADE := preload("res://scenes/world/player_occlusion_fade.gd")
 const RESOURCE_GROUPS := [&"mineable_rocks", &"choppable_trees"]
 const GHOST_SHADER := """
 shader_type canvas_item;
@@ -30,13 +28,15 @@ void fragment() {
 @onready var _hotbar: Control = get_node_or_null("../../PlayerHUD/Screen/Hotbar")
 @onready var _ground: TileMapLayer = get_node_or_null("../../Ground")
 
+var placement_enabled := true
+
 var _blocking_layers: Array[TileMapLayer] = []
 var _shape := RectangleShape2D.new()
 var _query := PhysicsShapeQueryParameters2D.new()
 var _grid: Node2D
 var _grid_bounds := Rect2i()
 var _blocked_cells: Dictionary[Vector2i, bool] = {}
-var _placed_footprints: Array[Rect2i] = []
+var _placed_footprints: Array[Rect2] = []
 var _requested_item: InventoryItem
 var _requested_slot: int
 var _requested_mouse := Vector2.ZERO
@@ -76,7 +76,7 @@ func _exit_tree() -> void:
         _grid.queue_free()
 
 func _selected_placeable() -> InventoryItem:
-    if _hotbar == null or _hotbar.input_locked or _player.movement_locked or get_viewport().gui_is_dragging():
+    if not placement_enabled or _hotbar == null or _hotbar.input_locked or _player.movement_locked or get_viewport().gui_is_dragging():
         return null
     var item: InventoryItem = _mining.equipped_item()
     if item != null and item.category == InventoryItem.Category.PLACEABLE and item.placement_texture != null:
@@ -117,9 +117,9 @@ func _physics_process(_delta: float) -> void:
         var requested := _requested_item
         _requested_item = null
         if item == requested and _hotbar.selected_slot - 1 == _requested_slot:
-            var clicked_bounds := _snapped_bounds(_requested_mouse, Vector2(item.placement_footprint) * cell_size, grid_origin, step)
-            if _placement_state(item, clicked_bounds, cell_size, step, grid_origin) == PreviewState.CLEAR:
-                _place_item(item, clicked_bounds, _snap_cells(clicked_bounds, grid_origin, step))
+            var clicked_bounds := _snapped_bounds(_requested_mouse, item.get_placement_size(cell_size), grid_origin, step)
+            if _placement_state(item, clicked_bounds, cell_size, step) == PreviewState.CLEAR:
+                _place_item(item, clicked_bounds, cell_size)
                 item = _selected_placeable()
                 visible = item != null
                 _grid.visible = visible
@@ -131,9 +131,9 @@ func _physics_process(_delta: float) -> void:
         _ghost.hide()
         return
 
-    var size := Vector2(item.placement_footprint) * cell_size
+    var size := item.get_placement_size(cell_size)
     var bounds := _snapped_bounds(_ground.to_local(get_global_mouse_position()), size, grid_origin, step)
-    var state := _placement_state(item, bounds, cell_size, step, grid_origin)
+    var state := _placement_state(item, bounds, cell_size, step)
     _ghost.visible = state != PreviewState.HIDDEN
     if not _ghost.visible:
         return
@@ -154,10 +154,12 @@ func _snapped_bounds(mouse: Vector2, size: Vector2, origin: Vector2, step: Vecto
 func _base_center(bounds: Rect2) -> Vector2:
     return Vector2(bounds.get_center().x, bounds.end.y)
 
-func _snap_cells(bounds: Rect2, origin: Vector2, step: Vector2) -> Rect2i:
-    return Rect2i(Vector2i(((bounds.position - origin) / step).round()), Vector2i((bounds.size / step).round()))
+func _covering_cells(bounds: Rect2, origin: Vector2, step: Vector2) -> Rect2i:
+    var first := Vector2i(((bounds.position - origin) / step).floor())
+    var last := Vector2i(((bounds.end - origin) / step).ceil())
+    return Rect2i(first, last - first)
 
-func _place_item(item: InventoryItem, bounds: Rect2, cells: Rect2i) -> void:
+func _place_item(item: InventoryItem, bounds: Rect2, cell_size: Vector2) -> void:
     var model: PlayerInventoryModel = _player.get_inventory_model()
     if model == null or model.get_item(&"hotbar", _requested_slot) != item:
         return
@@ -165,44 +167,18 @@ func _place_item(item: InventoryItem, bounds: Rect2, cells: Rect2i) -> void:
     var world := _ground.get_parent() as Node2D
     var body := PLACED_ITEM.new()
     body.item = item
+    body.placement_cell_size = cell_size
     body.name = item.get_title()
     var sort_offset := Vector2(0, item.placement_sort_offset)
     body.transform = world.global_transform.affine_inverse() * _ground.global_transform * Transform2D(0.0, _base_center(bounds) + sort_offset)
-    body.add_to_group(PLACED_ITEM.GROUP)
-    body.set_meta(FOOTPRINT_META, cells)
-
-    var sprite := Sprite2D.new()
-    sprite.name = "Sprite2D"
-    sprite.texture = item.placement_texture
-    sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-    sprite.centered = false
-    sprite.position = -sort_offset
-    # Draw from the bottom center so the pop keeps the object on the ground.
-    sprite.offset = -sprite.texture.get_size() * Vector2(0.5, 1.0)
-    body.add_child(sprite)
-
-    if item.placement_collision_polygon.size() >= 3:
-        var collision := CollisionPolygon2D.new()
-        collision.name = "CollisionPolygon2D"
-        collision.position = sprite.position + sprite.offset
-        collision.polygon = item.placement_collision_polygon
-        body.add_child(collision)
-    else:
-        var shape := RectangleShape2D.new()
-        shape.size = bounds.size
-        var collision := CollisionShape2D.new()
-        collision.name = "CollisionShape2D"
-        collision.shape = shape
-        collision.position = Vector2(0, -shape.size.y * 0.5) - sort_offset
-        body.add_child(collision)
-    body.add_child(OCCLUSION_FADE.new())
-
     world.add_child(body, true)
     if body.get_parent() != world or not model.remove_quantity(&"hotbar", _requested_slot, 1):
         body.queue_free()
         return
-    _placed_footprints.append(cells)
+
+    _placed_footprints.append(bounds)
     _grid.queue_redraw()
+    var sprite := body.get_node("Sprite2D") as Sprite2D
     sprite.scale = Vector2.ONE * 0.90
     var pop := sprite.create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
     pop.tween_property(sprite, "scale", Vector2.ONE * 1.035, 0.10)
@@ -210,15 +186,14 @@ func _place_item(item: InventoryItem, bounds: Rect2, cells: Rect2i) -> void:
 
 func _update_grid(origin: Vector2, step: Vector2) -> void:
     var screen_to_ground := _ground.get_global_transform_with_canvas().affine_inverse()
-    var visible_ground := screen_to_ground * get_viewport_rect()
-    var first := Vector2i(((visible_ground.position - origin) / step).floor())
-    var last := Vector2i(((visible_ground.end - origin) / step).ceil())
-    var bounds := Rect2i(first, last - first)
+    var bounds := _covering_cells(screen_to_ground * get_viewport_rect(), origin, step)
     var blocked := _collect_blocked_cells()
-    var placed: Array[Rect2i] = []
+    var placed: Array[Rect2] = []
+    var world := _ground.get_parent() as Node2D
+    var to_ground := _ground.global_transform.affine_inverse()
     for prop: Node2D in get_tree().get_nodes_in_group(PLACED_ITEM.GROUP):
-        if prop.get_parent() == _ground.get_parent() and not prop.is_queued_for_deletion():
-            placed.append(prop.get_meta(FOOTPRINT_META))
+        if prop.get_parent() == world and not prop.is_queued_for_deletion():
+            placed.append(to_ground * prop.global_transform * prop.get_local_placement_bounds())
     if bounds != _grid_bounds or blocked != _blocked_cells or placed != _placed_footprints:
         _grid_bounds = bounds
         _blocked_cells = blocked
@@ -251,7 +226,10 @@ func _draw_grid() -> void:
         return
     var cell_size := Vector2(_ground.tile_set.tile_size)
     var step := cell_size / SNAP_SUBDIVISIONS
-    var blockers: Array[Rect2i] = _placed_footprints.duplicate()
+    var origin := _ground.map_to_local(Vector2i.ZERO) - cell_size * 0.5
+    var blockers: Array[Rect2i] = []
+    for footprint in _placed_footprints:
+        blockers.append(_covering_cells(footprint, origin, step))
     for cell in _blocked_cells:
         blockers.append(Rect2i(cell * SNAP_SUBDIVISIONS, Vector2i.ONE * SNAP_SUBDIVISIONS))
     var lines := PackedVector2Array()
@@ -259,7 +237,6 @@ func _draw_grid() -> void:
     _append_blocked_grid_lines(lines, blockers, 1)
     if lines.is_empty():
         return
-    var origin := _ground.map_to_local(Vector2i.ZERO) - cell_size * 0.5
     for index in range(lines.size()):
         lines[index] = origin + lines[index] * step
     _grid.draw_multiline(lines, GRID_COLOR, 0.4, true)
@@ -297,7 +274,7 @@ func _append_blocked_grid_lines(lines: PackedVector2Array, blockers: Array[Rect2
             lines.append(line_origin + direction * run_start)
             lines.append(line_origin + direction * run_end)
 
-func _placement_state(item: InventoryItem, bounds: Rect2, cell_size: Vector2, step: Vector2, grid_origin: Vector2) -> PreviewState:
+func _placement_state(item: InventoryItem, bounds: Rect2, cell_size: Vector2, step: Vector2) -> PreviewState:
     if not bounds.has_area():
         return PreviewState.HIDDEN
 
@@ -307,14 +284,31 @@ func _placement_state(item: InventoryItem, bounds: Rect2, cell_size: Vector2, st
 
     # Large props with custom outlines use the clicked base point for reach.
     if item.placement_collision_polygon.size() < 3:
-        var first_center := bounds.position + cell_size * 0.5
-        var last_center := bounds.end - cell_size * 0.5
+        var inset := (cell_size * 0.5).min(bounds.size * 0.5)
+        var first_center := bounds.position + inset
+        var last_center := bounds.end - inset
         for x: float in [first_center.x, last_center.x]:
             for y: float in [first_center.y, last_center.y]:
                 var point := _ground.to_global(Vector2(x, y))
                 if _player.global_position.distance_squared_to(point) > reach_squared:
                     return PreviewState.HIDDEN
 
+    var terrain_state := _terrain_state(bounds, step)
+    if terrain_state != PreviewState.CLEAR:
+        return terrain_state
+
+    for occupied in _placed_footprints:
+        if bounds.intersects(occupied):
+            return PreviewState.BLOCKED
+
+    # An inset lets bases touch at an edge without treating that as an overlap.
+    _shape.size = bounds.size - Vector2(0.1, 0.1)
+    _query.transform = _ground.global_transform * Transform2D(0.0, bounds.get_center())
+    if _ground.get_world_2d().direct_space_state.intersect_shape(_query, 1).is_empty():
+        return PreviewState.CLEAR
+    return PreviewState.BLOCKED
+
+func _terrain_state(bounds: Rect2, step: Vector2) -> PreviewState:
     # A shifted base can overlap extra terrain tiles. Sample just inside its edges.
     var first_cell := _ground.local_to_map(bounds.position + step * 0.5)
     var last_cell := _ground.local_to_map(bounds.end - step * 0.5)
@@ -327,17 +321,4 @@ func _placement_state(item: InventoryItem, bounds: Rect2, cell_size: Vector2, st
                 return PreviewState.HIDDEN
             if _blocked_cells.has(cell):
                 blocked = true
-    if blocked:
-        return PreviewState.BLOCKED
-
-    var cells := _snap_cells(bounds, grid_origin, step)
-    for occupied in _placed_footprints:
-        if cells.intersects(occupied):
-            return PreviewState.BLOCKED
-
-    # An inset lets bases touch at an edge without treating that as an overlap.
-    _shape.size = bounds.size - Vector2(0.1, 0.1)
-    _query.transform = _ground.global_transform * Transform2D(0.0, bounds.get_center())
-    if _ground.get_world_2d().direct_space_state.intersect_shape(_query, 1).is_empty():
-        return PreviewState.CLEAR
-    return PreviewState.BLOCKED
+    return PreviewState.BLOCKED if blocked else PreviewState.CLEAR

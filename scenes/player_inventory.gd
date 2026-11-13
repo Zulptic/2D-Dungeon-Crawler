@@ -30,7 +30,8 @@ const STARTING_BACKPACK_ITEMS: Array[InventoryItem] = [
 	preload("res://scenes/items/ashenite_axe.tres"),
 	preload("res://scenes/items/furnace.tres"),
 	preload("res://scenes/items/bed.tres"),
-	preload("res://scenes/items/house.tres")
+	preload("res://scenes/items/house.tres"),
+	preload("res://scenes/items/test_bow.tres")
 ]
 const STACK_COUNT := preload("res://scenes/item_stack_count.gd")
 const RARITY_FRAME := preload("res://scenes/ui/item_rarity_frame.gd")

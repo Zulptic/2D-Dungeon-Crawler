@@ -2,20 +2,18 @@ extends ColorRect
 
 const INTERIOR := preload("res://scenes/Cabin_Interior.tscn")
 const WIPE := preload("res://scenes/world/cabin_wipe.gdshader")
-const INTERACT_ICON := preload("res://assets/hud/environmental_hud/input_keyboard_e.png")
 const INTERIOR_LOCATION := Vector2(8192, 8192)
-const EXIT_REACH := 24.0
+const INTERIOR_SAFE_MARGIN := 0.001
 
 var player: CharacterBody2D
 @onready var _inventory: Control = $"../Inventory"
 @onready var _hotbar: Control = $"../Hotbar"
 var _interior: Node2D
-var _exit: Marker2D
-var _exit_prompt: Sprite2D
-var _exit_pulse: Tween
+var _exit: Area2D
 var _wipe: ShaderMaterial
 var _inside := false
 var _return_point: Vector2
+var _outside_safe_margin: float
 
 func _ready() -> void:
 	name = "CabinWipe"
@@ -35,17 +33,8 @@ func try_enter() -> bool:
 	_play_wipe(true)
 	return true
 
-func try_exit() -> bool:
-	if not _inside or not _can_travel() or not _is_near_exit():
-		return false
-	_play_wipe(false)
-	return true
-
 func _can_travel() -> bool:
 	return not visible and is_instance_valid(player) and not player.movement_locked and not player.is_using_tool and not get_viewport().gui_is_dragging()
-
-func _is_near_exit() -> bool:
-	return player.global_position.distance_squared_to(_exit.global_position) <= EXIT_REACH * EXIT_REACH
 
 func _play_wipe(entering: bool) -> void:
 	var inventory_had_input := _inventory.is_processing_input()
@@ -73,6 +62,16 @@ func _move_player(entering: bool) -> void:
 	if entering and _interior == null:
 		_create_interior()
 	_inside = entering
+	# Keep collision recovery from alternating between nearby walls at cabin corners.
+	if entering:
+		_outside_safe_margin = player.safe_margin
+		player.safe_margin = INTERIOR_SAFE_MARGIN
+		player.facing = Vector2.UP
+		player._play_animation("idle")
+	else:
+		player.safe_margin = _outside_safe_margin
+	(_interior.get_node("Backdrop") as CanvasLayer).visible = entering
+	player.get_node("PlacementPreview").placement_enabled = not entering
 	var arrival: Marker2D = _interior.get_node("Arrival")
 	player.global_position = arrival.global_position if entering else _return_point
 	player.reset_physics_interpolation()
@@ -90,27 +89,7 @@ func _create_interior() -> void:
 	_interior.position = INTERIOR_LOCATION
 	player.get_parent().add_child(_interior)
 	_exit = _interior.get_node("Exit")
-	_exit_prompt = Sprite2D.new()
-	_exit_prompt.texture = INTERACT_ICON
-	_exit_prompt.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_exit_prompt.position.y = -8.0
-	_exit_prompt.z_index = 7
-	var unlit := CanvasItemMaterial.new()
-	unlit.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	_exit_prompt.material = unlit
-	_exit_prompt.hide()
-	_exit.add_child(_exit_prompt)
 
 func _process(_delta: float) -> void:
-	var show_prompt: bool = not player.movement_locked and _is_near_exit()
-	if _exit_prompt.visible == show_prompt:
-		return
-	_exit_prompt.visible = show_prompt
-	if _exit_pulse != null:
-		_exit_pulse.kill()
-		_exit_pulse = null
-	_exit_prompt.scale = Vector2.ONE * 0.5
-	if show_prompt:
-		_exit_pulse = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-		_exit_pulse.tween_property(_exit_prompt, "scale", Vector2.ONE * 0.625, 0.6)
-		_exit_pulse.tween_property(_exit_prompt, "scale", Vector2.ONE * 0.5, 0.6)
+	if _can_travel() and _exit.overlaps_body(player):
+		_play_wipe(false)
